@@ -1,0 +1,16 @@
+com\tarea\rutinas\saludables\Role.class
+com\tarea\rutinas\saludables\Favoritehabit.class
+com\tarea\rutinas\saludables\User.class
+com\TestEntityRepository.class
+com\tarea\rutinas\saludables\GuideHabitId.class
+com\tarea\rutinas\saludables\Guide.class
+com\tarea\rutinas\saludables\Progresslog.class
+com\tarea\rutinas\saludables\Habit.class
+com\tarea\rutinas\saludables\Authtoken.class
+com\TestEntity.class
+com\tarea\rutinas\saludables\Routineactivity.class
+com\tarea\rutinas\saludables\Routine.class
+com\tarea\rutinas\saludables\Completedactivity.class
+com\tarea\rutinas\saludables\FavoritehabitId.class
+com\tarea\rutinas\saludables\GuideHabit.class
+com\tarea\rutinas\saludables\Reminder.class
