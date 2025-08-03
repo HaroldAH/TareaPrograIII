@@ -1,6 +1,10 @@
-package com.tarea.rutinas.saludables;
+package com.tarea.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,19 +13,19 @@ import lombok.Setter;
 @Entity
 @Table(name = "guide")
 public class Guide {
+
     @Id
     @Column(name = "id", nullable = false)
-    private java.lang.Long id;
+    private Long id;
 
     @Column(name = "title", length = 100)
-    private java.lang.String title;
+    private String title;
 
     @Lob
     @Column(name = "content")
-    private java.lang.String content;
+    private String content;
 
     @Lob
     @Column(name = "category")
-    private java.lang.String category;
-
+    private String category;
 }

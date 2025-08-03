@@ -1,9 +1,10 @@
-package com.tarea.rutinas.saludables;
+package com.tarea.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,17 +13,17 @@ import lombok.Setter;
 @Entity
 @Table(name = "habit")
 public class Habit {
+
     @Id
     @Column(name = "id", nullable = false)
-    private java.lang.Long id;
+    private Long id;
 
     @Column(name = "name", length = 20)
-    private java.lang.String name;
+    private String name;
 
     @Column(name = "category", length = 50)
-    private java.lang.String category;
+    private String category;
 
     @Column(name = "description", length = 100)
-    private java.lang.String description;
-
+    private String description;
 }

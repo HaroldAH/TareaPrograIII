@@ -1,0 +1,71 @@
+package com.tarea.services;
+
+import com.tarea.dtos.FavoriteHabitDTO;
+import com.tarea.models.Favoritehabit;
+import com.tarea.models.FavoritehabitId;
+import com.tarea.models.Habit;
+import com.tarea.models.User;
+import com.tarea.repositories.FavoriteHabitRepository;
+import com.tarea.repositories.HabitRepository;
+import com.tarea.repositories.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class FavoriteHabitService {
+
+    private final FavoriteHabitRepository favoriteHabitRepository;
+    private final UserRepository userRepository;
+    private final HabitRepository habitRepository;
+
+    public FavoriteHabitService(FavoriteHabitRepository favoriteHabitRepository,
+                                UserRepository userRepository,
+                                HabitRepository habitRepository) {
+        this.favoriteHabitRepository = favoriteHabitRepository;
+        this.userRepository = userRepository;
+        this.habitRepository = habitRepository;
+    }
+
+    public List<FavoriteHabitDTO> getAll() {
+        return favoriteHabitRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public FavoriteHabitDTO getById(Long userId, Long habitId) {
+        FavoritehabitId id = new FavoritehabitId(userId, habitId);
+        return favoriteHabitRepository.findById(id)
+                .map(this::toDTO)
+                .orElse(null);
+    }
+
+    public FavoriteHabitDTO save(FavoriteHabitDTO dto) {
+        Favoritehabit entity = new Favoritehabit();
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
+        Habit habit = habitRepository.findById(dto.getHabitId())
+                .orElseThrow(() -> new IllegalArgumentException("Habit not found: " + dto.getHabitId()));
+
+        entity.setId(new FavoritehabitId(dto.getUserId(), dto.getHabitId()));
+        entity.setUser(user);
+        entity.setHabit(habit);
+
+        return toDTO(favoriteHabitRepository.save(entity));
+    }
+
+    public void delete(Long userId, Long habitId) {
+        FavoritehabitId id = new FavoritehabitId(userId, habitId);
+        favoriteHabitRepository.deleteById(id);
+    }
+
+    private FavoriteHabitDTO toDTO(Favoritehabit entity) {
+        FavoriteHabitDTO dto = new FavoriteHabitDTO();
+        dto.setUserId(entity.getUser().getId());
+        dto.setHabitId(entity.getHabit().getId());
+        return dto;
+    }
+}

@@ -1,0 +1,71 @@
+package com.tarea.services;
+
+import com.tarea.dtos.GuideHabitDTO;
+import com.tarea.models.Guide;
+import com.tarea.models.GuideHabit;
+import com.tarea.models.GuideHabitId;
+import com.tarea.models.Habit;
+import com.tarea.repositories.GuideHabitRepository;
+import com.tarea.repositories.GuideRepository;
+import com.tarea.repositories.HabitRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class GuideHabitService {
+
+    private final GuideHabitRepository guideHabitRepository;
+    private final GuideRepository guideRepository;
+    private final HabitRepository habitRepository;
+
+    public GuideHabitService(GuideHabitRepository guideHabitRepository,
+                             GuideRepository guideRepository,
+                             HabitRepository habitRepository) {
+        this.guideHabitRepository = guideHabitRepository;
+        this.guideRepository = guideRepository;
+        this.habitRepository = habitRepository;
+    }
+
+    public List<GuideHabitDTO> getAll() {
+        return guideHabitRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public GuideHabitDTO getById(Long guideId, Long habitId) {
+        GuideHabitId id = new GuideHabitId(guideId, habitId);
+        return guideHabitRepository.findById(id)
+                .map(this::toDTO)
+                .orElse(null);
+    }
+
+    public GuideHabitDTO save(GuideHabitDTO dto) {
+        GuideHabit entity = new GuideHabit();
+
+        Guide guide = guideRepository.findById(dto.getGuideId())
+                .orElseThrow(() -> new IllegalArgumentException("Guide not found: " + dto.getGuideId()));
+        Habit habit = habitRepository.findById(dto.getHabitId())
+                .orElseThrow(() -> new IllegalArgumentException("Habit not found: " + dto.getHabitId()));
+
+        entity.setId(new GuideHabitId(dto.getGuideId(), dto.getHabitId()));
+        entity.setGuide(guide);
+        entity.setHabit(habit);
+
+        return toDTO(guideHabitRepository.save(entity));
+    }
+
+    public void delete(Long guideId, Long habitId) {
+        GuideHabitId id = new GuideHabitId(guideId, habitId);
+        guideHabitRepository.deleteById(id);
+    }
+
+    private GuideHabitDTO toDTO(GuideHabit entity) {
+        GuideHabitDTO dto = new GuideHabitDTO();
+        dto.setGuideId(entity.getGuide().getId());
+        dto.setHabitId(entity.getHabit().getId());
+        return dto;
+    }
+}

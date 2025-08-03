@@ -1,0 +1,53 @@
+RoleServicepackage com.tarea.services;
+
+import com.tarea.dtos.RoleDTO;
+import com.tarea.models.Role;
+import com.tarea.repositories.RoleRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class RoleService {
+
+    private final RoleRepository roleRepository;
+
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
+    public List<RoleDTO> getAll() {
+        return roleRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public RoleDTO getById(Long id) {
+        return roleRepository.findById(id)
+                .map(this::toDTO)
+                .orElse(null);
+    }
+
+    public RoleDTO save(RoleDTO dto) {
+        Role entity = new Role();
+        entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        entity.setPermissions(dto.getPermissions());
+
+        return toDTO(roleRepository.save(entity));
+    }
+
+    public void delete(Long id) {
+        roleRepository.deleteById(id);
+    }
+
+    private RoleDTO toDTO(Role entity) {
+        RoleDTO dto = new RoleDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setPermissions(entity.getPermissions());
+        return dto;
+    }
+}

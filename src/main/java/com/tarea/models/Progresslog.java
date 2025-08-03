@@ -1,8 +1,9 @@
-package com.tarea.rutinas.saludables;
+package com.tarea.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -10,22 +11,17 @@ import lombok.Setter;
 @Table(name = "progresslog")
 public class Progresslog {
     @Id
-    @Column(name = "id", nullable = false)
-    private java.lang.Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "routine_id")
+    @JoinColumn(name = "routine_id", nullable = false)
     private Routine routine;
 
-    @Column(name = "date")
-    private java.time.LocalDate date;
-
-    @Lob
-    @Column(name = "status")
-    private java.lang.String status;
-
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 }

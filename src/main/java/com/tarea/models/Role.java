@@ -1,9 +1,10 @@
-package com.tarea.rutinas.saludables;
+package com.tarea.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,14 +13,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "role")
 public class Role {
+
     @Id
     @Column(name = "id", nullable = false)
-    private java.lang.Long id;
+    private Long id;
 
     @Column(name = "name", length = 20)
-    private java.lang.String name;
+    private String name;
 
     @Column(name = "permissions")
-    private java.lang.String permissions;
-
+    private String permissions;
 }

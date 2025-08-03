@@ -1,6 +1,13 @@
-package com.tarea.rutinas.saludables;
+package com.tarea.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +16,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "routineactivity")
 public class Routineactivity {
+
     @Id
     @Column(name = "id", nullable = false)
-    private java.lang.Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "routine_id")
@@ -22,12 +30,11 @@ public class Routineactivity {
     private Habit habit;
 
     @Column(name = "duration")
-    private java.lang.Integer duration;
+    private Integer duration;
 
     @Column(name = "targetTime", length = 10)
-    private java.lang.String targetTime;
+    private String targetTime;
 
     @Column(name = "notes")
-    private java.lang.String notes;
-
+    private String notes;
 }
