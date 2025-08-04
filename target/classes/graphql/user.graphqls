@@ -1,0 +1,24 @@
+type Query {
+  getAllUsers: [UserDTO!]!
+  getUserById(id: ID!): UserDTO
+}
+
+type Mutation {
+  createUser(input: UserInput!): UserDTO
+  deleteUser(id: ID!): Boolean
+}
+
+type UserDTO {
+  id: ID!
+  name: String!
+  email: String!
+  roleId: ID
+}
+
+input UserInput {
+  id: ID!
+  name: String!
+  email: String!
+  roleId: ID!
+  password: String!
+}

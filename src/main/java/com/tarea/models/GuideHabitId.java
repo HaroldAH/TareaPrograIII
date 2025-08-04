@@ -22,6 +22,14 @@ public class GuideHabitId implements Serializable {
     @Column(name = "habit_id", nullable = false)
     private Long habitId;
 
+    public GuideHabitId() {
+    }
+
+    public GuideHabitId(Long guideId, Long habitId) {
+        this.guideId = guideId;
+        this.habitId = habitId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

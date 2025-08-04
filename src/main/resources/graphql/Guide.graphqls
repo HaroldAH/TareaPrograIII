@@ -1,0 +1,23 @@
+type Query {
+  getAllGuides: [GuideDTO!]!
+  getGuideById(id: ID!): GuideDTO
+}
+
+type Mutation {
+  createGuide(input: GuideInput!): GuideDTO
+  deleteGuide(id: ID!): Boolean
+}
+
+type GuideDTO {
+  id: ID!
+  title: String!
+  content: String
+  category: String
+}
+
+input GuideInput {
+  id: ID
+  title: String!
+  content: String
+  category: String
+}

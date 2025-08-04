@@ -1,0 +1,19 @@
+type Query {
+  getAllGuideHabits: [GuideHabitDTO!]!
+  getGuideHabitById(guideId: ID!, habitId: ID!): GuideHabitDTO
+}
+
+type Mutation {
+  createGuideHabit(input: GuideHabitInput!): GuideHabitDTO
+  deleteGuideHabit(guideId: ID!, habitId: ID!): Boolean
+}
+
+type GuideHabitDTO {
+  guideId: ID!
+  habitId: ID!
+}
+
+input GuideHabitInput {
+  guideId: ID!
+  habitId: ID!
+}

@@ -1,0 +1,73 @@
+package com.tarea.services;
+
+import com.tarea.dtos.ReminderDTO;
+import com.tarea.models.Habit;
+import com.tarea.models.Reminder;
+import com.tarea.models.User;
+import com.repositories.HabitRepository;
+import com.repositories.ReminderRepository;
+import com.repositories.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ReminderService {
+
+    private final ReminderRepository reminderRepository;
+    private final UserRepository userRepository;
+    private final HabitRepository habitRepository;
+
+    public ReminderService(ReminderRepository reminderRepository,
+                           UserRepository userRepository,
+                           HabitRepository habitRepository) {
+        this.reminderRepository = reminderRepository;
+        this.userRepository = userRepository;
+        this.habitRepository = habitRepository;
+    }
+
+    public List<ReminderDTO> getAll() {
+        return reminderRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public ReminderDTO getById(Long id) {
+        return reminderRepository.findById(id)
+                .map(this::toDTO)
+                .orElse(null);
+    }
+
+    public ReminderDTO save(ReminderDTO dto) {
+        Reminder entity = new Reminder();
+        entity.setId(dto.getId());
+        entity.setTime(dto.getTime());
+        entity.setFrequency(dto.getFrequency());
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
+        Habit habit = habitRepository.findById(dto.getHabitId())
+                .orElseThrow(() -> new IllegalArgumentException("Habit not found: " + dto.getHabitId()));
+
+        entity.setUser(user);
+        entity.setHabit(habit);
+
+        return toDTO(reminderRepository.save(entity));
+    }
+
+    public void delete(Long id) {
+        reminderRepository.deleteById(id);
+    }
+
+    private ReminderDTO toDTO(Reminder entity) {
+        ReminderDTO dto = new ReminderDTO();
+        dto.setId(entity.getId());
+        dto.setUserId(entity.getUser().getId());
+        dto.setHabitId(entity.getHabit().getId());
+        dto.setTime(entity.getTime());
+        dto.setFrequency(entity.getFrequency());
+        return dto;
+    }
+}

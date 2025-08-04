@@ -1,0 +1,25 @@
+type Query {
+  getAllCompletedActivities: [CompletedActivityDTO!]!
+  getCompletedActivityById(id: ID!): CompletedActivityDTO
+}
+
+type Mutation {
+  createCompletedActivity(input: CompletedActivityInput!): CompletedActivityDTO
+  deleteCompletedActivity(id: ID!): Boolean
+}
+
+type CompletedActivityDTO {
+  id: ID!
+  progressLogId: ID!
+  habitId: ID!
+  completedAt: String
+  notes: String
+}
+
+input CompletedActivityInput {
+  id: ID
+  progressLogId: ID!
+  habitId: ID!
+  completedAt: String
+  notes: String
+}

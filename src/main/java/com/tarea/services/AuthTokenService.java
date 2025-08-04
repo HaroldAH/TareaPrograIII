@@ -1,0 +1,60 @@
+package com.tarea.services;
+
+import com.tarea.dtos.AuthTokenDTO;
+import com.tarea.models.Authtoken;
+import com.tarea.models.User;
+import com.repositories.AuthTokenRepository;
+import com.repositories.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class AuthTokenService {
+
+    private final AuthTokenRepository authTokenRepository;
+    private final UserRepository userRepository;
+
+    public AuthTokenService(AuthTokenRepository authTokenRepository, UserRepository userRepository) {
+        this.authTokenRepository = authTokenRepository;
+        this.userRepository = userRepository;
+    }
+
+    public List<AuthTokenDTO> getAllTokens() {
+        return authTokenRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public AuthTokenDTO getToken(String token) {
+        return authTokenRepository.findById(token)
+                .map(this::toDTO)
+                .orElse(null);
+    }
+
+    public AuthTokenDTO saveToken(AuthTokenDTO dto) {
+        Authtoken token = new Authtoken();
+        token.setToken(dto.getToken());
+        token.setExpiresAt(dto.getExpiresAt());
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
+        token.setUser(user);
+
+        return toDTO(authTokenRepository.save(token));
+    }
+
+    public void deleteToken(String token) {
+        authTokenRepository.deleteById(token);
+    }
+
+    private AuthTokenDTO toDTO(Authtoken entity) {
+        AuthTokenDTO dto = new AuthTokenDTO();
+        dto.setToken(entity.getToken());
+        dto.setUserId(entity.getUser().getId());
+        dto.setExpiresAt(entity.getExpiresAt());
+        return dto;
+    }
+}

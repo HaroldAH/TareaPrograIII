@@ -1,0 +1,19 @@
+type Query {
+  getAllFavoriteHabits: [FavoriteHabitDTO!]!
+  getFavoriteHabitById(userId: ID!, habitId: ID!): FavoriteHabitDTO
+}
+
+type Mutation {
+  createFavoriteHabit(input: FavoriteHabitInput!): FavoriteHabitDTO
+  deleteFavoriteHabit(userId: ID!, habitId: ID!): Boolean
+}
+
+type FavoriteHabitDTO {
+  userId: ID!
+  habitId: ID!
+}
+
+input FavoriteHabitInput {
+  userId: ID!
+  habitId: ID!
+}

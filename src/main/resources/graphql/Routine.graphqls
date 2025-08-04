@@ -1,0 +1,23 @@
+type Query {
+  getAllRoutines: [RoutineDTO!]!
+  getRoutineById(id: ID!): RoutineDTO
+}
+
+type Mutation {
+  createRoutine(input: RoutineInput!): RoutineDTO
+  deleteRoutine(id: ID!): Boolean
+}
+
+type RoutineDTO {
+  id: ID!
+  title: String!
+  daysOfWeek: String
+  userId: ID!
+}
+
+input RoutineInput {
+  id: ID
+  title: String!
+  daysOfWeek: String
+  userId: ID!
+}

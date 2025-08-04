@@ -1,0 +1,27 @@
+type Query {
+  getAllRoutineActivities: [RoutineActivityDTO!]!
+  getRoutineActivityById(id: ID!): RoutineActivityDTO
+}
+
+type Mutation {
+  createRoutineActivity(input: RoutineActivityInput!): RoutineActivityDTO
+  deleteRoutineActivity(id: ID!): Boolean
+}
+
+type RoutineActivityDTO {
+  id: ID!
+  routineId: ID!
+  habitId: ID!
+  duration: Int
+  targetTime: String
+  notes: String
+}
+
+input RoutineActivityInput {
+  id: ID
+  routineId: ID!
+  habitId: ID!
+  duration: Int
+  targetTime: String
+  notes: String
+}

@@ -1,0 +1,21 @@
+type Query {
+  getAllTokens: [AuthTokenDTO!]!
+  getToken(token: String!): AuthTokenDTO
+}
+
+type Mutation {
+  createToken(input: AuthTokenInput!): AuthTokenDTO
+  deleteToken(token: String!): Boolean
+}
+
+type AuthTokenDTO {
+  token: String!
+  userId: ID!
+  expiresAt: String
+}
+
+input AuthTokenInput {
+  token: String!
+  userId: ID!
+  expiresAt: String
+}

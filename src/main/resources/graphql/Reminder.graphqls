@@ -1,0 +1,25 @@
+type Query {
+  getAllReminders: [ReminderDTO!]!
+  getReminderById(id: ID!): ReminderDTO
+}
+
+type Mutation {
+  createReminder(input: ReminderInput!): ReminderDTO
+  deleteReminder(id: ID!): Boolean
+}
+
+type ReminderDTO {
+  id: ID!
+  userId: ID!
+  habitId: ID!
+  time: String
+  frequency: String
+}
+
+input ReminderInput {
+  id: ID
+  userId: ID!
+  habitId: ID!
+  time: String
+  frequency: String
+}
