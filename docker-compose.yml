@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: healthyhabits-db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
