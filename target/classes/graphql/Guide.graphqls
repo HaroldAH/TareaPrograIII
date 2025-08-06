@@ -1,9 +1,13 @@
-type Query {
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo Guide
+# ==============================
+
+extend type Query {
   getAllGuides: [GuideDTO!]!
   getGuideById(id: ID!): GuideDTO
 }
 
-type Mutation {
+extend type Mutation {
   createGuide(input: GuideInput!): GuideDTO
   deleteGuide(id: ID!): Boolean
 }

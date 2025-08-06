@@ -1,9 +1,7 @@
 package com.tarea.services;
 
 import com.tarea.dtos.UserDTO;
-import com.tarea.models.Role;
 import com.tarea.models.User;
-import com.repositories.RoleRepository;
 import com.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +12,13 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     public List<UserDTO> getAll() {
-        return userRepository.findAll()
-                .stream()
+        return userRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
@@ -35,18 +29,19 @@ public class UserService {
                 .orElse(null);
     }
 
-    public UserDTO save(UserDTO dto, String rawPassword) {
-        User user = new User();
-        user.setId(dto.getId());
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        user.setPassword(rawPassword);
+    public UserDTO save(UserDTO dto) {
+        User entity = new User();
+        entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        
+        // ⚠️ Si decides incluir password en el DTO, asegúrate de manejarlo correctamente
+        if (dto.getPassword() != null) {
+            entity.setPassword(dto.getPassword()); // Puedes encriptarlo aquí si deseas
+        }
 
-        Role role = roleRepository.findById(dto.getRoleId())
-                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + dto.getRoleId()));
-        user.setRole(role);
-
-        return toDTO(userRepository.save(user));
+        User saved = userRepository.save(entity);
+        return toDTO(saved);
     }
 
     public void delete(Long id) {
@@ -58,7 +53,7 @@ public class UserService {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
-        dto.setRoleId(entity.getRole() != null ? entity.getRole().getId() : null);
+        // ❌ No devolver password en el DTO a menos que sea estrictamente necesario
         return dto;
     }
 }

@@ -3,8 +3,8 @@ package com.tarea.resolvers.inputs;
 public class RoutineInput {
     private Long id;
     private String title;
-    private String daysOfWeek;
     private Long userId;
+    private String daysOfWeek; // Ej: "MON,WED,FRI"
 
     public Long getId() {
         return id;
@@ -22,19 +22,19 @@ public class RoutineInput {
         this.title = title;
     }
 
-    public String getDaysOfWeek() {
-        return daysOfWeek;
-    }
-
-    public void setDaysOfWeek(String daysOfWeek) {
-        this.daysOfWeek = daysOfWeek;
-    }
-
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getDaysOfWeek() {
+        return daysOfWeek;
+    }
+
+    public void setDaysOfWeek(String daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
     }
 }

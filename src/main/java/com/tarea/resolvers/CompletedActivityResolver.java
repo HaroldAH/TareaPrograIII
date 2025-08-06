@@ -7,6 +7,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+
 import java.util.List;
 
 @Controller
@@ -42,9 +43,12 @@ public class CompletedActivityResolver {
     private CompletedActivityDTO toDTO(CompletedActivityInput input) {
         CompletedActivityDTO dto = new CompletedActivityDTO();
         dto.setId(input.getId());
-        dto.setProgressLogId(input.getProgressLogId());
+        dto.setUserId(input.getUserId());
+        dto.setRoutineId(input.getRoutineId());
         dto.setHabitId(input.getHabitId());
+        dto.setDate(input.getDate());
         dto.setCompletedAt(input.getCompletedAt());
+        dto.setIsCompleted(input.getIsCompleted());
         dto.setNotes(input.getNotes());
         return dto;
     }

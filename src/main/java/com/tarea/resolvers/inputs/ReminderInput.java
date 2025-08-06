@@ -4,8 +4,8 @@ public class ReminderInput {
     private Long id;
     private Long userId;
     private Long habitId;
-    private String time;
-    private String frequency;
+    private String time;      // Ej: "08:30", "21:00", formato HH:mm
+    private String frequency; // Ej: "DAILY", "WEEKLY"
 
     public Long getId() {
         return id;

@@ -7,6 +7,6 @@ public class ReminderDTO {
     private Long id;
     private Long userId;
     private Long habitId;
-    private String time;
-    private String frequency;
+    private String time;       
+    private String frequency;   
 }

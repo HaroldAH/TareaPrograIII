@@ -18,8 +18,7 @@ public class GuideService {
     }
 
     public List<GuideDTO> getAll() {
-        return guideRepository.findAll()
-                .stream()
+        return guideRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
@@ -37,7 +36,8 @@ public class GuideService {
         entity.setContent(dto.getContent());
         entity.setCategory(dto.getCategory());
 
-        return toDTO(guideRepository.save(entity));
+        Guide saved = guideRepository.save(entity);
+        return toDTO(saved);
     }
 
     public void delete(Long id) {
@@ -53,4 +53,3 @@ public class GuideService {
         return dto;
     }
 }
-

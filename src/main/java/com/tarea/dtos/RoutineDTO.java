@@ -7,5 +7,5 @@ public class RoutineDTO {
     private Long id;
     private String title;
     private Long userId;
-    private String daysOfWeek;
+    private String daysOfWeek;  
 }

@@ -3,14 +3,15 @@ package com.tarea.services;
 import com.tarea.dtos.GuideHabitDTO;
 import com.tarea.models.Guide;
 import com.tarea.models.GuideHabit;
+import com.tarea.models.Habitactivity;
 import com.tarea.models.GuideHabitId;
-import com.tarea.models.Habit;
 import com.repositories.GuideHabitRepository;
 import com.repositories.GuideRepository;
-import com.repositories.HabitRepository;
+import com.repositories.HabitActivityRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,19 +19,18 @@ public class GuideHabitService {
 
     private final GuideHabitRepository guideHabitRepository;
     private final GuideRepository guideRepository;
-    private final HabitRepository habitRepository;
+    private final HabitActivityRepository habitActivityRepository;
 
     public GuideHabitService(GuideHabitRepository guideHabitRepository,
                              GuideRepository guideRepository,
-                             HabitRepository habitRepository) {
+                             HabitActivityRepository habitActivityRepository) {
         this.guideHabitRepository = guideHabitRepository;
         this.guideRepository = guideRepository;
-        this.habitRepository = habitRepository;
+        this.habitActivityRepository = habitActivityRepository;
     }
 
     public List<GuideHabitDTO> getAll() {
-        return guideHabitRepository.findAll()
-                .stream()
+        return guideHabitRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
@@ -44,17 +44,17 @@ public class GuideHabitService {
 
     public GuideHabitDTO save(GuideHabitDTO dto) {
         GuideHabit entity = new GuideHabit();
+        GuideHabitId id = new GuideHabitId(dto.getGuideId(), dto.getHabitId());
+        entity.setId(id);
 
-        Guide guide = guideRepository.findById(dto.getGuideId())
-                .orElseThrow(() -> new IllegalArgumentException("Guide not found: " + dto.getGuideId()));
-        Habit habit = habitRepository.findById(dto.getHabitId())
-                .orElseThrow(() -> new IllegalArgumentException("Habit not found: " + dto.getHabitId()));
+        Optional<Guide> guide = guideRepository.findById(dto.getGuideId());
+        Optional<Habitactivity> habit = habitActivityRepository.findById(dto.getHabitId());
 
-        entity.setId(new GuideHabitId(dto.getGuideId(), dto.getHabitId()));
-        entity.setGuide(guide);
-        entity.setHabit(habit);
+        entity.setGuide(guide.orElse(null));
+        entity.setHabit(habit.orElse(null));
 
-        return toDTO(guideHabitRepository.save(entity));
+        GuideHabit saved = guideHabitRepository.save(entity);
+        return toDTO(saved);
     }
 
     public void delete(Long guideId, Long habitId) {
@@ -64,8 +64,8 @@ public class GuideHabitService {
 
     private GuideHabitDTO toDTO(GuideHabit entity) {
         GuideHabitDTO dto = new GuideHabitDTO();
-        dto.setGuideId(entity.getGuide().getId());
-        dto.setHabitId(entity.getHabit().getId());
+        dto.setGuideId(entity.getGuide() != null ? entity.getGuide().getId() : null);
+        dto.setHabitId(entity.getHabit() != null ? entity.getHabit().getId() : null);
         return dto;
     }
 }

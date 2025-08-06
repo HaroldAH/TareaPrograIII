@@ -1,9 +1,13 @@
-type Query {
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo GuideHabit (Relación N:M)
+# ==============================
+
+extend type Query {
   getAllGuideHabits: [GuideHabitDTO!]!
   getGuideHabitById(guideId: ID!, habitId: ID!): GuideHabitDTO
 }
 
-type Mutation {
+extend type Mutation {
   createGuideHabit(input: GuideHabitInput!): GuideHabitDTO
   deleteGuideHabit(guideId: ID!, habitId: ID!): Boolean
 }

@@ -1,14 +1,8 @@
-com\tarea\models\Progresslog.class
-com\tarea\models\Completedactivity.class
-com\tarea\models\Authtoken.class
-com\tarea\models\Favoritehabit.class
-com\tarea\models\Guide.class
 com\tarea\models\User.class
-com\tarea\models\FavoritehabitId.class
 com\tarea\models\GuideHabitId.class
-com\tarea\models\Habit.class
+com\tarea\models\Routine.class
+com\tarea\models\Completedactivity.class
+com\tarea\models\Guide.class
 com\tarea\models\GuideHabit.class
-com\tarea\models\Routineactivity.class
 com\tarea\models\Reminder.class
 com\tarea\models\Role.class
-com\tarea\models\Routine.class

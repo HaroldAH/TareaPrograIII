@@ -4,7 +4,6 @@ public class UserInput {
     private Long id;
     private String name;
     private String email;
-    private Long roleId;
     private String password;
 
     public Long getId() {
@@ -29,14 +28,6 @@ public class UserInput {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
     }
 
     public String getPassword() {

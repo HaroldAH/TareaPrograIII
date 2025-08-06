@@ -1,7 +1,0 @@
-package com.repositories;
-
-import com.tarea.models.Progresslog;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface ProgressLogRepository extends JpaRepository<Progresslog, Long> {
-}

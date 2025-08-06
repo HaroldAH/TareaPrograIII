@@ -2,9 +2,12 @@ package com.tarea.resolvers.inputs;
 
 public class CompletedActivityInput {
     private Long id;
-    private Long progressLogId;
+    private Long userId;
+    private Long routineId;
     private Long habitId;
-    private String completedAt;
+    private String date; 
+    private String completedAt; 
+    private Boolean isCompleted;
     private String notes;
 
     public Long getId() {
@@ -15,12 +18,20 @@ public class CompletedActivityInput {
         this.id = id;
     }
 
-    public Long getProgressLogId() {
-        return progressLogId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setProgressLogId(Long progressLogId) {
-        this.progressLogId = progressLogId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getRoutineId() {
+        return routineId;
+    }
+
+    public void setRoutineId(Long routineId) {
+        this.routineId = routineId;
     }
 
     public Long getHabitId() {
@@ -31,12 +42,28 @@ public class CompletedActivityInput {
         this.habitId = habitId;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getCompletedAt() {
         return completedAt;
     }
 
     public void setCompletedAt(String completedAt) {
         this.completedAt = completedAt;
+    }
+
+    public Boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
     }
 
     public String getNotes() {

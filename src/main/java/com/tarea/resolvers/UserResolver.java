@@ -1,12 +1,13 @@
 package com.tarea.resolvers;
 
-import com.tarea.resolvers.inputs.UserInput;
 import com.tarea.dtos.UserDTO;
+import com.tarea.resolvers.inputs.UserInput;
 import com.tarea.services.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+
 import java.util.List;
 
 @Controller
@@ -30,7 +31,7 @@ public class UserResolver {
 
     @MutationMapping
     public UserDTO createUser(@Argument UserInput input) {
-        return userService.save(toDTO(input), input.getPassword());
+        return userService.save(toDTO(input)); // Asegúrate que este método exista en UserService
     }
 
     @MutationMapping
@@ -44,7 +45,6 @@ public class UserResolver {
         dto.setId(input.getId());
         dto.setName(input.getName());
         dto.setEmail(input.getEmail());
-        dto.setRoleId(input.getRoleId());
         return dto;
     }
 }

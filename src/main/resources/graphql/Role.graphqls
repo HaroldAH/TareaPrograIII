@@ -1,9 +1,13 @@
-type Query {
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo Role
+# ==============================
+
+extend type Query {
   getAllRoles: [RoleDTO!]!
   getRoleById(id: ID!): RoleDTO
 }
 
-type Mutation {
+extend type Mutation {
   createRole(input: RoleInput!): RoleDTO
   deleteRole(id: ID!): Boolean
 }

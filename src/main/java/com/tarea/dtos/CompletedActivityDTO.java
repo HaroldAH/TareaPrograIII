@@ -5,8 +5,11 @@ import lombok.Data;
 @Data
 public class CompletedActivityDTO {
     private Long id;
-    private Long progressLogId;
+    private Long userId;
+    private Long routineId;
     private Long habitId;
+    private String date;          
     private String completedAt;
+    private Boolean isCompleted;
     private String notes;
 }

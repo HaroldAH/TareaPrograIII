@@ -1,9 +1,13 @@
-type Query {
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo User
+# ==============================
+
+extend type Query {
   getAllUsers: [UserDTO!]!
   getUserById(id: ID!): UserDTO
 }
 
-type Mutation {
+extend type Mutation {
   createUser(input: UserInput!): UserDTO
   deleteUser(id: ID!): Boolean
 }
@@ -12,13 +16,12 @@ type UserDTO {
   id: ID!
   name: String!
   email: String!
-  roleId: ID
+  # password omitido por seguridad en respuesta
 }
 
 input UserInput {
-  id: ID!
+  id: ID
   name: String!
   email: String!
-  roleId: ID!
   password: String!
 }

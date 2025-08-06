@@ -1,3 +1,7 @@
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo CompletedActivity
+# ==============================
+
 type Query {
   getAllCompletedActivities: [CompletedActivityDTO!]!
   getCompletedActivityById(id: ID!): CompletedActivityDTO
@@ -10,16 +14,22 @@ type Mutation {
 
 type CompletedActivityDTO {
   id: ID!
-  progressLogId: ID!
+  userId: ID!
+  routineId: ID!
   habitId: ID!
+  date: String
   completedAt: String
+  isCompleted: Boolean
   notes: String
 }
 
 input CompletedActivityInput {
   id: ID
-  progressLogId: ID!
+  userId: ID!
+  routineId: ID!
   habitId: ID!
+  date: String
   completedAt: String
+  isCompleted: Boolean
   notes: String
 }

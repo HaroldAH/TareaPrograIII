@@ -1,10 +1,6 @@
 package com.tarea.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +9,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "guide")
 public class Guide {
-
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
@@ -28,4 +23,5 @@ public class Guide {
     @Lob
     @Column(name = "category")
     private String category;
+
 }

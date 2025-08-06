@@ -18,8 +18,7 @@ public class RoleService {
     }
 
     public List<RoleDTO> getAll() {
-        return roleRepository.findAll()
-                .stream()
+        return roleRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
@@ -36,7 +35,8 @@ public class RoleService {
         entity.setName(dto.getName());
         entity.setPermissions(dto.getPermissions());
 
-        return toDTO(roleRepository.save(entity));
+        Role saved = roleRepository.save(entity);
+        return toDTO(saved);
     }
 
     public void delete(Long id) {

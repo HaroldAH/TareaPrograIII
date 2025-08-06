@@ -1,9 +1,13 @@
-type Query {
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo Routine
+# ==============================
+
+extend type Query {
   getAllRoutines: [RoutineDTO!]!
   getRoutineById(id: ID!): RoutineDTO
 }
 
-type Mutation {
+extend type Mutation {
   createRoutine(input: RoutineInput!): RoutineDTO
   deleteRoutine(id: ID!): Boolean
 }
@@ -11,13 +15,13 @@ type Mutation {
 type RoutineDTO {
   id: ID!
   title: String!
-  daysOfWeek: String
   userId: ID!
+  daysOfWeek: String
 }
 
 input RoutineInput {
   id: ID
   title: String!
-  daysOfWeek: String
   userId: ID!
+  daysOfWeek: String
 }

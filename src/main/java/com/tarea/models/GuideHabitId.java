@@ -13,8 +13,7 @@ import java.util.Objects;
 @Setter
 @Embeddable
 public class GuideHabitId implements Serializable {
-
-    private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = 3564735706616014585L;
 
     @Column(name = "guide_id", nullable = false)
     private Long guideId;
@@ -22,9 +21,11 @@ public class GuideHabitId implements Serializable {
     @Column(name = "habit_id", nullable = false)
     private Long habitId;
 
+    // ✅ Constructor vacío (requerido por JPA)
     public GuideHabitId() {
     }
 
+    // ✅ Constructor con parámetros (requerido por vos)
     public GuideHabitId(Long guideId, Long habitId) {
         this.guideId = guideId;
         this.habitId = habitId;
@@ -34,9 +35,9 @@ public class GuideHabitId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        GuideHabitId that = (GuideHabitId) o;
-        return Objects.equals(guideId, that.guideId) &&
-               Objects.equals(habitId, that.habitId);
+        GuideHabitId entity = (GuideHabitId) o;
+        return Objects.equals(this.guideId, entity.guideId) &&
+                Objects.equals(this.habitId, entity.habitId);
     }
 
     @Override

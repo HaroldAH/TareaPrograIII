@@ -1,7 +1,0 @@
-package com.repositories;
-
-import com.tarea.models.Routineactivity;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface RoutineActivityRepository extends JpaRepository<Routineactivity, Long> {
-}

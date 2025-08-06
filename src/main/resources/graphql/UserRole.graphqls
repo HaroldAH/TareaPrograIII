@@ -1,0 +1,23 @@
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo UserRole (Relación N:M)
+# ==============================
+
+extend type Query {
+  getAllUserRoles: [UserRoleDTO!]!
+  getUserRoleById(userId: ID!, roleId: ID!): UserRoleDTO
+}
+
+extend type Mutation {
+  createUserRole(input: UserRoleInput!): UserRoleDTO
+  deleteUserRole(userId: ID!, roleId: ID!): Boolean
+}
+
+type UserRoleDTO {
+  userId: ID!
+  roleId: ID!
+}
+
+input UserRoleInput {
+  userId: ID!
+  roleId: ID!
+}

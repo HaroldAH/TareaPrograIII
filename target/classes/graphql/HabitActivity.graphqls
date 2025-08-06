@@ -1,0 +1,35 @@
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo HabitActivity
+# ==============================
+
+extend type Query {
+  getAllHabitActivities: [HabitActivityDTO!]!
+  getHabitActivityById(id: ID!): HabitActivityDTO
+}
+
+extend type Mutation {
+  createHabitActivity(input: HabitActivityInput!): HabitActivityDTO
+  deleteHabitActivity(id: ID!): Boolean
+}
+
+type HabitActivityDTO {
+  id: ID!
+  name: String!
+  category: String!
+  description: String
+  duration: Int
+  targetTime: String
+  notes: String
+  isFavorite: Boolean
+}
+
+input HabitActivityInput {
+  id: ID
+  name: String!
+  category: String!
+  description: String
+  duration: Int
+  targetTime: String
+  notes: String
+  isFavorite: Boolean
+}

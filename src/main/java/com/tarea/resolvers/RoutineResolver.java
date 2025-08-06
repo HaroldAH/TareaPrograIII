@@ -7,6 +7,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+
 import java.util.List;
 
 @Controller
@@ -43,8 +44,8 @@ public class RoutineResolver {
         RoutineDTO dto = new RoutineDTO();
         dto.setId(input.getId());
         dto.setTitle(input.getTitle());
-        dto.setDaysOfWeek(input.getDaysOfWeek());
         dto.setUserId(input.getUserId());
+        dto.setDaysOfWeek(input.getDaysOfWeek());
         return dto;
     }
 }
