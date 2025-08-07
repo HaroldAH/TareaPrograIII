@@ -3,8 +3,9 @@ package com.tarea.services;
 import com.tarea.dtos.RoutineDTO;
 import com.tarea.models.Routine;
 import com.tarea.models.User;
-import com.repositories.RoutineRepository;
-import com.repositories.UserRepository;
+import com.tarea.repositories.RoutineRepository;
+import com.tarea.repositories.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,9 +1,10 @@
 package com.tarea.resolvers;
 
 import com.tarea.models.User;
+import com.tarea.repositories.UserRepository;
 import com.tarea.security.JwtService;
 import com.tarea.security.TokenBlacklistService;
-import com.repositories.UserRepository;
+
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;

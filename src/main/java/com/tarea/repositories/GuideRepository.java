@@ -1,4 +1,4 @@
-package com.repositories;
+package com.tarea.repositories;
 
 import com.tarea.models.Guide;
 import org.springframework.data.jpa.repository.JpaRepository;

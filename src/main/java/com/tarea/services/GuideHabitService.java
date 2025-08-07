@@ -4,10 +4,11 @@ import com.tarea.dtos.GuideHabitDTO;
 import com.tarea.models.Guide;
 import com.tarea.models.GuideHabit;
 import com.tarea.models.Habitactivity;
+import com.tarea.repositories.GuideHabitRepository;
+import com.tarea.repositories.GuideRepository;
+import com.tarea.repositories.HabitActivityRepository;
 import com.tarea.models.GuideHabitId;
-import com.repositories.GuideHabitRepository;
-import com.repositories.GuideRepository;
-import com.repositories.HabitActivityRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

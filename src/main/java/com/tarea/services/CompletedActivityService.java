@@ -5,10 +5,11 @@ import com.tarea.models.Completedactivity;
 import com.tarea.models.Habitactivity;
 import com.tarea.models.Routine;
 import com.tarea.models.User;
-import com.repositories.CompletedActivityRepository;
-import com.repositories.HabitActivityRepository;
-import com.repositories.RoutineRepository;
-import com.repositories.UserRepository;
+import com.tarea.repositories.CompletedActivityRepository;
+import com.tarea.repositories.HabitActivityRepository;
+import com.tarea.repositories.RoutineRepository;
+import com.tarea.repositories.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

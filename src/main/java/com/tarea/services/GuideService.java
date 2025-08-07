@@ -2,7 +2,8 @@ package com.tarea.services;
 
 import com.tarea.dtos.GuideDTO;
 import com.tarea.models.Guide;
-import com.repositories.GuideRepository;
+import com.tarea.repositories.GuideRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

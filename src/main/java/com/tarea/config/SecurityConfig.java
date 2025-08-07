@@ -19,12 +19,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // desactiva CSRF (necesario para GraphQL)
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/graphiql").permitAll()  // permite acceso sin token al IDE web
-                .requestMatchers("/graphql").permitAll()   // permite login/registro sin token
-                .anyRequest().authenticated()              // todo lo demás protegido
-            )
+             .requestMatchers("/api/test/**").permitAll()       // solo pruebas públicas
+             .requestMatchers("/graphiql").permitAll()          // la UI para probar
+            .anyRequest().authenticated()                      // 🔐 todo lo demás protegido
+        )
+
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

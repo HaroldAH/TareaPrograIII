@@ -4,9 +4,10 @@ import com.tarea.dtos.ReminderDTO;
 import com.tarea.models.Habitactivity;
 import com.tarea.models.Reminder;
 import com.tarea.models.User;
-import com.repositories.HabitActivityRepository;
-import com.repositories.ReminderRepository;
-import com.repositories.UserRepository;
+import com.tarea.repositories.HabitActivityRepository;
+import com.tarea.repositories.ReminderRepository;
+import com.tarea.repositories.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

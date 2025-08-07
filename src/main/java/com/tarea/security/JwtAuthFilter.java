@@ -4,11 +4,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -25,46 +26,67 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-protected void doFilterInternal(HttpServletRequest request,
-                                HttpServletResponse response,
-                                FilterChain filterChain)
-        throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
-    final String header = request.getHeader("Authorization");
-    final String token;
+        final String header = request.getHeader("Authorization");
 
-    // Permitir createUser y login sin token
-    if (request.getRequestURI().equals("/graphql")) {
-        String body = request.getReader().lines().reduce("", (acc, line) -> acc + line);
-        if (body.contains("createUser") || body.contains("login")) {
-            filterChain.doFilter(request, response);
+        if (header == null || !header.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
+
+        String token = header.substring(7);
+
+        if (!jwtService.validateToken(token) || tokenBlacklist.isBlacklisted(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        Long userId = jwtService.getUserIdFromToken(token);
+        String role = jwtService.getUserRoleFromToken(token);
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                userId, null, Collections.emptyList()
+        );
+
+        auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        filterChain.doFilter(request, response);
     }
 
-    if (header == null || !header.startsWith("Bearer ")) {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return;
+    @Override
+protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    String path = request.getRequestURI();
+
+    // Excluir rutas del filtro (rutas públicas)
+    if (path.equals("/api/test/connection") || path.equals("/ping")) {
+        return true;
     }
 
-    token = header.substring(7);
-
-    if (!jwtService.validateToken(token) || tokenBlacklist.isBlacklisted(token)) {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return;
+    // ✅ Permitir el acceso a la interfaz visual GraphiQL
+    if (path.equals("/graphiql")) {
+        return true;
     }
 
-    Long userId = jwtService.getUserIdFromToken(token);
-    String role = jwtService.getUserRoleFromToken(token);
+    // ✅ Permitir login y createUser sin token
+    if (path.equals("/graphql")) {
+        return isLoginOrCreateUser(request);
+    }
 
-    var auth = new UsernamePasswordAuthenticationToken(
-            userId, null, Collections.emptyList()
-    );
-
-    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-    SecurityContextHolder.getContext().setAuthentication(auth);
-
-    filterChain.doFilter(request, response);
+    return false;
 }
 
+
+    private boolean isLoginOrCreateUser(HttpServletRequest request) {
+        try {
+            String body = request.getReader().lines().reduce("", (acc, line) -> acc + line);
+            return body.contains("createUser") || body.contains("login");
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }

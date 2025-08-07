@@ -1,4 +1,4 @@
-package com.repositories;
+package com.tarea.repositories;
 
 import com.tarea.models.UserRole;
 // Update the import path to the correct location of UserRoleId

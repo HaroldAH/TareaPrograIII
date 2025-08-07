@@ -1,4 +1,4 @@
-package com.repositories;
+package com.tarea.repositories;
 
 import com.tarea.models.Completedactivity;
 import org.springframework.data.jpa.repository.JpaRepository;

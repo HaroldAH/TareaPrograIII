@@ -2,7 +2,8 @@ package com.tarea.services;
 
 import com.tarea.dtos.RoleDTO;
 import com.tarea.models.Role;
-import com.repositories.RoleRepository;
+import com.tarea.repositories.RoleRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

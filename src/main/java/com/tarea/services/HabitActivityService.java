@@ -2,7 +2,8 @@ package com.tarea.services;
 
 import com.tarea.dtos.HabitActivityDTO;
 import com.tarea.models.Habitactivity;
-import com.repositories.HabitActivityRepository;
+import com.tarea.repositories.HabitActivityRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

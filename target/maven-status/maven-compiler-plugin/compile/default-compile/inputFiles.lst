@@ -1,12 +1,3 @@
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\CompletedActivityRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\GuideHabitRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\GuideRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\HabitActivityRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\ReminderRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\RoleRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\RoutineRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\UserRepository.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\repositories\UserRoleRepository.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\config\SecurityConfig.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\controllers\TestController.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\CompletedActivityDTO.java
@@ -29,6 +20,15 @@ C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Ro
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\User.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\UserRole.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\UserRoleId.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\CompletedActivityRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\GuideHabitRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\GuideRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\HabitActivityRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\ReminderRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\RoleRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\RoutineRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\UserRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\UserRoleRepository.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\AuthResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\CompletedActivityResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideHabitResolver.java
@@ -48,7 +48,7 @@ C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\RoutineResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\UserResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\UserRoleResolver.java
-C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\rutinas\saludables\RutinasSaludablesApplication.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\RutinasSaludablesApplication.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\JwtAuthFilter.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\TokenBlacklistService.java

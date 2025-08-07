@@ -2,7 +2,8 @@ package com.tarea.services;
 
 import com.tarea.dtos.UserDTO;
 import com.tarea.models.User;
-import com.repositories.UserRepository;
+import com.tarea.repositories.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

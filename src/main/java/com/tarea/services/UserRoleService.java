@@ -5,9 +5,10 @@ import com.tarea.models.Role;
 import com.tarea.models.User;
 import com.tarea.models.UserRole;
 import com.tarea.models.UserRoleId;
-import com.repositories.RoleRepository;
-import com.repositories.UserRepository;
-import com.repositories.UserRoleRepository;
+import com.tarea.repositories.RoleRepository;
+import com.tarea.repositories.UserRepository;
+import com.tarea.repositories.UserRoleRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
