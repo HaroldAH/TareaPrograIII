@@ -29,6 +29,7 @@ C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Ro
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\User.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\UserRole.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\UserRoleId.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\AuthResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\CompletedActivityResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideHabitResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideResolver.java
@@ -48,7 +49,9 @@ C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\UserResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\UserRoleResolver.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\rutinas\saludables\RutinasSaludablesApplication.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\JwtAuthFilter.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\TokenBlacklistService.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\CompletedActivityService.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\GuideHabitService.java
 C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\GuideService.java

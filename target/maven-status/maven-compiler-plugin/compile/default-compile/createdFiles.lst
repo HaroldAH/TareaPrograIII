@@ -24,7 +24,6 @@ com\tarea\services\GuideService.class
 com\tarea\models\UserRoleId.class
 com\tarea\services\RoleService.class
 com\tarea\config\SecurityConfig.class
-com\tarea\services\UserRoleService.class
 com\repositories\CompletedActivityRepository.class
 com\tarea\dtos\RoutineDTO.class
 com\tarea\services\CompletedActivityService.class
@@ -42,9 +41,7 @@ com\tarea\models\Role.class
 com\tarea\services\ReminderService.class
 com\tarea\dtos\ReminderDTO.class
 com\tarea\resolvers\inputs\UserRoleInput.class
-com\tarea\services\UserService.class
 com\tarea\services\GuideHabitService.class
 com\tarea\resolvers\inputs\RoleInput.class
 com\tarea\dtos\HabitActivityDTO.class
-com\tarea\resolvers\inputs\UserInput.class
 com\tarea\services\RoutineService.class

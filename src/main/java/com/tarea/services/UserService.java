@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UserService {
@@ -30,19 +31,21 @@ public class UserService {
     }
 
     public UserDTO save(UserDTO dto) {
-        User entity = new User();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setEmail(dto.getEmail());
-        
-        // ⚠️ Si decides incluir password en el DTO, asegúrate de manejarlo correctamente
-        if (dto.getPassword() != null) {
-            entity.setPassword(dto.getPassword()); // Puedes encriptarlo aquí si deseas
-        }
+    User entity = new User();
+    entity.setId(dto.getId());
+    entity.setName(dto.getName());
+    entity.setEmail(dto.getEmail());
 
-        User saved = userRepository.save(entity);
-        return toDTO(saved);
+    if (dto.getPassword() != null) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        entity.setPassword(encoder.encode(dto.getPassword()));
     }
+
+    entity.setRole(dto.getRole());
+
+    User saved = userRepository.save(entity);
+    return toDTO(saved);
+}
 
     public void delete(Long id) {
         userRepository.deleteById(id);

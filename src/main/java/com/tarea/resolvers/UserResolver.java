@@ -13,6 +13,7 @@ import java.util.List;
 @Controller
 public class UserResolver {
 
+    
     private final UserService userService;
 
     public UserResolver(UserService userService) {

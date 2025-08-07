@@ -10,7 +10,10 @@ extend type Query {
 extend type Mutation {
   createUser(input: UserInput!): UserDTO
   deleteUser(id: ID!): Boolean
+  login(email: String!, password: String!): String
+  logout(token: String!): Boolean
 }
+
 
 type UserDTO {
   id: ID!
@@ -25,3 +28,4 @@ input UserInput {
   email: String!
   password: String!
 }
+
