@@ -1,0 +1,29 @@
+# Tipos base (OBLIGATORIOS)
+type Query {
+    getAllUsers: [UserDTO!]!
+    getUserById(id: ID!): UserDTO
+}
+
+type Mutation {
+    createUser(input: UserInput!): UserDTO
+    deleteUser(id: ID!): Boolean
+    login(email: String!, password: String!): String
+    logout(token: String!): Boolean
+}
+
+# DTOs
+type UserDTO {
+    id: ID!
+    name: String!
+    email: String!
+    role: String!
+}
+
+# Inputs
+input UserInput {
+    id: ID
+    name: String!
+    email: String!
+    password: String!
+    role: String!
+}

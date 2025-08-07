@@ -19,14 +19,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-             .requestMatchers("/api/test/**").permitAll()       // solo pruebas públicas
-             .requestMatchers("/graphiql").permitAll()          // la UI para probar
-            .anyRequest().authenticated()                      // 🔐 todo lo demás protegido
-        )
-
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/test/**").permitAll()
+                        .requestMatchers("/graphiql").permitAll()
+                        .requestMatchers("/graphql").permitAll() // ✅ AGREGA ESTA LÍNEA
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

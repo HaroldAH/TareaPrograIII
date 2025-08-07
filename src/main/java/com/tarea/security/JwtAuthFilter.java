@@ -27,8 +27,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         final String header = request.getHeader("Authorization");
@@ -49,8 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String role = jwtService.getUserRoleFromToken(token);
 
         var auth = new UsernamePasswordAuthenticationToken(
-                userId, null, Collections.emptyList()
-        );
+                userId, null, Collections.emptyList());
 
         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -59,27 +58,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    String path = request.getRequestURI();
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
 
-    // Excluir rutas del filtro (rutas públicas)
-    if (path.equals("/api/test/connection") || path.equals("/ping")) {
-        return true;
+        // Excluir rutas del filtro (rutas públicas)
+        if (path.equals("/api/test/connection") || path.equals("/ping")) {
+            return true;
+        }
+
+        // ✅ Permitir el acceso a la interfaz visual GraphiQL
+        if (path.equals("/graphiql")) {
+            return true;
+        }
+
+        // ✅ TEMPORALMENTE permitir TODAS las peticiones GraphQL
+        if (path.equals("/graphql")) {
+            return true; // ← CAMBIA ESTA LÍNEA (quita la lógica del body)
+        }
+
+        return false;
     }
-
-    // ✅ Permitir el acceso a la interfaz visual GraphiQL
-    if (path.equals("/graphiql")) {
-        return true;
-    }
-
-    // ✅ Permitir login y createUser sin token
-    if (path.equals("/graphql")) {
-        return isLoginOrCreateUser(request);
-    }
-
-    return false;
-}
-
 
     private boolean isLoginOrCreateUser(HttpServletRequest request) {
         try {

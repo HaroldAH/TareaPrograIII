@@ -2,12 +2,12 @@
 # ✅ SCHEMA GRAPHQL - Módulo CompletedActivity
 # ==============================
 
-type Query {
+extend type Query {
   getAllCompletedActivities: [CompletedActivityDTO!]!
   getCompletedActivityById(id: ID!): CompletedActivityDTO
 }
 
-type Mutation {
+extend type Mutation {
   createCompletedActivity(input: CompletedActivityInput!): CompletedActivityDTO
   deleteCompletedActivity(id: ID!): Boolean
 }

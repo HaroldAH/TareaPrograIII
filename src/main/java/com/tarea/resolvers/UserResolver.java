@@ -13,7 +13,6 @@ import java.util.List;
 @Controller
 public class UserResolver {
 
-    
     private final UserService userService;
 
     public UserResolver(UserService userService) {
@@ -30,10 +29,11 @@ public class UserResolver {
         return userService.getById(id);
     }
 
-    @MutationMapping
-    public UserDTO createUser(@Argument UserInput input) {
-        return userService.save(toDTO(input)); // Asegúrate que este método exista en UserService
-    }
+   @MutationMapping
+public UserDTO createUser(@Argument UserInput input) {
+    System.out.println(">>> Entrando a createUser con: " + input.getEmail());
+    return userService.save(toDTO(input));
+}
 
     @MutationMapping
     public Boolean deleteUser(@Argument Long id) {
@@ -43,9 +43,11 @@ public class UserResolver {
 
     private UserDTO toDTO(UserInput input) {
         UserDTO dto = new UserDTO();
-        dto.setId(input.getId());
         dto.setName(input.getName());
         dto.setEmail(input.getEmail());
+        dto.setPassword(input.getPassword());
+        dto.setRole(input.getRole());
         return dto;
     }
+
 }

@@ -32,20 +32,29 @@ public class UserService {
     }
 
     public UserDTO save(UserDTO dto) {
-    User entity = new User();
-    entity.setId(dto.getId());
-    entity.setName(dto.getName());
-    entity.setEmail(dto.getEmail());
+    try {
+        System.out.println(">>> Guardando usuario con email: " + dto.getEmail());
 
-    if (dto.getPassword() != null) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        entity.setPassword(encoder.encode(dto.getPassword()));
+        User entity = new User();
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+
+        if (dto.getPassword() != null) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            entity.setPassword(encoder.encode(dto.getPassword()));
+        }
+
+        entity.setRole(dto.getRole());
+
+        User saved = userRepository.save(entity);
+        System.out.println(">>> Usuario guardado con ID: " + saved.getId());
+
+        return toDTO(saved);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException("Error al guardar usuario: " + e.getMessage(), e);
     }
-
-    entity.setRole(dto.getRole());
-
-    User saved = userRepository.save(entity);
-    return toDTO(saved);
 }
 
     public void delete(Long id) {
@@ -57,7 +66,7 @@ public class UserService {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
-        // ❌ No devolver password en el DTO a menos que sea estrictamente necesario
+        dto.setRole(entity.getRole());
         return dto;
     }
 }
