@@ -6,6 +6,7 @@ import com.tarea.services.ReminderService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -19,21 +20,25 @@ public class ReminderResolver {
         this.reminderService = reminderService;
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public List<ReminderDTO> getAllReminders() {
         return reminderService.getAll();
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public ReminderDTO getReminderById(@Argument Long id) {
         return reminderService.getById(id);
     }
 
+    @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
     public ReminderDTO createReminder(@Argument ReminderInput input) {
         return reminderService.save(toDTO(input));
     }
 
+    @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
     public Boolean deleteReminder(@Argument Long id) {
         reminderService.delete(id);

@@ -6,6 +6,7 @@ import com.tarea.services.CompletedActivityService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -19,21 +20,25 @@ public class CompletedActivityResolver {
         this.completedActivityService = completedActivityService;
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public List<CompletedActivityDTO> getAllCompletedActivities() {
         return completedActivityService.getAll();
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public CompletedActivityDTO getCompletedActivityById(@Argument Long id) {
         return completedActivityService.getById(id);
     }
 
+    @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
     public CompletedActivityDTO createCompletedActivity(@Argument CompletedActivityInput input) {
         return completedActivityService.save(toDTO(input));
     }
 
+    @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
     public Boolean deleteCompletedActivity(@Argument Long id) {
         completedActivityService.delete(id);

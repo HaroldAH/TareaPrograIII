@@ -6,6 +6,7 @@ import com.tarea.services.GuideHabitService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -19,21 +20,25 @@ public class GuideHabitResolver {
         this.guideHabitService = guideHabitService;
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public List<GuideHabitDTO> getAllGuideHabits() {
         return guideHabitService.getAll();
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public GuideHabitDTO getGuideHabitById(@Argument Long guideId, @Argument Long habitId) {
         return guideHabitService.getById(guideId, habitId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','COACH')")
     @MutationMapping
     public GuideHabitDTO createGuideHabit(@Argument GuideHabitInput input) {
         return guideHabitService.save(toDTO(input));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','COACH')")
     @MutationMapping
     public Boolean deleteGuideHabit(@Argument Long guideId, @Argument Long habitId) {
         guideHabitService.delete(guideId, habitId);

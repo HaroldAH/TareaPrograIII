@@ -1,18 +1,16 @@
 package com.tarea.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -27,64 +25,43 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
+                                    HttpServletResponse response,
+                                    FilterChain chain)
             throws ServletException, IOException {
 
         final String header = request.getHeader("Authorization");
 
         if (header == null || !header.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            chain.doFilter(request, response);
             return;
         }
 
         String token = header.substring(7);
 
         if (!jwtService.validateToken(token) || tokenBlacklist.isBlacklisted(token)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            chain.doFilter(request, response);
             return;
         }
 
         Long userId = jwtService.getUserIdFromToken(token);
-        String role = jwtService.getUserRoleFromToken(token);
+        String role = jwtService.getUserRoleFromToken(token); // p.ej. USER | ADMIN | COACH | AUDITOR
 
-        var auth = new UsernamePasswordAuthenticationToken(
-                userId, null, Collections.emptyList());
-
+        var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+        var auth = new UsernamePasswordAuthenticationToken(userId, null, authorities);
         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getRequestURI();
-
-        // Excluir rutas del filtro (rutas públicas)
-        if (path.equals("/api/test/connection") || path.equals("/ping")) {
-            return true;
-        }
-
-        // ✅ Permitir el acceso a la interfaz visual GraphiQL
-        if (path.equals("/graphiql")) {
-            return true;
-        }
-
-        // ✅ TEMPORALMENTE permitir TODAS las peticiones GraphQL
-        if (path.equals("/graphql")) {
-            return true; // ← CAMBIA ESTA LÍNEA (quita la lógica del body)
-        }
-
-        return false;
-    }
-
-    private boolean isLoginOrCreateUser(HttpServletRequest request) {
-        try {
-            String body = request.getReader().lines().reduce("", (acc, line) -> acc + line);
-            return body.contains("createUser") || body.contains("login");
-        } catch (IOException e) {
-            return false;
-        }
-    }
+protected boolean shouldNotFilter(HttpServletRequest request) {
+    String p = request.getRequestURI();
+    return p.equals("/api/test/connection")
+        || p.equals("/ping")
+        || p.equals("/graphiql")
+        || p.startsWith("/graphiql/")   // por si acaso
+        || p.startsWith("/vendor/");    // assets de GraphiQL
+    // OJO: /graphql ya NO va aquí
+}
 }

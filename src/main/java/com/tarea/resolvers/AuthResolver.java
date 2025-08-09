@@ -9,6 +9,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @Controller
 public class AuthResolver {
@@ -36,9 +37,11 @@ public class AuthResolver {
         return jwtService.generateToken(user.getId(), user.getRole());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @MutationMapping
     public Boolean logout(@Argument String token) {
         tokenBlacklist.blacklist(token);
         return true;
     }
+    
 }

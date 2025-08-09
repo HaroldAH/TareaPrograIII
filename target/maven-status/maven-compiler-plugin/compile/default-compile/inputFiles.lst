@@ -1,63 +1,63 @@
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\config\SecurityConfig.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\controllers\TestController.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\CompletedActivityDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\GuideDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\GuideHabitDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\HabitActivityDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\ReminderDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\RoleDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\RoutineDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\UserDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\UserRoleDTO.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Completedactivity.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Guide.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\GuideHabit.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\GuideHabitId.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Habitactivity.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Reminder.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Role.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Routine.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\User.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\UserRole.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\UserRoleId.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\CompletedActivityRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\GuideHabitRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\GuideRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\HabitActivityRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\ReminderRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\RoleRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\RoutineRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\UserRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\UserRoleRepository.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\AuthResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\CompletedActivityResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideHabitResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\HabitActivityResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\CompletedActivityInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideHabitInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\HabitActivityInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\ReminderInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\RoleInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\RoutineInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\UserInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\UserRoleInput.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\ReminderResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\RoleResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\RoutineResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\UserResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\UserRoleResolver.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\RutinasSaludablesApplication.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\JwtAuthFilter.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\TokenBlacklistService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\CompletedActivityService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\GuideHabitService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\GuideService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\HabitActivityService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\ReminderService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\RoleService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\RoutineService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\UserRoleService.java
-C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\UserService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\config\SecurityConfig.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\controllers\TestController.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\CompletedActivityDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\GuideDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\GuideHabitDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\HabitActivityDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\ReminderDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\RoleDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\RoutineDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\UserDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\dtos\UserRoleDTO.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Completedactivity.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Guide.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\GuideHabit.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\GuideHabitId.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Habitactivity.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Reminder.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Role.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\Routine.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\User.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\UserRole.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\models\UserRoleId.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\CompletedActivityRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\GuideHabitRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\GuideRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\HabitActivityRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\ReminderRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\RoleRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\RoutineRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\UserRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\repositories\UserRoleRepository.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\AuthResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\CompletedActivityResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideHabitResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\HabitActivityResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\CompletedActivityInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideHabitInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\HabitActivityInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\ReminderInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\RoleInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\RoutineInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\UserInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\UserRoleInput.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\ReminderResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\RoleResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\RoutineResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\UserResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\resolvers\UserRoleResolver.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\RutinasSaludablesApplication.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\JwtAuthFilter.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\security\TokenBlacklistService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\CompletedActivityService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\GuideHabitService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\GuideService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\HabitActivityService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\ReminderService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\RoleService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\RoutineService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\UserRoleService.java
+C:\Users\jordy\OneDrive\Desktop\TareaPrograIII\src\main\java\com\tarea\services\UserService.java

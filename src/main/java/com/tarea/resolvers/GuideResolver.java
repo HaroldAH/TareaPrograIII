@@ -6,6 +6,7 @@ import com.tarea.services.GuideService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -19,21 +20,25 @@ public class GuideResolver {
         this.guideService = guideService;
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public List<GuideDTO> getAllGuides() {
         return guideService.getAll();
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public GuideDTO getGuideById(@Argument Long id) {
         return guideService.getById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','COACH')")
     @MutationMapping
     public GuideDTO createGuide(@Argument GuideInput input) {
         return guideService.save(toDTO(input));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','COACH')")
     @MutationMapping
     public Boolean deleteGuide(@Argument Long id) {
         guideService.delete(id);
