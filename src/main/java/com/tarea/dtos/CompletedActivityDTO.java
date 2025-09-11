@@ -1,3 +1,4 @@
+// com/tarea/dtos/CompletedActivityDTO.java
 package com.tarea.dtos;
 
 import lombok.Data;
@@ -8,8 +9,8 @@ public class CompletedActivityDTO {
     private Long userId;
     private Long routineId;
     private Long habitId;
-    private String date;          
-    private String completedAt;
+    private String date;        // "YYYY-MM-DD"
+    private String completedAt; // "HH:mm"
     private Boolean isCompleted;
     private String notes;
 }

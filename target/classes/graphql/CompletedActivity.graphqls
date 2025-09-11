@@ -1,22 +1,25 @@
-# ==============================
-# ✅ SCHEMA GRAPHQL - Módulo CompletedActivity
-# ==============================
+# graphql/CompletedActivity.graphqls
 
 extend type Query {
   getAllCompletedActivities: [CompletedActivityDTO!]!
   getCompletedActivityById(id: ID!): CompletedActivityDTO
+
+  # extras útiles (opcional pero recomendado)
+  getCompletedActivitiesByUser(userId: ID!, startDate: String, endDate: String): [CompletedActivityDTO!]!
+  getMyCompletedActivities(startDate: String, endDate: String): [CompletedActivityDTO!]!
 }
 
 extend type Mutation {
-  createCompletedActivity(input: CompletedActivityInput!): CompletedActivityDTO
-  deleteCompletedActivity(id: ID!): Boolean
+  # puedes llamarle logCompletion si prefieres
+  createCompletedActivity(input: CompletedActivityInput!): CompletedActivityDTO!
+  deleteCompletedActivity(id: ID!): Boolean!
 }
 
 type CompletedActivityDTO {
   id: ID!
   userId: ID!
-  routineId: ID!
-  habitId: ID!
+  routineId: ID
+  habitId: ID
   date: String
   completedAt: String
   isCompleted: Boolean
@@ -25,11 +28,11 @@ type CompletedActivityDTO {
 
 input CompletedActivityInput {
   id: ID
-  userId: ID!
-  routineId: ID!
-  habitId: ID!
-  date: String
-  completedAt: String
+  userId: ID        # ← opcional (se rellena con el sub del token si es USER)
+  routineId: ID     # ← opcional
+  habitId: ID       # ← opcional
+  date: String        # "YYYY-MM-DD"
+  completedAt: String # "HH:mm"
   isCompleted: Boolean
   notes: String
 }

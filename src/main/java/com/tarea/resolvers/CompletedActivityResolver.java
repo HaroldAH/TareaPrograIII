@@ -1,3 +1,4 @@
+// com/tarea/resolvers/CompletedActivityResolver.java
 package com.tarea.resolvers;
 
 import com.tarea.dtos.CompletedActivityDTO;
@@ -7,6 +8,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -14,47 +16,107 @@ import java.util.List;
 @Controller
 public class CompletedActivityResolver {
 
-    private final CompletedActivityService completedActivityService;
+    private final CompletedActivityService service;
 
-    public CompletedActivityResolver(CompletedActivityService completedActivityService) {
-        this.completedActivityService = completedActivityService;
+    public CompletedActivityResolver(CompletedActivityService service) {
+        this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','COACH','AUDITOR')")
     @QueryMapping
     public List<CompletedActivityDTO> getAllCompletedActivities() {
-        return completedActivityService.getAll();
+        return service.getAll();
     }
 
-    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','COACH','AUDITOR')")
     @QueryMapping
     public CompletedActivityDTO getCompletedActivityById(@Argument Long id) {
-        return completedActivityService.getById(id);
+        return service.getById(id);
+    }
+
+    // Extras recomendados
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public List<CompletedActivityDTO> getCompletedActivitiesByUser(@Argument Long userId,
+                                                                   @Argument String startDate,
+                                                                   @Argument String endDate,
+                                                                   Authentication auth) {
+        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN") ||
+                a.getAuthority().equals("ROLE_COACH") ||
+                a.getAuthority().equals("ROLE_AUDITOR"));
+        if (!isStaff && !String.valueOf(userId).equals(auth.getName())) {
+            throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+        }
+        return service.getByUser(userId, startDate, endDate);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public List<CompletedActivityDTO> getMyCompletedActivities(@Argument String startDate,
+                                                               @Argument String endDate,
+                                                               Authentication auth) {
+        Long me = Long.valueOf(auth.getName());
+        return service.getByUser(me, startDate, endDate);
     }
 
     @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
-    public CompletedActivityDTO createCompletedActivity(@Argument CompletedActivityInput input) {
-        return completedActivityService.save(toDTO(input));
+    public CompletedActivityDTO createCompletedActivity(@Argument("input") CompletedActivityInput input,
+                                                        Authentication auth) {
+        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN") ||
+                a.getAuthority().equals("ROLE_COACH") ||
+                a.getAuthority().equals("ROLE_AUDITOR"));
+        Long me = Long.valueOf(auth.getName());
+
+        if (!isStaff) {
+            if (input.getId() != null) {
+                CompletedActivityDTO existing = service.getById(input.getId());
+                if (existing == null) throw new IllegalArgumentException("Registro no encontrado: " + input.getId());
+                if (!me.equals(existing.getUserId())) {
+                    throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+                }
+            }
+            if (input.getUserId() == null) input.setUserId(me);
+            else if (!me.equals(input.getUserId())) {
+                throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+            }
+        }
+
+        return service.save(toDTO(input));
     }
 
     @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
-    public Boolean deleteCompletedActivity(@Argument Long id) {
-        completedActivityService.delete(id);
+    public Boolean deleteCompletedActivity(@Argument Long id, Authentication auth) {
+        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN") ||
+                a.getAuthority().equals("ROLE_COACH") ||
+                a.getAuthority().equals("ROLE_AUDITOR"));
+
+        if (!isStaff) {
+            CompletedActivityDTO existing = service.getById(id);
+            if (existing == null) throw new IllegalArgumentException("Registro no encontrado: " + id);
+            if (!String.valueOf(existing.getUserId()).equals(auth.getName())) {
+                throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+            }
+        }
+
+        service.delete(id);
         return true;
     }
 
-    private CompletedActivityDTO toDTO(CompletedActivityInput input) {
+    private CompletedActivityDTO toDTO(CompletedActivityInput in) {
         CompletedActivityDTO dto = new CompletedActivityDTO();
-        dto.setId(input.getId());
-        dto.setUserId(input.getUserId());
-        dto.setRoutineId(input.getRoutineId());
-        dto.setHabitId(input.getHabitId());
-        dto.setDate(input.getDate());
-        dto.setCompletedAt(input.getCompletedAt());
-        dto.setIsCompleted(input.getIsCompleted());
-        dto.setNotes(input.getNotes());
+        dto.setId(in.getId());
+        dto.setUserId(in.getUserId());
+        dto.setRoutineId(in.getRoutineId());
+        dto.setHabitId(in.getHabitId());
+        dto.setDate(in.getDate());
+        dto.setCompletedAt(in.getCompletedAt());
+        dto.setIsCompleted(in.getIsCompleted());
+        dto.setNotes(in.getNotes());
         return dto;
     }
 }
