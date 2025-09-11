@@ -5,11 +5,10 @@ import com.tarea.models.Routine;
 import com.tarea.models.User;
 import com.tarea.repositories.RoutineRepository;
 import com.tarea.repositories.UserRepository;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,15 +34,37 @@ public class RoutineService {
                 .map(this::toDTO)
                 .orElse(null);
     }
+public List<RoutineDTO> getByUserId(Long userId) {
+    return routineRepository.findByUser_Id(userId).stream()
+            .map(this::toDTO)
+            .collect(Collectors.toList());
+}
 
+    @Transactional
     public RoutineDTO save(RoutineDTO dto) {
-        Routine entity = new Routine();
-        entity.setId(dto.getId());
+        if (dto.getUserId() == null) {
+            throw new IllegalArgumentException("userId es obligatorio.");
+        }
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Usuario no encontrado: " + dto.getUserId()));
+
+        final Routine entity;
+
+        if (dto.getId() != null) {
+            // UPDATE
+            entity = routineRepository.findById(dto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Rutina no encontrada: " + dto.getId()));
+        } else {
+            // CREATE (¡NO setear id!)
+            entity = new Routine();
+        }
+
         entity.setTitle(dto.getTitle());
         entity.setDaysOfWeek(dto.getDaysOfWeek());
-
-        Optional<User> user = userRepository.findById(dto.getUserId());
-        entity.setUser(user.orElse(null));
+        entity.setUser(user);
 
         Routine saved = routineRepository.save(entity);
         return toDTO(saved);

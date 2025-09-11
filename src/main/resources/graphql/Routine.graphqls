@@ -3,25 +3,31 @@
 # ==============================
 
 extend type Query {
+
   getAllRoutines: [RoutineDTO!]!
   getRoutineById(id: ID!): RoutineDTO
+
+
+  getRoutinesByUser(userId: ID!): [RoutineDTO!]!
+
+  getMyRoutines: [RoutineDTO!]!
 }
 
 extend type Mutation {
-  createRoutine(input: RoutineInput!): RoutineDTO
-  deleteRoutine(id: ID!): Boolean
+  createRoutine(input: RoutineInput!): RoutineDTO!
+  deleteRoutine(id: ID!): Boolean!
 }
 
 type RoutineDTO {
   id: ID!
   title: String!
-  userId: ID!
+  userId: ID!        
   daysOfWeek: String
 }
 
 input RoutineInput {
   id: ID
   title: String!
-  userId: ID!
+  userId: ID!       
   daysOfWeek: String
 }
