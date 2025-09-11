@@ -14,47 +14,47 @@ import java.util.List;
 @Controller
 public class HabitActivityResolver {
 
-    private final HabitActivityService habitActivityService;
+    private final HabitActivityService service;
 
-    public HabitActivityResolver(HabitActivityService habitActivityService) {
-        this.habitActivityService = habitActivityService;
+    public HabitActivityResolver(HabitActivityService service) {
+        this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    // Listar/ver: abierto a todos los roles autenticados (o incluso sin auth si prefieres)
     @QueryMapping
     public List<HabitActivityDTO> getAllHabitActivities() {
-        return habitActivityService.getAll();
+        return service.getAll();
     }
 
-    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public HabitActivityDTO getHabitActivityById(@Argument Long id) {
-        return habitActivityService.getById(id);
+        return service.getById(id);
     }
 
+    // Crear/actualizar: solo staff (ADMIN, COACH). Auditor NO.
     @PreAuthorize("hasAnyRole('ADMIN','COACH')")
     @MutationMapping
     public HabitActivityDTO createHabitActivity(@Argument HabitActivityInput input) {
-        return habitActivityService.save(toDTO(input));
+        return service.save(toDTO(input));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','COACH')")
     @MutationMapping
     public Boolean deleteHabitActivity(@Argument Long id) {
-        habitActivityService.delete(id);
+        service.delete(id);
         return true;
     }
 
-    private HabitActivityDTO toDTO(HabitActivityInput input) {
+    private HabitActivityDTO toDTO(HabitActivityInput in) {
         HabitActivityDTO dto = new HabitActivityDTO();
-        dto.setId(input.getId());
-        dto.setName(input.getName());
-        dto.setCategory(input.getCategory());
-        dto.setDescription(input.getDescription());
-        dto.setDuration(input.getDuration());
-        dto.setTargetTime(input.getTargetTime());
-        dto.setNotes(input.getNotes());
-        dto.setIsFavorite(input.getIsFavorite());
+        dto.setId(in.getId());
+        dto.setName(in.getName());
+        dto.setCategory(in.getCategory());
+        dto.setDescription(in.getDescription());
+        dto.setDuration(in.getDuration());
+        dto.setTargetTime(in.getTargetTime());
+        dto.setNotes(in.getNotes());
+        dto.setIsFavorite(in.getIsFavorite());
         return dto;
     }
 }

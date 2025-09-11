@@ -4,12 +4,16 @@ import com.tarea.dtos.HabitActivityDTO;
 import com.tarea.models.Habitactivity;
 import com.tarea.repositories.HabitActivityRepository;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
+// com/tarea/services/HabitActivityService.java
+
 public class HabitActivityService {
 
     private final HabitActivityRepository habitActivityRepository;
@@ -30,15 +34,15 @@ public class HabitActivityService {
                 .orElse(null);
     }
 
+    @Transactional
     public HabitActivityDTO save(HabitActivityDTO dto) {
         final Habitactivity entity;
 
-        if (dto.getId() != null) {
-            // UPDATE
+        if (dto.getId() != null) { // UPDATE
             entity = habitActivityRepository.findById(dto.getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Habit no encontrado: " + dto.getId()));
-        } else {
-            // CREATE
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "HabitActivity no encontrada: " + dto.getId()));
+        } else {                    // CREATE (no seteamos id)
             entity = new Habitactivity();
         }
 
@@ -46,7 +50,9 @@ public class HabitActivityService {
         entity.setCategory(dto.getCategory());
         entity.setDescription(dto.getDescription());
         entity.setDuration(dto.getDuration());
-        entity.setTargetTime(dto.getTargetTime() != null ? LocalTime.parse(dto.getTargetTime()) : null);
+        entity.setTargetTime(dto.getTargetTime() != null && !dto.getTargetTime().isBlank()
+                ? java.time.LocalTime.parse(dto.getTargetTime())  // "HH:mm"
+                : null);
         entity.setNotes(dto.getNotes());
         entity.setIsFavorite(dto.getIsFavorite());
 

@@ -18,9 +18,10 @@ import java.time.LocalTime;
 public class Habitactivity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)   // <— AÑADE ESTO
-    @Column(name = "id", nullable = false)
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)   // <-- agrega esto
+@Column(name = "id")
+private Long id;
+
 
     @Column(name = "name", length = 20)
     private String name;
