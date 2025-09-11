@@ -2,19 +2,23 @@ package com.tarea.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalTime;
-
+// com.tarea.models.Habitactivity
 @Getter
 @Setter
 @Entity
 @Table(name = "habitactivity")
 public class Habitactivity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)   // <— AÑADE ESTO
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -31,12 +35,11 @@ public class Habitactivity {
     private Integer duration;
 
     @Column(name = "targetTime")
-    private LocalTime targetTime;
+    private java.time.LocalTime targetTime;
 
     @Column(name = "notes")
     private String notes;
 
     @Column(name = "isFavorite")
     private Boolean isFavorite;
-
 }

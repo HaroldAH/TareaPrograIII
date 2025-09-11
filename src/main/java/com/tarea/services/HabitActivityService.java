@@ -6,9 +6,9 @@ import com.tarea.repositories.HabitActivityRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 public class HabitActivityService {
 
@@ -31,13 +31,22 @@ public class HabitActivityService {
     }
 
     public HabitActivityDTO save(HabitActivityDTO dto) {
-        Habitactivity entity = new Habitactivity();
-        entity.setId(dto.getId());
+        final Habitactivity entity;
+
+        if (dto.getId() != null) {
+            // UPDATE
+            entity = habitActivityRepository.findById(dto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Habit no encontrado: " + dto.getId()));
+        } else {
+            // CREATE
+            entity = new Habitactivity();
+        }
+
         entity.setName(dto.getName());
         entity.setCategory(dto.getCategory());
         entity.setDescription(dto.getDescription());
         entity.setDuration(dto.getDuration());
-        entity.setTargetTime(java.time.LocalTime.parse(dto.getTargetTime()));
+        entity.setTargetTime(dto.getTargetTime() != null ? LocalTime.parse(dto.getTargetTime()) : null);
         entity.setNotes(dto.getNotes());
         entity.setIsFavorite(dto.getIsFavorite());
 

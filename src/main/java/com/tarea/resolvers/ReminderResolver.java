@@ -7,6 +7,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -20,27 +21,83 @@ public class ReminderResolver {
         this.reminderService = reminderService;
     }
 
-    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    // Solo staff
+    @PreAuthorize("hasAnyRole('ADMIN','COACH','AUDITOR')")
     @QueryMapping
     public List<ReminderDTO> getAllReminders() {
         return reminderService.getAll();
     }
 
-    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    // Solo staff
+    @PreAuthorize("hasAnyRole('ADMIN','COACH','AUDITOR')")
     @QueryMapping
     public ReminderDTO getReminderById(@Argument Long id) {
         return reminderService.getById(id);
     }
 
+    // USER ve solo lo suyo; staff puede ver cualquiera
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public List<ReminderDTO> getRemindersByUser(@Argument Long userId, Authentication auth) {
+        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN") ||
+                a.getAuthority().equals("ROLE_COACH") ||
+                a.getAuthority().equals("ROLE_AUDITOR"));
+        if (!isStaff && !String.valueOf(userId).equals(auth.getName())) {
+            throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+        }
+        return reminderService.getByUserId(userId);
+    }
+
+    // Conveniencia para el usuario autenticado
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public List<ReminderDTO> getMyReminders(Authentication auth) {
+        Long me = Long.valueOf(auth.getName());
+        return reminderService.getByUserId(me);
+    }
+
+    // Crear/actualizar: AUDITOR no puede; USER solo los suyos
     @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
-    public ReminderDTO createReminder(@Argument ReminderInput input) {
+    public ReminderDTO createReminder(@Argument("input") ReminderInput input, Authentication auth) {
+        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN") ||
+                a.getAuthority().equals("ROLE_COACH") ||
+                a.getAuthority().equals("ROLE_AUDITOR"));
+        Long me = Long.valueOf(auth.getName());
+
+        if (!isStaff) {
+            if (input.getId() != null) {
+                ReminderDTO existing = reminderService.getById(input.getId());
+                if (existing == null) throw new IllegalArgumentException("Reminder no encontrado: " + input.getId());
+                if (!me.equals(existing.getUserId())) {
+                    throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+                }
+            }
+            if (input.getUserId() == null) input.setUserId(me);
+            else if (!me.equals(input.getUserId())) {
+                throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+            }
+        }
         return reminderService.save(toDTO(input));
     }
 
+    // Borrar: AUDITOR no puede; USER solo los suyos
     @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
-    public Boolean deleteReminder(@Argument Long id) {
+    public Boolean deleteReminder(@Argument Long id, Authentication auth) {
+        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN") ||
+                a.getAuthority().equals("ROLE_COACH") ||
+                a.getAuthority().equals("ROLE_AUDITOR"));
+        if (!isStaff) {
+            ReminderDTO r = reminderService.getById(id);
+            if (r == null) throw new IllegalArgumentException("Reminder no encontrado: " + id);
+            if (!String.valueOf(r.getUserId()).equals(auth.getName())) {
+                throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+            }
+        }
         reminderService.delete(id);
         return true;
     }
