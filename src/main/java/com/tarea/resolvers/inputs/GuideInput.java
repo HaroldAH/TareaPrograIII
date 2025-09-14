@@ -5,6 +5,7 @@ public class GuideInput {
     private String title;
     private String content;
     private String category; // Ej: "PHYSICAL", "MENTAL", "SLEEP", "DIET"
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -36,5 +37,13 @@ public class GuideInput {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

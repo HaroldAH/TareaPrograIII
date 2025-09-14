@@ -3,12 +3,8 @@ package com.tarea.services;
 import com.tarea.dtos.HabitActivityDTO;
 import com.tarea.models.Habitactivity;
 import com.tarea.repositories.HabitActivityRepository;
-
 import jakarta.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
-
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service

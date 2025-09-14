@@ -11,6 +11,7 @@ import lombok.Setter;
 public class Guide {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title", length = 100)
@@ -24,4 +25,7 @@ public class Guide {
     @Column(name = "category")
     private String category;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

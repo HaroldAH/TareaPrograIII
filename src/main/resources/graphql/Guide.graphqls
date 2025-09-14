@@ -5,6 +5,9 @@
 extend type Query {
   getAllGuides: [GuideDTO!]!
   getGuideById(id: ID!): GuideDTO
+  getGuidesByCategory(category: String!): [GuideDTO!]!         # <-- Agrega esto
+  getGuidesByUser(userId: ID!): [GuideDTO!]!                   # <-- Agrega esto
+  getGuidesByCategoryAndUser(category: String!, userId: ID!): [GuideDTO!]! # <-- Opcional
 }
 
 extend type Mutation {
@@ -17,6 +20,7 @@ type GuideDTO {
   title: String!
   content: String
   category: String
+  userId: ID!
 }
 
 input GuideInput {
@@ -24,4 +28,5 @@ input GuideInput {
   title: String!
   content: String
   category: String
+  userId: ID
 }

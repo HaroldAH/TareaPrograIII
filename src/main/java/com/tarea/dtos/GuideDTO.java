@@ -8,4 +8,5 @@ public class GuideDTO {
     private String title;
     private String content;
     private String category;
+    private Long userId;
 }
