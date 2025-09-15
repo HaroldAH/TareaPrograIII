@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
 // com.tarea.models.Habitactivity
 @Getter
 @Setter
@@ -16,10 +17,9 @@ import lombok.Setter;
 public class Habitactivity {
 
     @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)   // <-- agrega esto
-@Column(name = "id")
-private Long id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // <-- agrega esto
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "name", length = 20)
     private String name;
@@ -38,7 +38,4 @@ private Long id;
 
     @Column(name = "notes")
     private String notes;
-
-    @Column(name = "isFavorite")
-    private Boolean isFavorite;
 }

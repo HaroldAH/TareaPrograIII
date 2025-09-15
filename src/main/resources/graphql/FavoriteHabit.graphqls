@@ -1,0 +1,21 @@
+extend type Query {
+  getAllFavoriteHabits: [FavoriteHabitDTO!]!
+  getFavoriteHabitById(id: ID!): FavoriteHabitDTO
+}
+
+extend type Mutation {
+  createFavoriteHabit(input: FavoriteHabitInput!): FavoriteHabitDTO!
+  deleteFavoriteHabit(id: ID!): Boolean!
+}
+
+type FavoriteHabitDTO {
+  id: ID!
+  userId: ID!
+  habitId: ID!
+}
+
+input FavoriteHabitInput {
+  id: ID
+  userId: ID!
+  habitId: ID!
+}

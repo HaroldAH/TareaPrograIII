@@ -8,7 +8,6 @@ public class HabitActivityInput {
     private Integer duration;    // En minutos
     private String targetTime;   // Ej: "07:30", formato HH:mm
     private String notes;
-    private Boolean isFavorite;
 
     public Long getId() {
         return id;
@@ -64,13 +63,5 @@ public class HabitActivityInput {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public Boolean getIsFavorite() {
-        return isFavorite;
-    }
-
-    public void setIsFavorite(Boolean isFavorite) {
-        this.isFavorite = isFavorite;
     }
 }

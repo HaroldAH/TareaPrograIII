@@ -1,6 +1,7 @@
 package com.tarea.services;
 
 import com.tarea.dtos.HabitActivityDTO;
+import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.models.Habitactivity;
 import com.tarea.repositories.HabitActivityRepository;
 import jakarta.transaction.Transactional;
@@ -50,7 +51,6 @@ public class HabitActivityService {
                 ? java.time.LocalTime.parse(dto.getTargetTime())  // "HH:mm"
                 : null);
         entity.setNotes(dto.getNotes());
-        entity.setIsFavorite(dto.getIsFavorite());
 
         Habitactivity saved = habitActivityRepository.save(entity);
         return toDTO(saved);
@@ -58,6 +58,24 @@ public class HabitActivityService {
 
     public void delete(Long id) {
         habitActivityRepository.deleteById(id);
+    }
+
+    public List<HabitActivityListDTO> getByCategory(String category) {
+        return habitActivityRepository.findByCategory(category).stream()
+                .map(this::toListDTO)
+                .collect(Collectors.toList());
+    }
+
+    public HabitActivityDTO getByName(String name) {
+        return habitActivityRepository.findByName(name)
+                .map(this::toDTO)
+                .orElse(null);
+    }
+
+    public List<HabitActivityListDTO> getAllAsList() {
+        return habitActivityRepository.findAll().stream()
+                .map(this::toListDTO)
+                .collect(Collectors.toList());
     }
 
     private HabitActivityDTO toDTO(Habitactivity entity) {
@@ -69,7 +87,14 @@ public class HabitActivityService {
         dto.setDuration(entity.getDuration());
         dto.setTargetTime(entity.getTargetTime() != null ? entity.getTargetTime().toString() : null);
         dto.setNotes(entity.getNotes());
-        dto.setIsFavorite(entity.getIsFavorite());
+        return dto;
+    }
+
+    private HabitActivityListDTO toListDTO(Habitactivity entity) {
+        HabitActivityListDTO dto = new HabitActivityListDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setCategory(entity.getCategory());
         return dto;
     }
 }

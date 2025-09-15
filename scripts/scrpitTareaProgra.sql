@@ -149,3 +149,35 @@ CREATE TABLE IF NOT EXISTS `user_role` (
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+package com.tarea.models;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "favoriteHabit", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"user_id", "habit_id"})
+})
+public class FavoriteHabit {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "habit_id", nullable = false)
+    private Habitactivity habit;
+
+    // Getters y setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    public Habitactivity getHabit() { return habit; }
+    public void setHabit(Habitactivity habit) { this.habit = habit; }
+}

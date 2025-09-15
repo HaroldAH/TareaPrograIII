@@ -1,6 +1,7 @@
 package com.tarea.resolvers;
 
 import com.tarea.dtos.HabitActivityDTO;
+import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.resolvers.inputs.HabitActivityInput;
 import com.tarea.services.HabitActivityService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -26,9 +27,25 @@ public class HabitActivityResolver {
         return service.getAll();
     }
 
+    // Listar todos los hábitos por categoría (solo nombre y categoría)
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @QueryMapping
+    public List<HabitActivityListDTO> getHabitActivitiesByCategory(@Argument String category) {
+        return service.getByCategory(category);
+    }
+
+    // Detalle por ID
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
     @QueryMapping
     public HabitActivityDTO getHabitActivityById(@Argument Long id) {
         return service.getById(id);
+    }
+
+    // Detalle por nombre
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @QueryMapping
+    public HabitActivityDTO getHabitActivityByName(@Argument String name) {
+        return service.getByName(name);
     }
 
     // Crear/actualizar: solo staff (ADMIN, COACH). Auditor NO.
@@ -45,6 +62,13 @@ public class HabitActivityResolver {
         return true;
     }
 
+    // Listar/ver: abierto a todos los roles autenticados (o incluso sin auth si prefieres)
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @QueryMapping
+    public List<HabitActivityListDTO> getAllHabitActivitiesAsList() {
+        return service.getAllAsList();
+    }
+
     private HabitActivityDTO toDTO(HabitActivityInput in) {
         HabitActivityDTO dto = new HabitActivityDTO();
         dto.setId(in.getId());
@@ -54,7 +78,6 @@ public class HabitActivityResolver {
         dto.setDuration(in.getDuration());
         dto.setTargetTime(in.getTargetTime());
         dto.setNotes(in.getNotes());
-        dto.setIsFavorite(in.getIsFavorite());
         return dto;
     }
 }

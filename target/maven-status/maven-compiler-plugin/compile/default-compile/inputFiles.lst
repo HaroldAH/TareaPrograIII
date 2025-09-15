@@ -1,15 +1,18 @@
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\config\SecurityConfig.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\controllers\TestController.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\CompletedActivityDTO.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\FavoriteHabitDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\GuideDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\GuideHabitDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\HabitActivityDTO.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\HabitActivityListDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\ReminderDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\RoleDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\RoutineDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\UserDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\dtos\UserRoleDTO.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\models\Completedactivity.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\models\FavoriteHabit.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\models\Guide.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\models\GuideHabit.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\models\GuideHabitId.java
@@ -21,6 +24,7 @@ C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\models\UserRole.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\models\UserRoleId.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\repositories\CompletedActivityRepository.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\repositories\FavoriteHabitRepository.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\repositories\GuideHabitRepository.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\repositories\GuideRepository.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\repositories\HabitActivityRepository.java
@@ -31,10 +35,12 @@ C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\repositories\UserRoleRepository.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\AuthResolver.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\CompletedActivityResolver.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\FavoriteHabitResolver.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideHabitResolver.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\GuideResolver.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\HabitActivityResolver.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\CompletedActivityInput.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\FavoriteHabitInput.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideHabitInput.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideInput.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\HabitActivityInput.java
@@ -53,6 +59,7 @@ C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\security\TokenBlacklistService.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\services\CompletedActivityService.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\services\FavoriteHabitService.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\services\GuideHabitService.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\services\GuideService.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\services\HabitActivityService.java

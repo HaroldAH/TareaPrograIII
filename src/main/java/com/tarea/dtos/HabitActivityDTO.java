@@ -11,5 +11,4 @@ public class HabitActivityDTO {
     private Integer duration;    // En minutos
     private String targetTime;   // Formato: "HH:mm" como string para GraphQL
     private String notes;
-    private Boolean isFavorite;
 }

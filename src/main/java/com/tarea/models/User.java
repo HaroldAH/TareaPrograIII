@@ -29,7 +29,6 @@ public class User {
     private String password;
 
     @Column(name = "role", nullable = false, length = 50)
-private String role; // Ejemplo: "USER", "AUDITOR"
-
+    private String role; // Ejemplo: "USER", "AUDITOR"
 
 }

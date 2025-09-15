@@ -8,6 +8,7 @@ com\tarea\repositories\HabitActivityRepository.class
 com\tarea\RutinasSaludablesApplication.class
 com\tarea\models\User.class
 com\tarea\resolvers\inputs\GuideHabitInput.class
+com\tarea\dtos\HabitActivityListDTO.class
 com\tarea\models\GuideHabitId.class
 com\tarea\resolvers\inputs\CompletedActivityInput.class
 com\tarea\resolvers\inputs\RoutineInput.class
