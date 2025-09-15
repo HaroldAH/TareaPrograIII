@@ -1,6 +1,10 @@
 extend type Query {
   getAllFavoriteHabits: [FavoriteHabitDTO!]!
   getFavoriteHabitById(id: ID!): FavoriteHabitDTO
+
+  getFavoriteHabitsListByUser: [HabitActivityListDTO!]!
+  getFavoriteHabitsByCategory(category: String!): [HabitActivityListDTO!]!
+  getFavoriteHabitDetailByName(name: String!): HabitActivityDTO
 }
 
 extend type Mutation {

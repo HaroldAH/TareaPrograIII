@@ -1,6 +1,8 @@
 package com.tarea.services;
 
 import com.tarea.dtos.FavoriteHabitDTO;
+import com.tarea.dtos.HabitActivityListDTO;
+import com.tarea.dtos.HabitActivityDTO;
 import com.tarea.models.FavoriteHabit;
 import com.tarea.models.User;
 import com.tarea.models.Habitactivity;
@@ -70,6 +72,45 @@ public class FavoriteHabitService {
         dto.setId(entity.getId());
         dto.setUserId(entity.getUser().getId());
         dto.setHabitId(entity.getHabit().getId());
+        return dto;
+    }
+
+    public List<HabitActivityListDTO> getFavoriteHabitsListByUser(Long userId) {
+        return favoriteHabitRepository.findByUser_Id(userId).stream()
+            .map(fav -> {
+                Habitactivity habit = fav.getHabit();
+                HabitActivityListDTO dto = new HabitActivityListDTO();
+                dto.setId(habit.getId());
+                dto.setName(habit.getName());
+                dto.setCategory(habit.getCategory());
+                return dto;
+            }).collect(Collectors.toList());
+    }
+
+    public List<HabitActivityListDTO> getFavoriteHabitsByCategory(Long userId, String category) {
+        return favoriteHabitRepository.findByUser_IdAndHabit_Category(userId, category).stream()
+            .map(fav -> {
+                Habitactivity habit = fav.getHabit();
+                HabitActivityListDTO dto = new HabitActivityListDTO();
+                dto.setId(habit.getId());
+                dto.setName(habit.getName());
+                dto.setCategory(habit.getCategory());
+                return dto;
+            }).collect(Collectors.toList());
+    }
+
+    public HabitActivityDTO getFavoriteHabitDetailByName(Long userId, String name) {
+        FavoriteHabit fav = favoriteHabitRepository.findByUser_IdAndHabit_Name(userId, name);
+        if (fav == null) return null;
+        Habitactivity habit = fav.getHabit();
+        HabitActivityDTO dto = new HabitActivityDTO();
+        dto.setId(habit.getId());
+        dto.setName(habit.getName());
+        dto.setCategory(habit.getCategory());
+        dto.setDescription(habit.getDescription());
+        dto.setDuration(habit.getDuration());
+        dto.setTargetTime(habit.getTargetTime() != null ? habit.getTargetTime().toString() : null);
+        dto.setNotes(habit.getNotes());
         return dto;
     }
 }
