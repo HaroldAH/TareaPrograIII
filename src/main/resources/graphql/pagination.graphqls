@@ -1,0 +1,44 @@
+"""
+Entrada genérica de paginación y ordenamiento.
+sort admite formatos: ["name,asc","id,desc"] o ["-name","+id"]
+"""
+input PageRequestInput {
+  page: Int! = 0
+  size: Int! = 20
+  sort: [String!]
+}
+
+"Metadatos de la página"
+type PageInfo {
+  totalElements: Int!
+  totalPages: Int!
+  page: Int!
+  size: Int!
+  numberOfElements: Int!
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+}
+
+"Página de HabitActivity"
+type HabitActivityPage {
+  content: [HabitActivityDTO!]!
+  pageInfo: PageInfo!
+}
+
+"Página de Guide"
+type GuidePage {
+  content: [GuideDTO!]!
+  pageInfo: PageInfo!
+}
+
+"Página de CompletedActivity"
+type CompletedActivityPage {
+  content: [CompletedActivityDTO!]!
+  pageInfo: PageInfo!
+}
+
+extend type Query {
+  habitActivitiesPage(page: PageRequestInput!): HabitActivityPage!
+  guidesPage(page: PageRequestInput!): GuidePage!
+  completedActivitiesPage(page: PageRequestInput!): CompletedActivityPage!
+}
