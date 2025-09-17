@@ -69,6 +69,18 @@ public class HabitActivityResolver {
         return service.getAllAsList();
     }
 
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @QueryMapping
+    public List<HabitActivityDTO> getHabitActivitiesByRoutineId(@Argument Long routineId) {
+        return service.getByRoutineId(routineId);
+    }
+
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @QueryMapping
+    public List<HabitActivityListDTO> getHabitActivitiesListByRoutineId(@Argument Long routineId) {
+        return service.getByRoutineIdList(routineId);
+    }
+
     private HabitActivityDTO toDTO(HabitActivityInput in) {
         HabitActivityDTO dto = new HabitActivityDTO();
         dto.setId(in.getId());
@@ -78,6 +90,7 @@ public class HabitActivityResolver {
         dto.setDuration(in.getDuration());
         dto.setTargetTime(in.getTargetTime());
         dto.setNotes(in.getNotes());
+        dto.setRoutineId(in.getRoutineId());
         return dto;
     }
 }

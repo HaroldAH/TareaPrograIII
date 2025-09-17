@@ -38,4 +38,7 @@ public class Habitactivity {
 
     @Column(name = "notes")
     private String notes;
+
+    @Column(name = "routine_id")
+    private Long routineId;
 }

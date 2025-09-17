@@ -1,4 +1,3 @@
-// com/tarea/repositories/CompletedActivityRepository.java
 package com.tarea.repositories;
 
 import com.tarea.models.Completedactivity;

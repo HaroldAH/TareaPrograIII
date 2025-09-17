@@ -3,6 +3,8 @@ extend type Query {
   getHabitActivitiesByCategory(category: String!): [HabitActivityListDTO!]!
   getHabitActivityById(id: ID!): HabitActivityDTO
   getHabitActivityByName(name: String!): HabitActivityDTO
+  getHabitActivitiesByRoutineId(routineId: ID!): [HabitActivityDTO!]!
+  getHabitActivitiesListByRoutineId(routineId: ID!): [HabitActivityListDTO!]!
 }
 
 extend type Mutation {
@@ -18,12 +20,14 @@ type HabitActivityDTO {
   duration: Int
   targetTime: String
   notes: String
+  routineId: ID
 }
 
 type HabitActivityListDTO {
   id: ID!
   name: String!
   category: String
+  routineId: ID
 }
 
 input HabitActivityInput {
@@ -34,4 +38,5 @@ input HabitActivityInput {
   duration: Int
   targetTime: String   # "HH:mm"
   notes: String
+  routineId: ID
 }

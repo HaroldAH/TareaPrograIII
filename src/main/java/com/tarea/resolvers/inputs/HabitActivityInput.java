@@ -8,6 +8,7 @@ public class HabitActivityInput {
     private Integer duration;    // En minutos
     private String targetTime;   // Ej: "07:30", formato HH:mm
     private String notes;
+    private Long routineId;
 
     public Long getId() {
         return id;
@@ -63,5 +64,13 @@ public class HabitActivityInput {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Long getRoutineId() {
+        return routineId;
+    }
+
+    public void setRoutineId(Long routineId) {
+        this.routineId = routineId;
     }
 }

@@ -51,6 +51,7 @@ public class HabitActivityService {
                 ? java.time.LocalTime.parse(dto.getTargetTime())  // "HH:mm"
                 : null);
         entity.setNotes(dto.getNotes());
+        entity.setRoutineId(dto.getRoutineId());
 
         Habitactivity saved = habitActivityRepository.save(entity);
         return toDTO(saved);
@@ -78,6 +79,18 @@ public class HabitActivityService {
                 .collect(Collectors.toList());
     }
 
+    public List<HabitActivityDTO> getByRoutineId(Long routineId) {
+        return habitActivityRepository.findByRoutineId(routineId).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+     public List<HabitActivityListDTO> getByRoutineIdList(Long routineId) {
+        return habitActivityRepository.findByRoutineId(routineId).stream()
+                .map(this::toListDTO)
+                .collect(Collectors.toList());
+    }
+
     private HabitActivityDTO toDTO(Habitactivity entity) {
         HabitActivityDTO dto = new HabitActivityDTO();
         dto.setId(entity.getId());
@@ -87,6 +100,7 @@ public class HabitActivityService {
         dto.setDuration(entity.getDuration());
         dto.setTargetTime(entity.getTargetTime() != null ? entity.getTargetTime().toString() : null);
         dto.setNotes(entity.getNotes());
+        dto.setRoutineId(entity.getRoutineId());
         return dto;
     }
 
@@ -95,6 +109,7 @@ public class HabitActivityService {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setCategory(entity.getCategory());
+        dto.setRoutineId(entity.getRoutineId());
         return dto;
     }
 }
