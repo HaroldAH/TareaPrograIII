@@ -8,6 +8,7 @@ extend type Query {
   getGuidesByCategory(category: String!): [GuideDTO!]!         # <-- Agrega esto
   getGuidesByUser(userId: ID!): [GuideDTO!]!                   # <-- Agrega esto
   getGuidesByCategoryAndUser(category: String!, userId: ID!): [GuideDTO!]! # <-- Opcional
+  getGuideDetail(id: ID!): GuideDetailDTO
 }
 
 extend type Mutation {
@@ -29,4 +30,19 @@ input GuideInput {
   content: String
   category: String
   userId: ID
+}
+
+type GuideDetailDTO {
+  id: ID!
+  title: String!
+  content: String
+  category: String
+  userId: ID!
+  recommendHabit: [HabitActivityListDTO!]!
+}
+
+type HabitActivityListDTO {
+  id: ID!
+  name: String!
+  category: String!
 }

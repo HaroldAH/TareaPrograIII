@@ -39,6 +39,8 @@ public class FavoriteHabitResolver {
 
     @MutationMapping
     public FavoriteHabitDTO createFavoriteHabit(@Argument FavoriteHabitInput input) {
+        Long userId = getAuthenticatedUserId();
+        input.setUserId(userId);
         return service.save(toDTO(input));
     }
 

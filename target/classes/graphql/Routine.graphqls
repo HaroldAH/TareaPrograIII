@@ -11,6 +11,7 @@ extend type Query {
   getRoutinesByUser(userId: ID!): [RoutineDTO!]!
 
   getMyRoutines: [RoutineDTO!]!
+  getRoutineDetail(id: ID!): RoutineDetailDTO
 }
 
 extend type Mutation {
@@ -30,4 +31,21 @@ input RoutineInput {
   title: String!
   userId: ID!       
   daysOfWeek: String
+}
+
+type RoutineHabitDetailDTO {
+  habitId: ID!
+  name: String!
+  category: String!
+  description: String
+  orderInRoutine: Int!
+  targetTimeInRoutine: String
+  notes: String
+}
+
+type RoutineDetailDTO {
+  id: ID!
+  title: String!
+  daysOfWeek: String
+  habits: [RoutineHabitDetailDTO!]!
 }

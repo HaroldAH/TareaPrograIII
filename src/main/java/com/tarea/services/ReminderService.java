@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,5 +95,10 @@ public ReminderDTO save(ReminderDTO dto) {
         dto.setTime(entity.getTime());
         dto.setFrequency(entity.getFrequency());
         return dto;
+    }
+
+    public Optional<Habitactivity> getHabitById(Long habitId) {
+        if (habitId == null) return Optional.empty();
+        return habitActivityRepository.findById(habitId);
     }
 }

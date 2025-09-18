@@ -2,6 +2,9 @@
 package com.tarea.services;
 
 import com.tarea.dtos.CompletedActivityDTO;
+import com.tarea.dtos.CompletedDayDTO;
+import com.tarea.dtos.CompletedRoutineInWeekDTO;
+import com.tarea.dtos.CompletedWeekDTO;
 import com.tarea.models.Completedactivity;
 import com.tarea.models.Habitactivity;
 import com.tarea.models.Routine;
@@ -14,7 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,7 +93,6 @@ public class CompletedActivityService {
         entity.setHabit(habit);
         entity.setDate(dto.getDate() != null ? LocalDate.parse(dto.getDate()) : null);
         entity.setCompletedAt(dto.getCompletedAt());
-        entity.setIsCompleted(dto.getIsCompleted());
         entity.setNotes(dto.getNotes());
 
         return toDTO(repo.save(entity));
@@ -105,8 +110,67 @@ public class CompletedActivityService {
         dto.setHabitId(e.getHabit() != null ? e.getHabit().getId() : null);
         dto.setDate(e.getDate() != null ? e.getDate().toString() : null);
         dto.setCompletedAt(e.getCompletedAt());
-        dto.setIsCompleted(e.getIsCompleted());
         dto.setNotes(e.getNotes());
+        return dto;
+    }
+
+    public List<CompletedDayDTO> getCompletedByUserPerDay(Long userId, String start, String end) {
+        List<CompletedActivityDTO> all = getByUser(userId, start, end);
+        Map<String, List<CompletedActivityDTO>> grouped = all.stream()
+                .collect(Collectors.groupingBy(CompletedActivityDTO::getDate));
+        return grouped.entrySet().stream()
+                .map(e -> {
+                    CompletedDayDTO dto = new CompletedDayDTO();
+                    dto.setDate(e.getKey());
+                    dto.setActivities(e.getValue());
+                    dto.setTotalCompleted(e.getValue().size());
+                    return dto;
+                })
+                .sorted((a, b) -> b.getDate().compareTo(a.getDate())) // más reciente primero
+                .collect(Collectors.toList());
+    }
+
+    public List<CompletedWeekDTO> getCompletedByUserPerWeek(Long userId, String start, String end) {
+        List<CompletedActivityDTO> all = getByUser(userId, start, end);
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        Map<String, List<CompletedActivityDTO>> byWeek = all.stream()
+                .collect(Collectors.groupingBy(dto -> {
+                    LocalDate d = LocalDate.parse(dto.getDate());
+                    int week = d.get(weekFields.weekOfWeekBasedYear());
+                    int year = d.getYear();
+                    return String.format("%d-W%02d", year, week);
+                }));
+
+        return byWeek.entrySet().stream()
+                .map(e -> {
+                    // Agrupa por rutina
+                    Map<Long, List<CompletedActivityDTO>> byRoutine = e.getValue().stream()
+                            .filter(dto -> dto.getRoutineId() != null)
+                            .collect(Collectors.groupingBy(CompletedActivityDTO::getRoutineId));
+                    List<CompletedRoutineInWeekDTO> routines = byRoutine.entrySet().stream()
+                            .map(r -> {
+                                CompletedRoutineInWeekDTO cr = new CompletedRoutineInWeekDTO();
+                                cr.setRoutineId(r.getKey());
+                                cr.setRoutineTitle(""); // Puedes setear el título si lo necesitas (requiere repo)
+                                cr.setCompletedHabits(r.getValue());
+                                return cr;
+                            }).collect(Collectors.toList());
+                    CompletedWeekDTO dto = new CompletedWeekDTO();
+                    dto.setWeekLabel(e.getKey());
+                    dto.setRoutines(routines);
+                    dto.setTotalCompleted(e.getValue().size());
+                    return dto;
+                })
+                .sorted((a, b) -> b.getWeekLabel().compareTo(a.getWeekLabel()))
+                .collect(Collectors.toList());
+    }
+
+    public CompletedDayDTO getCompletedByUserOnDay(Long userId, String date) {
+        List<CompletedActivityDTO> all = getByUser(userId, date, date);
+        CompletedDayDTO dto = new CompletedDayDTO();
+        dto.setDate(date);
+        dto.setActivities(all);
+        dto.setTotalCompleted(all.size());
         return dto;
     }
 }

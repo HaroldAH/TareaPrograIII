@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface HabitActivityRepository extends JpaRepository<Habitactivity, Long> {
     List<Habitactivity> findByCategory(String category);
     Optional<Habitactivity> findByName(String name);
-    List<Habitactivity> findByRoutineId(Long routineId);
 }

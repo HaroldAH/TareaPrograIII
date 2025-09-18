@@ -1,6 +1,7 @@
 package com.tarea.resolvers;
 
 import com.tarea.dtos.GuideDTO;
+import com.tarea.dtos.GuideDetailDTO;
 import com.tarea.resolvers.inputs.GuideInput;
 import com.tarea.services.GuideService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -100,6 +101,12 @@ public class GuideResolver {
     @QueryMapping
     public List<GuideDTO> getGuidesByCategoryAndUser(@Argument String category, @Argument Long userId) {
         return guideService.getByCategoryAndUserId(category, userId);
+    }
+
+    @PreAuthorize("hasAnyRole('USER','COACH','ADMIN','AUDITOR')")
+    @QueryMapping
+    public GuideDetailDTO getGuideDetail(@Argument Long id) {
+        return guideService.getGuideDetail(id);
     }
 
     private GuideDTO toDTO(GuideInput input) {

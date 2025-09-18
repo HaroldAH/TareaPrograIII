@@ -34,9 +34,6 @@ public class Completedactivity {
     @Column(name = "completedAt", length = 10) // "HH:mm"
     private String completedAt;
 
-    @Column(name = "isCompleted")
-    private Boolean isCompleted;
-
     @Column(name = "notes", length = 255)
     private String notes;
 }

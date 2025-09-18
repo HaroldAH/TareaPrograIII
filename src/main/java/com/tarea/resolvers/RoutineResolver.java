@@ -1,6 +1,7 @@
 package com.tarea.resolvers;
 
 import com.tarea.dtos.RoutineDTO;
+import com.tarea.dtos.RoutineDetailDTO;
 import com.tarea.resolvers.inputs.RoutineInput;
 import com.tarea.services.RoutineService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -108,6 +109,21 @@ public class RoutineResolver {
         }
         routineService.delete(id);
         return true;
+    }
+
+    // Mis rutinas detalladas
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public RoutineDetailDTO getRoutineDetail(@Argument Long id, Authentication auth) {
+        RoutineDTO r = routineService.getById(id);
+        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN") ||
+                a.getAuthority().equals("ROLE_COACH") ||
+                a.getAuthority().equals("ROLE_AUDITOR"));
+        if (!isStaff && (r == null || !String.valueOf(r.getUserId()).equals(auth.getName()))) {
+            throw new org.springframework.security.access.AccessDeniedException("Forbidden");
+        }
+        return routineService.getRoutineDetail(id);
     }
 
     // Mapper input -> DTO

@@ -1,7 +1,8 @@
-// com/tarea/resolvers/CompletedActivityResolver.java
 package com.tarea.resolvers;
 
 import com.tarea.dtos.CompletedActivityDTO;
+import com.tarea.dtos.CompletedDayDTO;
+import com.tarea.dtos.CompletedWeekDTO;
 import com.tarea.resolvers.inputs.CompletedActivityInput;
 import com.tarea.services.CompletedActivityService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -107,6 +108,31 @@ public class CompletedActivityResolver {
         return true;
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public List<CompletedDayDTO> getMyCompletedActivitiesPerDay(@Argument String startDate,
+                                                           @Argument String endDate,
+                                                           Authentication auth) {
+        Long me = Long.valueOf(auth.getName());
+        return service.getCompletedByUserPerDay(me, startDate, endDate);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public List<CompletedWeekDTO> getMyCompletedActivitiesPerWeek(@Argument String startDate,
+                                                             @Argument String endDate,
+                                                             Authentication auth) {
+        Long me = Long.valueOf(auth.getName());
+        return service.getCompletedByUserPerWeek(me, startDate, endDate);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public CompletedDayDTO getMyCompletedActivitiesOnDay(@Argument String date, Authentication auth) {
+        Long me = Long.valueOf(auth.getName());
+        return service.getCompletedByUserOnDay(me, date);
+    }
+
     private CompletedActivityDTO toDTO(CompletedActivityInput in) {
         CompletedActivityDTO dto = new CompletedActivityDTO();
         dto.setId(in.getId());
@@ -115,7 +141,6 @@ public class CompletedActivityResolver {
         dto.setHabitId(in.getHabitId());
         dto.setDate(in.getDate());
         dto.setCompletedAt(in.getCompletedAt());
-        dto.setIsCompleted(in.getIsCompleted());
         dto.setNotes(in.getNotes());
         return dto;
     }

@@ -7,6 +7,9 @@ extend type Query {
   # extras útiles (opcional pero recomendado)
   getCompletedActivitiesByUser(userId: ID!, startDate: String, endDate: String): [CompletedActivityDTO!]!
   getMyCompletedActivities(startDate: String, endDate: String): [CompletedActivityDTO!]!
+  getMyCompletedActivitiesPerDay(startDate: String, endDate: String): [CompletedDayDTO!]!
+  getMyCompletedActivitiesPerWeek(startDate: String, endDate: String): [CompletedWeekDTO!]!
+  getMyCompletedActivitiesOnDay(date: String!): CompletedDayDTO!
 }
 
 extend type Mutation {
@@ -22,17 +25,33 @@ type CompletedActivityDTO {
   habitId: ID
   date: String
   completedAt: String
-  isCompleted: Boolean
   notes: String
 }
 
 input CompletedActivityInput {
   id: ID
-  userId: ID        # ← opcional (se rellena con el sub del token si es USER)
-  routineId: ID     # ← opcional
-  habitId: ID       # ← opcional
-  date: String        # "YYYY-MM-DD"
-  completedAt: String # "HH:mm"
-  isCompleted: Boolean
+  userId: ID
+  routineId: ID
+  habitId: ID
+  date: String
+  completedAt: String
   notes: String
+}
+
+type CompletedDayDTO {
+  date: String!
+  activities: [CompletedActivityDTO!]!
+  totalCompleted: Int!
+}
+
+type CompletedRoutineInWeekDTO {
+  routineId: ID!
+  routineTitle: String
+  completedHabits: [CompletedActivityDTO!]!
+}
+
+type CompletedWeekDTO {
+  weekLabel: String!
+  routines: [CompletedRoutineInWeekDTO!]!
+  totalCompleted: Int!
 }

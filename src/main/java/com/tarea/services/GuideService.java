@@ -1,11 +1,16 @@
 package com.tarea.services;
 
 import com.tarea.dtos.GuideDTO;
+import com.tarea.dtos.GuideDetailDTO;
+import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.models.Guide;
+import com.tarea.models.GuideHabit;
 import com.tarea.models.User;
+import com.tarea.repositories.GuideHabitRepository;
 import com.tarea.repositories.GuideRepository;
 import com.tarea.repositories.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +20,13 @@ import java.util.stream.Collectors;
 public class GuideService {
     private final GuideRepository guideRepository;
     private final UserRepository userRepository;
+    private final GuideHabitRepository guideHabitRepository;
 
-    public GuideService(GuideRepository guideRepository, UserRepository userRepository) {
+    @Autowired
+    public GuideService(GuideRepository guideRepository, UserRepository userRepository, GuideHabitRepository guideHabitRepository) {
         this.guideRepository = guideRepository;
         this.userRepository = userRepository;
+        this.guideHabitRepository = guideHabitRepository;
     }
 
     public List<GuideDTO> getAll() {
@@ -85,6 +93,33 @@ public class GuideService {
         dto.setContent(entity.getContent());
         dto.setCategory(entity.getCategory());
         dto.setUserId(entity.getUser().getId());
+        return dto;
+    }
+
+    public GuideDetailDTO getGuideDetail(Long guideId) {
+        Guide guide = guideRepository.findById(guideId)
+                .orElseThrow(() -> new IllegalArgumentException("Guía no encontrada: " + guideId));
+
+        GuideDetailDTO dto = new GuideDetailDTO();
+        dto.setId(guide.getId());
+        dto.setTitle(guide.getTitle());
+        dto.setContent(guide.getContent());
+        dto.setCategory(guide.getCategory());
+        dto.setUserId(guide.getUser().getId());
+
+        List<GuideHabit> guideHabits = guideHabitRepository.findAll().stream()
+                .filter(gh -> gh.getGuide().getId().equals(guideId))
+                .toList();
+
+        List<HabitActivityListDTO> recommendHabit = guideHabits.stream().map(gh -> {
+            HabitActivityListDTO h = new HabitActivityListDTO();
+            h.setId(gh.getHabit().getId());
+            h.setName(gh.getHabit().getName());
+            h.setCategory(gh.getHabit().getCategory());
+            return h;
+        }).toList();
+
+        dto.setRecommendHabit(recommendHabit);
         return dto;
     }
 }

@@ -10,11 +10,13 @@ extend type Query {
   # USER ve solo lo suyo; staff puede ver cualquiera
   getMyReminders: [ReminderDTO!]!
   getRemindersByUser(userId: ID!): [ReminderDTO!]!
+  getMyReminderList: [ReminderDTO!]!
 }
 
 extend type Mutation {
   createReminder(input: ReminderInput!): ReminderDTO!
   deleteReminder(id: ID!): Boolean!
+  createMyReminder(input: ReminderInput!): ReminderDTO!
 }
 
 type ReminderDTO {

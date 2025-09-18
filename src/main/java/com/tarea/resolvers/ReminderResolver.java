@@ -1,6 +1,8 @@
 package com.tarea.resolvers;
 
 import com.tarea.dtos.ReminderDTO;
+import com.tarea.dtos.ReminderListDTO;
+import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.resolvers.inputs.ReminderInput;
 import com.tarea.services.ReminderService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -100,6 +102,36 @@ public class ReminderResolver {
         }
         reminderService.delete(id);
         return true;
+    }
+
+    // Crear recordatorio forzando el usuario autenticado
+    @PreAuthorize("isAuthenticated()")
+    @MutationMapping
+    public ReminderDTO createMyReminder(@Argument("input") ReminderInput input, Authentication auth) {
+        Long me = Long.valueOf(auth.getName());
+        input.setUserId(me); // Fuerza el usuario autenticado
+        return reminderService.save(toDTO(input));
+    }
+
+    // Obtener lista de recordatorios simplificada para el usuario autenticado
+    @PreAuthorize("isAuthenticated()")
+    @QueryMapping
+    public List<ReminderListDTO> getMyReminderList(Authentication auth) {
+        Long me = Long.valueOf(auth.getName());
+        return reminderService.getByUserId(me).stream().map(reminder -> {
+            ReminderListDTO dto = new ReminderListDTO();
+            dto.setId(reminder.getId());
+            dto.setFrequency(reminder.getFrequency());
+            HabitActivityListDTO habitDto = new HabitActivityListDTO();
+            habitDto.setId(reminder.getHabitId());
+            var habitOpt = reminderService.getHabitById(reminder.getHabitId());
+            habitOpt.ifPresent(habit -> {
+                habitDto.setName(habit.getName());
+                habitDto.setCategory(habit.getCategory());
+            });
+            dto.setHabit(habitDto);
+            return dto;
+        }).toList();
     }
 
     private ReminderDTO toDTO(ReminderInput input) {

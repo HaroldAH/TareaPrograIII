@@ -101,8 +101,7 @@ public class PaginationResolver {
         dto.setRoutineId(c.getRoutine() == null ? null : c.getRoutine().getId());
         dto.setHabitId(c.getHabit() == null ? null : c.getHabit().getId());
         dto.setDate(c.getDate() == null ? null : c.getDate().toString());         // "YYYY-MM-DD"
-        dto.setCompletedAt(c.getCompletedAt());                                    // ya es String en tu BD
-        dto.setIsCompleted(c.getIsCompleted());
+        dto.setCompletedAt(c.getCompletedAt());
         dto.setNotes(c.getNotes());
         return dto;
     }

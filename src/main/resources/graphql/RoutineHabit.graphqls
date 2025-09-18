@@ -1,0 +1,24 @@
+extend type Query {
+  getRoutineHabitsByRoutineId(routineId: ID!): [RoutineHabitDTO!]!
+}
+
+extend type Mutation {
+  createRoutineHabit(input: RoutineHabitInput!): RoutineHabitDTO!
+  deleteRoutineHabit(routineId: ID!, habitId: ID!): Boolean!
+}
+
+type RoutineHabitDTO {
+  routineId: ID!
+  habitId: ID!
+  orderInRoutine: Int
+  targetTimeInRoutine: String
+  notes: String
+}
+
+input RoutineHabitInput {
+  routineId: ID!
+  habitId: ID!
+  orderInRoutine: Int
+  targetTimeInRoutine: String
+  notes: String
+}

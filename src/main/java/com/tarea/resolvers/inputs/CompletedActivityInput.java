@@ -7,7 +7,6 @@ public class CompletedActivityInput {
     private Long habitId;
     private String date; 
     private String completedAt; 
-    private Boolean isCompleted;
     private String notes;
 
     public Long getId() {
@@ -56,14 +55,6 @@ public class CompletedActivityInput {
 
     public void setCompletedAt(String completedAt) {
         this.completedAt = completedAt;
-    }
-
-    public Boolean getIsCompleted() {
-        return isCompleted;
-    }
-
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
     }
 
     public String getNotes() {

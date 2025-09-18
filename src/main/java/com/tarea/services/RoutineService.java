@@ -1,8 +1,12 @@
 package com.tarea.services;
 
 import com.tarea.dtos.RoutineDTO;
+import com.tarea.dtos.RoutineDetailDTO;
+import com.tarea.dtos.RoutineHabitDetailDTO;
 import com.tarea.models.Routine;
+import com.tarea.models.RoutineHabit;
 import com.tarea.models.User;
+import com.tarea.repositories.RoutineHabitRepository;
 import com.tarea.repositories.RoutineRepository;
 import com.tarea.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -16,11 +20,14 @@ public class RoutineService {
 
     private final RoutineRepository routineRepository;
     private final UserRepository userRepository;
+    private final RoutineHabitRepository routineHabitRepository;
 
     public RoutineService(RoutineRepository routineRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          RoutineHabitRepository routineHabitRepository) {
         this.routineRepository = routineRepository;
         this.userRepository = userRepository;
+        this.routineHabitRepository = routineHabitRepository;
     }
 
     public List<RoutineDTO> getAll() {
@@ -34,11 +41,12 @@ public class RoutineService {
                 .map(this::toDTO)
                 .orElse(null);
     }
-public List<RoutineDTO> getByUserId(Long userId) {
-    return routineRepository.findByUser_Id(userId).stream()
-            .map(this::toDTO)
-            .collect(Collectors.toList());
-}
+
+    public List<RoutineDTO> getByUserId(Long userId) {
+        return routineRepository.findByUser_Id(userId).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public RoutineDTO save(RoutineDTO dto) {
@@ -80,6 +88,34 @@ public List<RoutineDTO> getByUserId(Long userId) {
         dto.setTitle(entity.getTitle());
         dto.setDaysOfWeek(entity.getDaysOfWeek());
         dto.setUserId(entity.getUser() != null ? entity.getUser().getId() : null);
+        return dto;
+    }
+
+    // Nuevo método:
+    public RoutineDetailDTO getRoutineDetail(Long routineId) {
+        Routine routine = routineRepository.findById(routineId)
+                .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + routineId));
+
+        RoutineDetailDTO dto = new RoutineDetailDTO();
+        dto.setId(routine.getId());
+        dto.setTitle(routine.getTitle());
+        dto.setDaysOfWeek(routine.getDaysOfWeek());
+
+        List<RoutineHabit> routineHabits = routineHabitRepository.findByRoutine_IdOrderByOrderInRoutine(routineId);
+
+        List<RoutineHabitDetailDTO> habits = routineHabits.stream().map(rh -> {
+            RoutineHabitDetailDTO h = new RoutineHabitDetailDTO();
+            h.setHabitId(rh.getHabit().getId());
+            h.setName(rh.getHabit().getName());
+            h.setCategory(rh.getHabit().getCategory());
+            h.setDescription(rh.getHabit().getDescription());
+            h.setOrderInRoutine(rh.getOrderInRoutine());
+            h.setTargetTimeInRoutine(rh.getTargetTimeInRoutine() != null ? rh.getTargetTimeInRoutine().toString() : null);
+            h.setNotes(rh.getNotes());
+            return h;
+        }).toList();
+
+        dto.setHabits(habits);
         return dto;
     }
 }

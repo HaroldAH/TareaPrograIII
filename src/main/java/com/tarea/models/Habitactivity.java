@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-// com.tarea.models.Habitactivity
 @Getter
 @Setter
 @Entity
@@ -38,7 +37,4 @@ public class Habitactivity {
 
     @Column(name = "notes")
     private String notes;
-
-    @Column(name = "routine_id")
-    private Long routineId;
 }
