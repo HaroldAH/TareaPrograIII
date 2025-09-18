@@ -2,7 +2,6 @@ package com.tarea.resolvers.inputs;
 
 public class ReminderInput {
     private Long id;
-    private Long userId;
     private Long habitId;
     private String time;      // Ej: "08:30", "21:00", formato HH:mm
     private String frequency; // Ej: "DAILY", "WEEKLY"
@@ -13,14 +12,6 @@ public class ReminderInput {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public Long getHabitId() {

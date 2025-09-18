@@ -63,26 +63,10 @@ public class ReminderResolver {
     @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
     @MutationMapping
     public ReminderDTO createReminder(@Argument("input") ReminderInput input, Authentication auth) {
-        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equals("ROLE_ADMIN") ||
-                a.getAuthority().equals("ROLE_COACH") ||
-                a.getAuthority().equals("ROLE_AUDITOR"));
         Long me = Long.valueOf(auth.getName());
-
-        if (!isStaff) {
-            if (input.getId() != null) {
-                ReminderDTO existing = reminderService.getById(input.getId());
-                if (existing == null) throw new IllegalArgumentException("Reminder no encontrado: " + input.getId());
-                if (!me.equals(existing.getUserId())) {
-                    throw new org.springframework.security.access.AccessDeniedException("Forbidden");
-                }
-            }
-            if (input.getUserId() == null) input.setUserId(me);
-            else if (!me.equals(input.getUserId())) {
-                throw new org.springframework.security.access.AccessDeniedException("Forbidden");
-            }
-        }
-        return reminderService.save(toDTO(input));
+        ReminderDTO dto = toDTO(input);
+        dto.setUserId(me); // Siempre asigna el usuario autenticado
+        return reminderService.save(dto);
     }
 
     // Borrar: AUDITOR no puede; USER solo los suyos
@@ -109,8 +93,9 @@ public class ReminderResolver {
     @MutationMapping
     public ReminderDTO createMyReminder(@Argument("input") ReminderInput input, Authentication auth) {
         Long me = Long.valueOf(auth.getName());
-        input.setUserId(me); // Fuerza el usuario autenticado
-        return reminderService.save(toDTO(input));
+        ReminderDTO dto = toDTO(input);
+        dto.setUserId(me); // Fuerza el usuario autenticado en el DTO
+        return reminderService.save(dto);
     }
 
     // Obtener lista de recordatorios simplificada para el usuario autenticado
@@ -137,7 +122,6 @@ public class ReminderResolver {
     private ReminderDTO toDTO(ReminderInput input) {
         ReminderDTO dto = new ReminderDTO();
         dto.setId(input.getId());
-        dto.setUserId(input.getUserId());
         dto.setHabitId(input.getHabitId());
         dto.setTime(input.getTime());
         dto.setFrequency(input.getFrequency());

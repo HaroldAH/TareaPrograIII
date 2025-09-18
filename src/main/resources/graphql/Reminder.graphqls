@@ -10,7 +10,7 @@ extend type Query {
   # USER ve solo lo suyo; staff puede ver cualquiera
   getMyReminders: [ReminderDTO!]!
   getRemindersByUser(userId: ID!): [ReminderDTO!]!
-  getMyReminderList: [ReminderDTO!]!
+  getMyReminderList: [ReminderListDTO!]!
 }
 
 extend type Mutation {
@@ -29,8 +29,13 @@ type ReminderDTO {
 
 input ReminderInput {
   id: ID
-  userId: ID
   habitId: ID!
   time: String       # "07:30"
   frequency: String  # "DAILY" o "MON,WED,FRI"
+}
+
+type ReminderListDTO {
+  id: ID!
+  frequency: String
+  habit: HabitActivityListDTO
 }

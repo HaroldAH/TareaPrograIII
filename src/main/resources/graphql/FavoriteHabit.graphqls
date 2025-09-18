@@ -20,6 +20,5 @@ type FavoriteHabitDTO {
 
 input FavoriteHabitInput {
   id: ID
-  userId: ID!
   habitId: ID!
 }

@@ -40,8 +40,10 @@ public class FavoriteHabitResolver {
     @MutationMapping
     public FavoriteHabitDTO createFavoriteHabit(@Argument FavoriteHabitInput input) {
         Long userId = getAuthenticatedUserId();
-        input.setUserId(userId);
-        return service.save(toDTO(input));
+        // Aquí puedes crear el DTO y asignar el userId
+        FavoriteHabitDTO dto = toDTO(input);
+        dto.setUserId(userId);
+        return service.save(dto);
     }
 
     @MutationMapping
@@ -85,7 +87,6 @@ public class FavoriteHabitResolver {
     private FavoriteHabitDTO toDTO(FavoriteHabitInput in) {
         FavoriteHabitDTO dto = new FavoriteHabitDTO();
         dto.setId(in.getId());
-        dto.setUserId(in.getUserId());
         dto.setHabitId(in.getHabitId());
         return dto;
     }

@@ -87,13 +87,13 @@ public ReminderDTO save(ReminderDTO dto) {
         reminderRepository.deleteById(id);
     }
 
-    private ReminderDTO toDTO(Reminder entity) {
+    private ReminderDTO toDTO(Reminder reminder) {
         ReminderDTO dto = new ReminderDTO();
-        dto.setId(entity.getId());
-        dto.setUserId(entity.getUser() != null ? entity.getUser().getId() : null);
-        dto.setHabitId(entity.getHabit() != null ? entity.getHabit().getId() : null);
-        dto.setTime(entity.getTime());
-        dto.setFrequency(entity.getFrequency());
+        dto.setId(reminder.getId());
+        dto.setUserId(reminder.getUser().getId()); // <-- Asegúrate de esto
+        dto.setHabitId(reminder.getHabit().getId()); // <-- Y esto
+        dto.setTime(reminder.getTime());
+        dto.setFrequency(reminder.getFrequency());
         return dto;
     }
 

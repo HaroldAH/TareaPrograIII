@@ -29,7 +29,7 @@ type RoutineDTO {
 input RoutineInput {
   id: ID
   title: String!
-  userId: ID!       
+  userId: ID    # <-- Ahora es opcional
   daysOfWeek: String
 }
 
