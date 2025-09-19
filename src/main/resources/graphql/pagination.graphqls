@@ -42,3 +42,71 @@ extend type Query {
   guidesPage(page: PageRequestInput!): GuidePage!
   completedActivitiesPage(page: PageRequestInput!): CompletedActivityPage!
 }
+
+type UserPage {
+  content: [UserDTO!]!
+  pageInfo: PageInfo!
+}
+
+extend type Query {
+  usersPage(page: PageRequestInput!): UserPage!
+  countUsers: Int!
+}
+
+type RolePage {
+  content: [RoleDTO!]!
+  pageInfo: PageInfo!
+}
+
+extend type Query {
+  rolesPage(page: PageRequestInput!): RolePage!
+  countRoles: Int!
+}
+
+type RoutinePage {
+  content: [RoutineDTO!]!
+  pageInfo: PageInfo!
+}
+
+extend type Query {
+  routinesPage(page: PageRequestInput!): RoutinePage!
+  countRoutines: Int!
+}
+
+type ReminderPage {
+  content: [ReminderDTO!]!
+  pageInfo: PageInfo!
+}
+
+extend type Query {
+  remindersPage(page: PageRequestInput!): ReminderPage!
+  countReminders: Int!
+}
+type FavoriteHabitPage {
+  content: [FavoriteHabitDTO!]!
+  pageInfo: PageInfo!
+}
+
+extend type Query {
+  favoriteHabitsPage(page: PageRequestInput!): FavoriteHabitPage!
+  countFavoriteHabits: Int!
+}
+
+type RoutineHabitPage {
+  content: [RoutineHabitDTO!]!
+  pageInfo: PageInfo!
+}
+
+type GuideHabitPage {
+  content: [GuideHabitDTO!]!
+  pageInfo: PageInfo!
+}
+
+extend type Query {
+  routineHabitsPage(page: PageRequestInput!): RoutineHabitPage!
+  countRoutineHabits: Int!
+
+  guideHabitsPage(page: PageRequestInput!): GuideHabitPage!
+  countGuideHabits: Int!
+}
+
