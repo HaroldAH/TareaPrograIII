@@ -1,0 +1,21 @@
+# ============ STATS ============
+
+extend type Query {
+  monthlyCategoryStats(year: Int!, month: Int, userId: ID): [MonthlyCategoryStatDTO!]!
+}
+
+type MonthlyCategoryStatDTO {
+  year: Int!
+  month: Int!
+  category: String!
+
+  totalCompletions: Int!
+  uniqueDays: Int!
+  avgPerActiveDay: Float!
+
+  totalDurationMinutes: Int!
+  activeDayRatio: Float!
+
+  weeksActive: Int!
+  avgPerActiveWeek: Float!
+}

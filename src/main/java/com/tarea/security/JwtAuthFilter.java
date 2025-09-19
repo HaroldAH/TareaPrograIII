@@ -62,6 +62,5 @@ protected boolean shouldNotFilter(HttpServletRequest request) {
         || p.equals("/graphiql")
         || p.startsWith("/graphiql/")   // por si acaso
         || p.startsWith("/vendor/");    // assets de GraphiQL
-    // OJO: /graphql ya NO va aquí
 }
 }
