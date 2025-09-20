@@ -3,16 +3,19 @@ package com.tarea.resolvers;
 import com.tarea.dtos.CompletedActivityDTO;
 import com.tarea.dtos.CompletedDayDTO;
 import com.tarea.dtos.CompletedWeekDTO;
+import com.tarea.models.Module;
 import com.tarea.resolvers.inputs.CompletedActivityInput;
 import com.tarea.services.CompletedActivityService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
+
+import static com.tarea.security.SecurityUtils.requireMutate;
+import static com.tarea.security.SecurityUtils.requireView;
 
 @Controller
 public class CompletedActivityResolver {
@@ -23,116 +26,86 @@ public class CompletedActivityResolver {
         this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','COACH','AUDITOR')")
+    /* =================== QUERIES (CONSULT) =================== */
+
     @QueryMapping
     public List<CompletedActivityDTO> getAllCompletedActivities() {
+        requireView(Module.PROGRESS);
         return service.getAll();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','COACH','AUDITOR')")
     @QueryMapping
     public CompletedActivityDTO getCompletedActivityById(@Argument Long id) {
+        requireView(Module.PROGRESS);
         return service.getById(id);
     }
 
-    // Extras recomendados
-    @PreAuthorize("isAuthenticated()")
     @QueryMapping
     public List<CompletedActivityDTO> getCompletedActivitiesByUser(@Argument Long userId,
                                                                    @Argument String startDate,
-                                                                   @Argument String endDate,
-                                                                   Authentication auth) {
-        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equals("ROLE_ADMIN") ||
-                a.getAuthority().equals("ROLE_COACH") ||
-                a.getAuthority().equals("ROLE_AUDITOR"));
-        if (!isStaff && !String.valueOf(userId).equals(auth.getName())) {
-            throw new org.springframework.security.access.AccessDeniedException("Forbidden");
-        }
+                                                                   @Argument String endDate) {
+        requireView(Module.PROGRESS);
         return service.getByUser(userId, startDate, endDate);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    /* “My …” siguen existiendo, pero igual requieren permiso de consulta del módulo */
     @QueryMapping
     public List<CompletedActivityDTO> getMyCompletedActivities(@Argument String startDate,
                                                                @Argument String endDate,
                                                                Authentication auth) {
+        requireView(Module.PROGRESS);
         Long me = Long.valueOf(auth.getName());
         return service.getByUser(me, startDate, endDate);
     }
 
-    @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
-    @MutationMapping
-    public CompletedActivityDTO createCompletedActivity(@Argument("input") CompletedActivityInput input,
-                                                        Authentication auth) {
-        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equals("ROLE_ADMIN") ||
-                a.getAuthority().equals("ROLE_COACH") ||
-                a.getAuthority().equals("ROLE_AUDITOR"));
-        Long me = Long.valueOf(auth.getName());
-
-        if (!isStaff) {
-            if (input.getId() != null) {
-                CompletedActivityDTO existing = service.getById(input.getId());
-                if (existing == null) throw new IllegalArgumentException("Registro no encontrado: " + input.getId());
-                if (!me.equals(existing.getUserId())) {
-                    throw new org.springframework.security.access.AccessDeniedException("Forbidden");
-                }
-            }
-            if (input.getUserId() == null) input.setUserId(me);
-            else if (!me.equals(input.getUserId())) {
-                throw new org.springframework.security.access.AccessDeniedException("Forbidden");
-            }
-        }
-
-        return service.save(toDTO(input));
-    }
-
-    @PreAuthorize("isAuthenticated() and !hasRole('AUDITOR')")
-    @MutationMapping
-    public Boolean deleteCompletedActivity(@Argument Long id, Authentication auth) {
-        boolean isStaff = auth.getAuthorities().stream().anyMatch(a ->
-                a.getAuthority().equals("ROLE_ADMIN") ||
-                a.getAuthority().equals("ROLE_COACH") ||
-                a.getAuthority().equals("ROLE_AUDITOR"));
-
-        if (!isStaff) {
-            CompletedActivityDTO existing = service.getById(id);
-            if (existing == null) throw new IllegalArgumentException("Registro no encontrado: " + id);
-            if (!String.valueOf(existing.getUserId()).equals(auth.getName())) {
-                throw new org.springframework.security.access.AccessDeniedException("Forbidden");
-            }
-        }
-
-        service.delete(id);
-        return true;
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @QueryMapping
     public List<CompletedDayDTO> getMyCompletedActivitiesPerDay(@Argument String startDate,
-                                                           @Argument String endDate,
-                                                           Authentication auth) {
+                                                                @Argument String endDate,
+                                                                Authentication auth) {
+        requireView(Module.PROGRESS);
         Long me = Long.valueOf(auth.getName());
         return service.getCompletedByUserPerDay(me, startDate, endDate);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @QueryMapping
     public List<CompletedWeekDTO> getMyCompletedActivitiesPerWeek(@Argument String startDate,
-                                                             @Argument String endDate,
-                                                             Authentication auth) {
+                                                                  @Argument String endDate,
+                                                                  Authentication auth) {
+        requireView(Module.PROGRESS);
         Long me = Long.valueOf(auth.getName());
         return service.getCompletedByUserPerWeek(me, startDate, endDate);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @QueryMapping
-    public CompletedDayDTO getMyCompletedActivitiesOnDay(@Argument String date, Authentication auth) {
+    public CompletedDayDTO getMyCompletedActivitiesOnDay(@Argument String date,
+                                                         Authentication auth) {
+        requireView(Module.PROGRESS);
         Long me = Long.valueOf(auth.getName());
         return service.getCompletedByUserOnDay(me, date);
     }
 
+    /* =================== MUTATIONS (MUTATE) =================== */
+
+    @MutationMapping
+    public CompletedActivityDTO createCompletedActivity(@Argument("input") CompletedActivityInput input,
+                                                        Authentication auth) {
+        requireMutate(Module.PROGRESS);
+
+        // Conveniencia: si no viene userId, asume el del token
+        if (input.getUserId() == null && auth != null) {
+            input.setUserId(Long.valueOf(auth.getName()));
+        }
+        return service.save(toDTO(input));
+    }
+
+    @MutationMapping
+    public Boolean deleteCompletedActivity(@Argument Long id) {
+        requireMutate(Module.PROGRESS);
+        service.delete(id);
+        return true;
+    }
+
+    /* =================== Mapper =================== */
     private CompletedActivityDTO toDTO(CompletedActivityInput in) {
         CompletedActivityDTO dto = new CompletedActivityDTO();
         dto.setId(in.getId());

@@ -1,29 +1,57 @@
-# Tipos base (OBLIGATORIOS)
+# ===== Permisos por módulo =====
+enum Module { HABITS ROUTINES PROGRESS GUIDES REMINDERS USERS }
+enum ModulePermission { CONSULT MUTATE } # "NADA" = sin fila (revocado)
+
+type UserPermission {
+  module: Module!
+  permission: ModulePermission!
+}
+
+# ===== DTOs =====
+type UserDTO {
+  id: ID!
+  name: String!
+  email: String!
+  isAuditor: Boolean!
+  permissions: [UserPermission!]!
+  # Mantengo 'role' para compatibilidad, pero ya no se usa
+  role: String @deprecated(reason: "Reemplazado por permisos por módulo (Module/ModulePermission).")
+}
+
+# ===== Inputs =====
+input ModulePermissionInput {
+  module: Module!
+  permission: ModulePermission!
+}
+
+input UserInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  isAuditor: Boolean = false
+  permissions: [ModulePermissionInput!]
+  # Mantén el campo para no romper clientes antiguos
+  role: String @deprecated(reason: "Ya no se usa. Utilice 'permissions' e 'isAuditor'.")
+}
+
+# ===== Tipos base (OBLIGATORIOS) =====
 type Query {
-    getAllUsers: [UserDTO!]!
-    getUserById(id: ID!): UserDTO
+  getAllUsers: [UserDTO!]!
+  getUserById(id: ID!): UserDTO
 }
 
 type Mutation {
-    createUser(input: UserInput!): UserDTO
-    deleteUser(id: ID!): Boolean
-    login(email: String!, password: String!): String
-    logout(token: String!): Boolean
-}
+  createUser(input: UserInput!): UserDTO
+  deleteUser(id: ID!): Boolean
 
-# DTOs
-type UserDTO {
-    id: ID!
-    name: String!
-    email: String!
-    role: String!
-}
+  # Auth
+  login(email: String!, password: String!): String
+  logout(token: String!): Boolean
 
-# Inputs
-input UserInput {
-    id: ID
-    name: String!
-    email: String!
-    password: String!
-    role: String!
+  # ===== Mutaciones para permisos por módulo =====
+  setUserModulePermission(userId: ID!, module: Module!, permission: ModulePermission!): UserDTO
+  revokeUserModulePermission(userId: ID!, module: Module!): UserDTO         # = NADA
+  setUserPermissions(userId: ID!, permissions: [ModulePermissionInput!]!): UserDTO
+  setAuditor(userId: ID!, auditor: Boolean!): UserDTO
 }

@@ -15,6 +15,7 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\HabitActivityDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\HabitActivityListDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\HabitActivityPageDTO.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\MonthlyCategoryStatDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\PageInfoDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\ReminderDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\ReminderListDTO.java
@@ -29,6 +30,7 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\RoutinePageDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\UserDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\UserPageDTO.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\UserPermissionDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\dtos\UserRoleDTO.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Completedactivity.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\FavoriteHabit.java
@@ -36,12 +38,15 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\GuideHabit.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\GuideHabitId.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Habitactivity.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Module.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\ModulePermission.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Reminder.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Role.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Routine.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\RoutineHabit.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\RoutineHabitId.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\User.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\UserModulePermission.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\UserRole.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\UserRoleId.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\CompletedActivityRepository.java
@@ -53,6 +58,7 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\RoleRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\RoutineHabitRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\RoutineRepository.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\UserModulePermissionRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\UserRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\UserRoleRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\AuthResolver.java
@@ -67,6 +73,7 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideHabitInput.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\GuideInput.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\HabitActivityInput.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\ModulePermissionInput.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\PageRequestInput.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\ReminderInput.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\inputs\RoleInput.java
@@ -79,11 +86,13 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\RoleResolver.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\RoutineHabitResolver.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\RoutineResolver.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\StatsResolver.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\UserResolver.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\resolvers\UserRoleResolver.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\RutinasSaludablesApplication.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\JwtAuthFilter.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\SecurityUtils.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\TokenBlacklistService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\CompletedActivityService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\FavoriteHabitService.java
@@ -94,5 +103,6 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\RoleService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\RoutineHabitService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\RoutineService.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\StatsService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\UserRoleService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\UserService.java

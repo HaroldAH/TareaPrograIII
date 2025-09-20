@@ -1,15 +1,18 @@
 package com.tarea.resolvers;
 
 import com.tarea.dtos.RoleDTO;
+import com.tarea.models.Module;
 import com.tarea.resolvers.inputs.RoleInput;
 import com.tarea.services.RoleService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+
+import static com.tarea.security.SecurityUtils.requireMutate;
+import static com.tarea.security.SecurityUtils.requireView;
 
 @Controller
 public class RoleResolver {
@@ -20,31 +23,34 @@ public class RoleResolver {
         this.roleService = roleService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // ===== QUERIES (CONSULT) =====
     @QueryMapping
     public List<RoleDTO> getAllRoles() {
+        requireView(Module.USERS);
         return roleService.getAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @QueryMapping
     public RoleDTO getRoleById(@Argument Long id) {
+        requireView(Module.USERS);
         return roleService.getById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // ===== MUTATIONS (MUTATE) =====
     @MutationMapping
     public RoleDTO createRole(@Argument RoleInput input) {
+        requireMutate(Module.USERS);
         return roleService.save(toDTO(input));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @MutationMapping
     public Boolean deleteRole(@Argument Long id) {
+        requireMutate(Module.USERS);
         roleService.delete(id);
         return true;
     }
 
+    // ===== Mapper =====
     private RoleDTO toDTO(RoleInput input) {
         RoleDTO dto = new RoleDTO();
         dto.setId(input.getId());
