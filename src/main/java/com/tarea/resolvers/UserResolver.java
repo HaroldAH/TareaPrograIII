@@ -1,6 +1,7 @@
 package com.tarea.resolvers;
 
 import com.tarea.dtos.UserDTO;
+import com.tarea.dtos.UserPageDTO;
 import com.tarea.dtos.UserPermissionDTO;
 import com.tarea.models.Module;
 import com.tarea.models.ModulePermission;
@@ -121,4 +122,12 @@ public class UserResolver {
         try { return (ModulePermission) p.getClass().getMethod("permission").invoke(p); }
         catch (Exception e) { throw new IllegalArgumentException("ModulePermissionInput.permission no accesible"); }
     }
+    @QueryMapping
+public UserPageDTO usersPage(@Argument("page") com.tarea.resolvers.inputs.PageRequestInput page) {
+    SecurityUtils.requireView(Module.USERS);
+    var pageable = (page == null) ? org.springframework.data.domain.PageRequest.of(0,20)
+                                  : page.toPageable();
+    return userService.pageUsers(pageable);
+}
+
 }

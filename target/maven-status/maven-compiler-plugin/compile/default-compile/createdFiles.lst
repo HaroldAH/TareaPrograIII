@@ -79,6 +79,7 @@ com\tarea\repositories\RoutineHabitRepository.class
 com\tarea\models\GuideHabit.class
 com\tarea\models\Habitactivity.class
 com\tarea\resolvers\inputs\ModulePermissionInput.class
+com\tarea\resolvers\PagesResolver.class
 com\tarea\security\JwtService.class
 com\tarea\dtos\GuideHabitPageDTO.class
 com\tarea\models\Reminder.class

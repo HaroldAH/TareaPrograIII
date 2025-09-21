@@ -1,6 +1,8 @@
 package com.tarea.services;
 
+import com.tarea.dtos.PageInfoDTO;
 import com.tarea.dtos.UserDTO;
+import com.tarea.dtos.UserPageDTO;
 import com.tarea.dtos.UserPermissionDTO;
 import com.tarea.models.Module;
 import com.tarea.models.ModulePermission;
@@ -8,6 +10,8 @@ import com.tarea.models.User;
 import com.tarea.models.UserModulePermission;
 import com.tarea.repositories.UserModulePermissionRepository;
 import com.tarea.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,6 +125,61 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    /* ========= Paginación ========= */
+
+    @Transactional(readOnly = true)
+    public UserPageDTO pageUsers(Pageable pageable) {
+        Page<User> p = userRepository.findAll(pageable);
+
+        // Página vacía
+        if (p.isEmpty()) {
+            return new UserPageDTO(
+                    List.of(),
+                    new PageInfoDTO(
+                            0,                          // totalElements
+                            0,                          // totalPages
+                            p.getNumber(),              // page
+                            p.getSize(),                // size
+                            0,                          // numberOfElements
+                            false,                      // hasNext
+                            false                       // hasPrevious
+                    )
+            );
+        }
+
+        // Carga permisos en bloque para evitar N+1
+        List<Long> ids = p.getContent().stream().map(User::getId).toList();
+        List<UserModulePermission> perms = umpRepository.findAllByUserIdIn(ids);
+
+        Map<Long, List<UserPermissionDTO>> permsByUser = perms.stream()
+                .collect(Collectors.groupingBy(
+                        up -> up.getUser().getId(),
+                        Collectors.mapping(up -> {
+                                    UserPermissionDTO dto = new UserPermissionDTO();
+                                    dto.setModule(up.getModule());
+                                    dto.setPermission(up.getPermission());
+                                    return dto;
+                                },
+                                Collectors.toList())
+                ));
+
+        List<UserDTO> content = p.getContent().stream()
+                .map(u -> toDTO(u, permsByUser.getOrDefault(u.getId(), List.of())))
+                .toList();
+
+        PageInfoDTO info = new PageInfoDTO(
+                (int) p.getTotalElements(),
+                p.getTotalPages(),
+                p.getNumber(),
+                p.getSize(),
+                p.getNumberOfElements(),
+                p.hasNext(),
+                p.hasPrevious()
+        );
+
+        return new UserPageDTO(content, info);
+    }
+
     /* ========= helpers ========= */
 
     @Transactional(readOnly = true)
@@ -181,17 +240,13 @@ public class UserService {
         return toDTO(u, loadPerms(id));
     }
 
-    // ⬇⬇⬇ AQUÍ EL CAMBIO CLAVE: construir DTO con setters
+    // Construcción del DTO con setters
     private UserDTO toDTO(User u, List<UserPermissionDTO> perms) {
         UserDTO dto = new UserDTO();
         dto.setId(u.getId());
         dto.setName(u.getName());
         dto.setEmail(u.getEmail());
-        // Si tu User tiene getIsAuditor() (Boolean) → usa esa:
         dto.setIsAuditor(Boolean.TRUE.equals(u.getIsAuditor()));
-        // Si tu User es boolean isAuditor y el getter es isAuditor(), usa:
-        // dto.setIsAuditor(u.isAuditor());
-
         dto.setPermissions(perms);
         return dto;
     }
