@@ -1,9 +1,9 @@
 # ==============================
-# ✅ SCHEMA GRAPHQL - Módulo Reminder
+# ✅ SCHEMA GRAPHQL - Módulo Reminder (permiso: REMINDERS)
 # ==============================
 
 extend type Query {
-  # Solo staff
+  # Staff (REMINDERS:CONSULT) puede ver todos
   getAllReminders: [ReminderDTO!]!
   getReminderById(id: ID!): ReminderDTO
 
@@ -14,9 +14,13 @@ extend type Query {
 }
 
 extend type Mutation {
+  "Crea/edita reminder. Si userId viene nulo, se toma del token."
   createReminder(input: ReminderInput!): ReminderDTO!
-  deleteReminder(id: ID!): Boolean!
+
+  "Crea para el usuario autenticado (más explícito)"
   createMyReminder(input: ReminderInput!): ReminderDTO!
+
+  deleteReminder(id: ID!): Boolean!
 }
 
 type ReminderDTO {
@@ -29,9 +33,10 @@ type ReminderDTO {
 
 input ReminderInput {
   id: ID
+  userId: ID        # <-- opcional: staff puede crear para otro usuario
   habitId: ID!
-  time: String       # "07:30"
-  frequency: String  # "DAILY" o "MON,WED,FRI"
+  time: String      # "07:30"
+  frequency: String # "DAILY" o "MON,WED,FRI"
 }
 
 type ReminderListDTO {

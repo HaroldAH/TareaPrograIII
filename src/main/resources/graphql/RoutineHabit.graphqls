@@ -1,3 +1,10 @@
+# ==============================
+# ✅ SCHEMA GRAPHQL - RoutineHabit (N:M dentro de ROUTINES)
+# Reglas:
+# - Consultar: ROUTINES:CONSULT (o dueño de la rutina)
+# - Crear/Eliminar: ROUTINES:MUTATE
+# ==============================
+
 extend type Query {
   getRoutineHabitsByRoutineId(routineId: ID!): [RoutineHabitDTO!]!
 }

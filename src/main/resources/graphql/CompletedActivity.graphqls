@@ -1,10 +1,9 @@
-# graphql/CompletedActivity.graphqls
+# Consultas de completados (progreso)
 
 extend type Query {
   getAllCompletedActivities: [CompletedActivityDTO!]!
   getCompletedActivityById(id: ID!): CompletedActivityDTO
 
-  # extras útiles (opcional pero recomendado)
   getCompletedActivitiesByUser(userId: ID!, startDate: String, endDate: String): [CompletedActivityDTO!]!
   getMyCompletedActivities(startDate: String, endDate: String): [CompletedActivityDTO!]!
   getMyCompletedActivitiesPerDay(startDate: String, endDate: String): [CompletedDayDTO!]!
@@ -13,7 +12,6 @@ extend type Query {
 }
 
 extend type Mutation {
-  # puedes llamarle logCompletion si prefieres
   createCompletedActivity(input: CompletedActivityInput!): CompletedActivityDTO!
   deleteCompletedActivity(id: ID!): Boolean!
 }

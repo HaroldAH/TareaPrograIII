@@ -37,76 +37,62 @@ type CompletedActivityPage {
   pageInfo: PageInfo!
 }
 
-extend type Query {
-  habitActivitiesPage(page: PageRequestInput!): HabitActivityPage!
-  guidesPage(page: PageRequestInput!): GuidePage!
-  completedActivitiesPage(page: PageRequestInput!): CompletedActivityPage!
-}
-
+"Página de Usuario"
 type UserPage {
   content: [UserDTO!]!
   pageInfo: PageInfo!
 }
 
-extend type Query {
-  usersPage(page: PageRequestInput!): UserPage!
-  countUsers: Int!
-}
-
-type RolePage {
-  content: [RoleDTO!]!
-  pageInfo: PageInfo!
-}
-
-extend type Query {
-  rolesPage(page: PageRequestInput!): RolePage!
-  countRoles: Int!
-}
-
+"Página de Rutina"
 type RoutinePage {
   content: [RoutineDTO!]!
   pageInfo: PageInfo!
 }
 
-extend type Query {
-  routinesPage(page: PageRequestInput!): RoutinePage!
-  countRoutines: Int!
-}
-
+"Página de Reminder"
 type ReminderPage {
   content: [ReminderDTO!]!
   pageInfo: PageInfo!
 }
 
-extend type Query {
-  remindersPage(page: PageRequestInput!): ReminderPage!
-  countReminders: Int!
-}
+"Página de Favoritos"
 type FavoriteHabitPage {
   content: [FavoriteHabitDTO!]!
   pageInfo: PageInfo!
 }
 
-extend type Query {
-  favoriteHabitsPage(page: PageRequestInput!): FavoriteHabitPage!
-  countFavoriteHabits: Int!
-}
-
+"Página de rutina-hábito (N:M)"
 type RoutineHabitPage {
   content: [RoutineHabitDTO!]!
   pageInfo: PageInfo!
 }
 
+"Página de guía-hábito (N:M)"
 type GuideHabitPage {
   content: [GuideHabitDTO!]!
   pageInfo: PageInfo!
 }
 
 extend type Query {
+  habitActivitiesPage(page: PageRequestInput!): HabitActivityPage!
+  guidesPage(page: PageRequestInput!): GuidePage!
+  completedActivitiesPage(page: PageRequestInput!): CompletedActivityPage!
+
+  usersPage(page: PageRequestInput!): UserPage!
+  countUsers: Int!
+
+  routinesPage(page: PageRequestInput!): RoutinePage!
+  countRoutines: Int!
+
+  remindersPage(page: PageRequestInput!): ReminderPage!
+  countReminders: Int!
+
+  favoriteHabitsPage(page: PageRequestInput!): FavoriteHabitPage!
+  countFavoriteHabits: Int!
+
   routineHabitsPage(page: PageRequestInput!): RoutineHabitPage!
   countRoutineHabits: Int!
 
   guideHabitsPage(page: PageRequestInput!): GuideHabitPage!
   countGuideHabits: Int!
 }
-

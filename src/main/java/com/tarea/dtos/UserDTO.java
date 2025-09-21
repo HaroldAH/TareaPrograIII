@@ -9,8 +9,6 @@ public class UserDTO {
     private String name;
     private String email;
 
-    // opcional/legado: puedes eliminarlo si ya no lo usas en ningún lado
-    private String role;
 
     // usa wrapper para tolerar null en mapeos
     private Boolean isAuditor;

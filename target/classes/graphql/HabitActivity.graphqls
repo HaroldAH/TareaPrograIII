@@ -1,3 +1,7 @@
+# ==============================
+# ✅ SCHEMA GRAPHQL - Módulo HabitActivity (usa módulo HABITS)
+# ==============================
+
 extend type Query {
   getAllHabitActivitiesAsList: [HabitActivityListDTO!]!
   getHabitActivitiesByCategory(category: String!): [HabitActivityListDTO!]!

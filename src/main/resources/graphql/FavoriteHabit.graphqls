@@ -1,13 +1,18 @@
-extend type Query {
-  getAllFavoriteHabits: [FavoriteHabitDTO!]!
-  getFavoriteHabitById(id: ID!): FavoriteHabitDTO
+# Favoritos del usuario
 
+extend type Query {
+  "Listado de mis hábitos favoritos (cards/lista)"
   getFavoriteHabitsListByUser: [HabitActivityListDTO!]!
+
+  "Mis favoritos por categoría (PHYSICAL, MENTAL, etc.)"
   getFavoriteHabitsByCategory(category: String!): [HabitActivityListDTO!]!
+
+  "Detalle de un hábito favorito por nombre"
   getFavoriteHabitDetailByName(name: String!): HabitActivityDTO
 }
 
 extend type Mutation {
+  "Marca un hábito como favorito (user se toma del token)"
   createFavoriteHabit(input: FavoriteHabitInput!): FavoriteHabitDTO!
   deleteFavoriteHabit(id: ID!): Boolean!
 }
@@ -18,6 +23,7 @@ type FavoriteHabitDTO {
   habitId: ID!
 }
 
+"Solo necesitas el habitId; el userId se saca del token"
 input FavoriteHabitInput {
   id: ID
   habitId: ID!

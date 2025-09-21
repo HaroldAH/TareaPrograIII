@@ -1,5 +1,5 @@
 # ==============================
-# ✅ SCHEMA GRAPHQL - Módulo GuideHabit (Relación N:M)
+# ✅ SCHEMA GRAPHQL - Módulo GuideHabit (relación N:M)
 # ==============================
 
 extend type Query {
@@ -8,7 +8,10 @@ extend type Query {
 }
 
 extend type Mutation {
+  "Asocia un hábito a una guía (autor o staff)"
   createGuideHabit(input: GuideHabitInput!): GuideHabitDTO
+
+  "Quita la asociación"
   deleteGuideHabit(guideId: ID!, habitId: ID!): Boolean
 }
 

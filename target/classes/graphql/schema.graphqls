@@ -1,6 +1,10 @@
+# ==============================
+# ✅ SCHEMA GRAPHQL - Usuarios + Permisos por Módulo
+# ==============================
+
 # ===== Permisos por módulo =====
 enum Module { HABITS ROUTINES PROGRESS GUIDES REMINDERS USERS }
-enum ModulePermission { CONSULT MUTATE } # "NADA" = sin fila (revocado)
+enum ModulePermission { CONSULT MUTATE }  # "NADA" = sin fila
 
 type UserPermission {
   module: Module!
@@ -14,7 +18,8 @@ type UserDTO {
   email: String!
   isAuditor: Boolean!
   permissions: [UserPermission!]!
-  # Mantengo 'role' para compatibilidad, pero ya no se usa
+
+  # Campo legado: si lo conservas, mándalo como null
   role: String @deprecated(reason: "Reemplazado por permisos por módulo (Module/ModulePermission).")
 }
 
@@ -31,11 +36,12 @@ input UserInput {
   password: String!
   isAuditor: Boolean = false
   permissions: [ModulePermissionInput!]
-  # Mantén el campo para no romper clientes antiguos
+
+  # Legado; ignóralo en el resolver
   role: String @deprecated(reason: "Ya no se usa. Utilice 'permissions' e 'isAuditor'.")
 }
 
-# ===== Tipos base (OBLIGATORIOS) =====
+# ===== Tipos base =====
 type Query {
   getAllUsers: [UserDTO!]!
   getUserById(id: ID!): UserDTO
@@ -49,9 +55,9 @@ type Mutation {
   login(email: String!, password: String!): String
   logout(token: String!): Boolean
 
-  # ===== Mutaciones para permisos por módulo =====
+  # Permisos por módulo
   setUserModulePermission(userId: ID!, module: Module!, permission: ModulePermission!): UserDTO
-  revokeUserModulePermission(userId: ID!, module: Module!): UserDTO         # = NADA
+  revokeUserModulePermission(userId: ID!, module: Module!): UserDTO
   setUserPermissions(userId: ID!, permissions: [ModulePermissionInput!]!): UserDTO
   setAuditor(userId: ID!, auditor: Boolean!): UserDTO
 }

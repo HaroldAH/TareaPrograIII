@@ -1,7 +1,17 @@
-# ============ STATS ============
+# ==============================
+# ✅ SCHEMA GRAPHQL - Stats/Progress
+# Reglas:
+# - Consultar: PROGRESS:CONSULT
+# - Si userId es nulo → usar el del token; si viene distinto,
+#   sólo permitirlo a usuarios con permiso de staff (p.ej. USERS:CONSULT o auditor=true).
+# ==============================
 
 extend type Query {
-  monthlyCategoryStats(year: Int!, month: Int, userId: ID): [MonthlyCategoryStatDTO!]!
+  monthlyCategoryStats(
+    year: Int!,
+    month: Int,              # opcional: si no se envía, calcular todo el año
+    userId: ID               # opcional: ver nota de seguridad arriba
+  ): [MonthlyCategoryStatDTO!]!
 }
 
 type MonthlyCategoryStatDTO {

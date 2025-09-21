@@ -25,9 +25,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    // lo puedes dejar por legado si quieres
-    @Column(name = "role", length = 50)
-    private String role;
 
     // ⬇️ NUEVO
     @Column(name = "is_auditor", nullable = false)

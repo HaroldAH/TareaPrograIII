@@ -1,18 +1,28 @@
 # ==============================
-# ✅ SCHEMA GRAPHQL - Módulo Guide
+# ✅ SCHEMA GRAPHQL - Módulo Guide (usa módulo GUIDES)
 # ==============================
 
 extend type Query {
+  "Listado general"
   getAllGuides: [GuideDTO!]!
+
+  "Detalle básico por id"
   getGuideById(id: ID!): GuideDTO
-  getGuidesByCategory(category: String!): [GuideDTO!]!         # <-- Agrega esto
-  getGuidesByUser(userId: ID!): [GuideDTO!]!                   # <-- Agrega esto
-  getGuidesByCategoryAndUser(category: String!, userId: ID!): [GuideDTO!]! # <-- Opcional
+
+  "Filtros útiles"
+  getGuidesByCategory(category: String!): [GuideDTO!]!
+  getGuidesByUser(userId: ID!): [GuideDTO!]!
+  getGuidesByCategoryAndUser(category: String!, userId: ID!): [GuideDTO!]!
+
+  "Detalle extendido (incluye recomendaciones de hábitos)"
   getGuideDetail(id: ID!): GuideDetailDTO
 }
 
 extend type Mutation {
+  "Crea/edita una guía. userId debería inferirse del token si es autor."
   createGuide(input: GuideInput!): GuideDTO
+
+  "Elimina guía (autor o staff con GUIDES:MUTATE)"
   deleteGuide(id: ID!): Boolean
 }
 
@@ -29,7 +39,7 @@ input GuideInput {
   title: String!
   content: String
   category: String
-  userId: ID
+  userId: ID      # opcional; ideal tomar del token
 }
 
 type GuideDetailDTO {

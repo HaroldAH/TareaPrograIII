@@ -1,20 +1,19 @@
 # ==============================
-# ✅ SCHEMA GRAPHQL - Módulo Routine
+# ✅ SCHEMA GRAPHQL - Módulo Routine (permiso: ROUTINES)
 # ==============================
 
 extend type Query {
-
   getAllRoutines: [RoutineDTO!]!
   getRoutineById(id: ID!): RoutineDTO
 
-
   getRoutinesByUser(userId: ID!): [RoutineDTO!]!
-
   getMyRoutines: [RoutineDTO!]!
+
   getRoutineDetail(id: ID!): RoutineDetailDTO
 }
 
 extend type Mutation {
+  "Si userId viene nulo, se toma del token (propietario)"
   createRoutine(input: RoutineInput!): RoutineDTO!
   deleteRoutine(id: ID!): Boolean!
 }
@@ -22,14 +21,14 @@ extend type Mutation {
 type RoutineDTO {
   id: ID!
   title: String!
-  userId: ID!        
+  userId: ID!
   daysOfWeek: String
 }
 
 input RoutineInput {
   id: ID
   title: String!
-  userId: ID    # <-- Ahora es opcional
+  userId: ID      # opcional; ideal tomar del token
   daysOfWeek: String
 }
 
