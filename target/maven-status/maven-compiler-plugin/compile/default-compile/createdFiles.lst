@@ -8,6 +8,7 @@ com\tarea\resolvers\inputs\GuideHabitInput.class
 com\tarea\dtos\UserPageDTO.class
 com\tarea\dtos\FavoriteHabitPageDTO.class
 com\tarea\models\RoutineHabit.class
+com\tarea\repositories\PasswordResetTokenRepository.class
 com\tarea\resolvers\inputs\PageRequestInput.class
 com\tarea\services\FavoriteHabitService.class
 com\tarea\resolvers\RoutineHabitResolver.class
@@ -37,6 +38,7 @@ com\tarea\repositories\CompletedActivityRepository.class
 com\tarea\repositories\GuideRepository.class
 com\tarea\resolvers\UserResolver.class
 com\tarea\services\UserService.class
+com\tarea\models\PasswordResetToken.class
 com\tarea\resolvers\inputs\RoleInput.class
 com\tarea\services\RoutineHabitService.class
 com\tarea\controllers\TestController.class
@@ -71,6 +73,7 @@ com\tarea\dtos\MonthlyCategoryStatDTO.class
 com\tarea\config\SecurityConfig.class
 com\tarea\dtos\RoutineHabitPageDTO.class
 com\tarea\resolvers\inputs\FavoriteHabitInput.class
+com\tarea\services\AccountService.class
 com\tarea\dtos\RoutineDTO.class
 com\tarea\dtos\HabitActivityPageDTO.class
 com\tarea\models\Module.class

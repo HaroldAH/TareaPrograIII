@@ -1,10 +1,12 @@
 package com.tarea.resolvers;
 
+import com.tarea.dtos.UserDTO;
 import com.tarea.models.ModulePermission;
 import com.tarea.repositories.UserModulePermissionRepository;
 import com.tarea.repositories.UserRepository;
 import com.tarea.security.JwtService;
 import com.tarea.security.TokenBlacklistService;
+import com.tarea.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -23,6 +25,11 @@ public class AuthResolver {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final TokenBlacklistService blacklist;
+
+  // NUEVO: servicio para registro y recuperación
+  private final AccountService accountService;
+
+  /* ====================== AUTH ====================== */
 
   @MutationMapping
   public String login(@Argument String email, @Argument String password) {
@@ -50,5 +57,35 @@ public class AuthResolver {
   public Boolean logout(@Argument String token) {
     blacklist.blacklist(token);
     return true;
+  }
+
+  /* ============= Registro y recuperación ============= */
+
+  // Registro público de usuario
+  @MutationMapping
+  public UserDTO register(@Argument String name,
+                          @Argument String email,
+                          @Argument String password) {
+    return accountService.registerPublic(name, email, password);
+  }
+
+  // Solicitar link de "Olvidé mi contraseña"
+  @MutationMapping
+  public Boolean requestPasswordReset(@Argument String email) {
+    return accountService.requestPasswordReset(email);
+  }
+
+  // Completar el reseteo con el token del correo
+  @MutationMapping
+  public Boolean resetPassword(@Argument String token,
+                               @Argument String newPassword) {
+    return accountService.resetPassword(token, newPassword);
+  }
+
+  // Cambiar mi contraseña (requiere estar autenticado)
+  @MutationMapping
+  public Boolean changeMyPassword(@Argument String oldPassword,
+                                  @Argument String newPassword) {
+    return accountService.changeMyPassword(oldPassword, newPassword);
   }
 }

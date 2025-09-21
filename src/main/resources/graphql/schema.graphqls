@@ -87,3 +87,16 @@ type Mutation {
 extend type Query {
   myCoachees: [UserDTO!]!
 }
+
+
+extend type Mutation {
+  # Registro público
+  register(name: String!, email: String!, password: String!): UserDTO!
+
+  # Recuperación de acceso
+  requestPasswordReset(email: String!): Boolean!
+  resetPassword(token: String!, newPassword: String!): Boolean!
+
+  # Autenticado
+  changeMyPassword(oldPassword: String!, newPassword: String!): Boolean!
+}

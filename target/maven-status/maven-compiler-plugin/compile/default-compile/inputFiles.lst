@@ -39,6 +39,7 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Habitactivity.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Module.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\ModulePermission.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\PasswordResetToken.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Reminder.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\Routine.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\models\RoutineHabit.java
@@ -50,6 +51,7 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\GuideHabitRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\GuideRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\HabitActivityRepository.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\PasswordResetTokenRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\ReminderRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\RoutineHabitRepository.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\repositories\RoutineRepository.java
@@ -86,6 +88,7 @@ C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\SecurityUtils.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\security\TokenBlacklistService.java
+C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\AccountService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\CompletedActivityService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\FavoriteHabitService.java
 C:\Users\Anthony\Desktop\rutinas-saludables (1) (1)\TareaPrograIII\src\main\java\com\tarea\services\GuideHabitService.java
