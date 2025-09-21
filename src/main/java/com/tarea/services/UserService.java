@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -333,4 +334,51 @@ public class UserService {
         dto.setPermissions(perms);
         return dto;
     }
+
+
+
+
+
+    @Transactional(readOnly = true)
+public UserPageDTO pageCoachees(Long coachId, Pageable pageable) {
+    Page<User> p = userRepository.findByAssignedCoach_Id(coachId, pageable);
+
+    if (p.isEmpty()) {
+        return new UserPageDTO(
+            List.of(),
+            new PageInfoDTO(0, 0, p.getNumber(), p.getSize(), 0, false, false)
+        );
+    }
+
+    // Carga permisos en bloque
+    List<Long> ids = p.getContent().stream().map(User::getId).toList();
+    List<UserModulePermission> perms = umpRepository.findAllByUserIdIn(ids);
+
+    Map<Long, List<UserPermissionDTO>> permsByUser = perms.stream()
+        .collect(Collectors.groupingBy(
+            up -> up.getUser().getId(),
+            Collectors.mapping(up -> {
+                UserPermissionDTO dto = new UserPermissionDTO();
+                dto.setModule(up.getModule());
+                dto.setPermission(up.getPermission());
+                return dto;
+            }, Collectors.toList())
+        ));
+
+    List<UserDTO> content = p.getContent().stream()
+        .map(u -> toDTO(u, permsByUser.getOrDefault(u.getId(), List.of())))
+        .toList();
+
+    PageInfoDTO info = new PageInfoDTO(
+        (int) p.getTotalElements(),
+        p.getTotalPages(),
+        p.getNumber(),
+        p.getSize(),
+        p.getNumberOfElements(),
+        p.hasNext(),
+        p.hasPrevious()
+    );
+
+    return new UserPageDTO(content, info);
+}
 }

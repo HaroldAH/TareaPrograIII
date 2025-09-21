@@ -95,4 +95,8 @@ extend type Query {
 
   guideHabitsPage(page: PageRequestInput!): GuideHabitPage!
   countGuideHabits: Int!
+
+  # 👇 NUEVO: paginación para coachees, usando SIEMPRE UserPage
+  myCoacheesPage(page: PageRequestInput!): UserPage!
+  coacheesPage(coachId: ID!, page: PageRequestInput!): UserPage!
 }

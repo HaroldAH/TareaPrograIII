@@ -14,6 +14,11 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import com.tarea.dtos.UserPageDTO;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.data.domain.PageRequest;
+
+
 
 import java.util.List;
 
@@ -173,4 +178,41 @@ public class UserResolver {
         var pageable = (page == null) ? org.springframework.data.domain.PageRequest.of(0,20) : page.toPageable();
         return userService.pageUsers(pageable);
     }
+
+
+@QueryMapping
+public UserPageDTO myCoacheesPage(@Argument("page") com.tarea.resolvers.inputs.PageRequestInput page) {
+    Long me = com.tarea.security.SecurityUtils.userId();
+    UserDTO meDto = userService.getById(me);
+    if (!Boolean.TRUE.equals(meDto.getIsCoach())) {
+        throw new AccessDeniedException("Forbidden");
+    }
+    var pageable = (page == null) ? PageRequest.of(0,20) : page.toPageable();
+    return userService.pageCoachees(me, pageable);
+}
+
+@QueryMapping
+public UserPageDTO coacheesPage(@Argument Long coachId,
+                                @Argument("page") com.tarea.resolvers.inputs.PageRequestInput page) {
+    Long me = null;
+    try { me = com.tarea.security.SecurityUtils.userId(); } catch (Exception ignore) {}
+
+    if (me != null) {
+        UserDTO meDto = userService.getById(me);
+        if (Boolean.TRUE.equals(meDto.getIsCoach()) && coachId.equals(me)) {
+            var pageable = (page == null) ? PageRequest.of(0,20) : page.toPageable();
+            return userService.pageCoachees(coachId, pageable);
+        }
+    }
+    com.tarea.security.SecurityUtils.requireView(com.tarea.models.Module.USERS);
+    var pageable = (page == null) ? PageRequest.of(0,20) : page.toPageable();
+    return userService.pageCoachees(coachId, pageable);
+}
+
+
+
+
+
+
+
 }
