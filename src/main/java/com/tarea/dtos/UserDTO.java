@@ -9,10 +9,10 @@ public class UserDTO {
     private String name;
     private String email;
 
+    private Boolean isAuditor;    // ya lo tenías
+    private Boolean isCoach;      // NUEVO
 
-    // usa wrapper para tolerar null en mapeos
-    private Boolean isAuditor;
+    private Long assignedCoachId; // NUEVO (para la UI)
 
-    // permisos por módulo que muestres en la UI/queries
     private List<UserPermissionDTO> permissions;
 }

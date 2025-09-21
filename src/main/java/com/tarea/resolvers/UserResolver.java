@@ -12,6 +12,7 @@ import com.tarea.services.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -39,18 +40,49 @@ public class UserResolver {
         return userService.getById(id);
     }
 
+    /** NUEVO: lista SOLO los usuarios asignados al coach autenticado */
+    @QueryMapping
+    public List<UserDTO> myCoachees() {
+        Long me = SecurityUtils.userId();
+        if (me == null) throw new AccessDeniedException("Unauthorized");
+
+        UserDTO meDto = userService.getById(me);
+        if (!Boolean.TRUE.equals(meDto.getIsCoach())) {
+            throw new AccessDeniedException("Forbidden");
+        }
+        return userService.getCoachees(me);
+    }
+
+    /** Ajustado: si el caller es coach y pide su propia lista, lo permitimos; si no, requiere permiso USERS */
+    @QueryMapping
+    public List<UserDTO> usersAssignedToCoach(@Argument Long coachId) {
+        Long me = null;
+        try { me = SecurityUtils.userId(); } catch (Exception ignore) {}
+
+        if (me != null) {
+            UserDTO meDto = userService.getById(me);
+            if (Boolean.TRUE.equals(meDto.getIsCoach()) && coachId.equals(me)) {
+                return userService.getCoachees(coachId);
+            }
+        }
+
+        SecurityUtils.requireView(Module.USERS);
+        return userService.getCoachees(coachId);
+    }
+
     /* ===================== MUTATIONS ===================== */
 
     @MutationMapping
     public UserDTO createUser(@Argument("input") UserInput input) {
-        // El service maneja bootstrap (si count==0 no exige token; si no, exige USERS:MUTATE)
         List<UserPermissionDTO> perms = mapInputs(input.getPermissions());
         return userService.createUser(
                 input.getName(),
                 input.getEmail(),
                 input.getPassword(),
                 input.getIsAuditor(),
-                perms
+                perms,
+                input.getIsCoach(),         // NUEVO
+                input.getAssignedCoachId()  // NUEVO
         );
     }
 
@@ -60,8 +92,6 @@ public class UserResolver {
         userService.delete(id);
         return true;
     }
-
-    // ----- Permisos por módulo -----
 
     @MutationMapping
     public UserDTO setUserModulePermission(@Argument Long userId,
@@ -96,6 +126,20 @@ public class UserResolver {
         return userService.setAuditor(userId, auditor != null && auditor);
     }
 
+    // ===== NUEVO: activar/desactivar Coach (con XOR dentro del service) =====
+    @MutationMapping
+    public UserDTO setCoach(@Argument Long userId, @Argument Boolean coach) {
+        SecurityUtils.requireMutate(Module.USERS);
+        return userService.setCoach(userId, coach != null && coach);
+    }
+
+    // ===== NUEVO: asignar un Coach a un usuario =====
+    @MutationMapping
+    public UserDTO setUserCoach(@Argument Long userId, @Argument Long coachId) {
+        SecurityUtils.requireMutate(Module.USERS);
+        return userService.setUserCoach(userId, coachId);
+    }
+
     /* ===================== HELPERS ===================== */
 
     private List<UserPermissionDTO> mapInputs(List<ModulePermissionInput> inputs) {
@@ -122,12 +166,11 @@ public class UserResolver {
         try { return (ModulePermission) p.getClass().getMethod("permission").invoke(p); }
         catch (Exception e) { throw new IllegalArgumentException("ModulePermissionInput.permission no accesible"); }
     }
-    @QueryMapping
-public UserPageDTO usersPage(@Argument("page") com.tarea.resolvers.inputs.PageRequestInput page) {
-    SecurityUtils.requireView(Module.USERS);
-    var pageable = (page == null) ? org.springframework.data.domain.PageRequest.of(0,20)
-                                  : page.toPageable();
-    return userService.pageUsers(pageable);
-}
 
+    @QueryMapping
+    public UserPageDTO usersPage(@Argument("page") com.tarea.resolvers.inputs.PageRequestInput page) {
+        SecurityUtils.requireView(Module.USERS);
+        var pageable = (page == null) ? org.springframework.data.domain.PageRequest.of(0,20) : page.toPageable();
+        return userService.pageUsers(pageable);
+    }
 }

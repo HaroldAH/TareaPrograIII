@@ -7,7 +7,12 @@ public class UserInput {
     private String name;
     private String email;
     private String password;
+
     private Boolean isAuditor = false;
+    private Boolean isCoach   = false;   // NUEVO
+
+    private Long assignedCoachId;        // NUEVO (opcional en create/update)
+
     private List<ModulePermissionInput> permissions; // null = sin asignaciones
 
     public Long getId() { return id; }
@@ -20,6 +25,13 @@ public class UserInput {
     public void setPassword(String password) { this.password = password; }
     public Boolean getIsAuditor() { return isAuditor; }
     public void setIsAuditor(Boolean isAuditor) { this.isAuditor = isAuditor; }
+
+    public Boolean getIsCoach() { return isCoach; }              // NUEVO
+    public void setIsCoach(Boolean isCoach) { this.isCoach = isCoach; } // NUEVO
+
+    public Long getAssignedCoachId() { return assignedCoachId; }        // NUEVO
+    public void setAssignedCoachId(Long assignedCoachId) { this.assignedCoachId = assignedCoachId; } // NUEVO
+
     public List<ModulePermissionInput> getPermissions() { return permissions; }
     public void setPermissions(List<ModulePermissionInput> permissions) { this.permissions = permissions; }
 }
