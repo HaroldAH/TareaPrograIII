@@ -21,7 +21,7 @@ public class InputSanitizationUtils {
         return false;
     }
 
-    // Valida todos los campos String públicos del DTO
+     
     public static void validateAllStringFields(Object dto) {
         if (dto == null) return;
         for (Field field : dto.getClass().getDeclaredFields()) {

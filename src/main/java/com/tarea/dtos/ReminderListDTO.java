@@ -6,5 +6,5 @@ import lombok.Data;
 public class ReminderListDTO {
     private Long id;
     private String frequency;
-    private HabitActivityListDTO habit; // info pequeña del hábito
+    private HabitActivityListDTO habit;  
 }

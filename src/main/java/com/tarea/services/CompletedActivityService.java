@@ -43,15 +43,15 @@ public class CompletedActivityService {
         this.habitRepo = habitRepo;
     }
 
-    /* ========== QUERIES ========== */
+ 
 
-    // Global: requiere VIEW(PROGRESS)
+     
     public List<CompletedActivityDTO> getAll() {
         requireView(Module.PROGRESS);
         return repo.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    // Ver uno: dueño o VIEW
+     
     public CompletedActivityDTO getById(Long id) {
         Completedactivity e = repo.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("CompletedActivity no encontrada: " + id));
@@ -59,7 +59,7 @@ public class CompletedActivityService {
         return toDTO(e);
     }
 
-    // Por usuario: dueño o VIEW
+     
     public List<CompletedActivityDTO> getByUser(Long userId, String startDate, String endDate) {
         requireSelfOrView(userId, Module.PROGRESS);
         LocalDate start = parseDateOrNull(startDate);
@@ -78,7 +78,7 @@ public class CompletedActivityService {
         return list.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    // “Mis …” (sin VIEW)
+     
     public List<CompletedActivityDTO> getMine(String startDate, String endDate) {
         return getByUser(SecurityUtils.userId(), startDate, endDate);
     }
@@ -92,7 +92,7 @@ public class CompletedActivityService {
         return getCompletedByUserOnDay(SecurityUtils.userId(), date);
     }
 
-    // Agrupación por día: dueño o VIEW
+     
     public List<CompletedDayDTO> getCompletedByUserPerDay(Long userId, String startDate, String endDate) {
         requireSelfOrView(userId, Module.PROGRESS);
         LocalDate start = parseDateOrNull(startDate);
@@ -119,7 +119,7 @@ public class CompletedActivityService {
         return out;
     }
 
-    // Agrupación por semana (ISO): dueño o VIEW
+     
     public List<CompletedWeekDTO> getCompletedByUserPerWeek(Long userId, String startDate, String endDate) {
         requireSelfOrView(userId, Module.PROGRESS);
         LocalDate start = parseDateOrNull(startDate);
@@ -151,7 +151,7 @@ public class CompletedActivityService {
             .collect(Collectors.toList());
     }
 
-    // Un día: dueño o VIEW
+     
     public CompletedDayDTO getCompletedByUserOnDay(Long userId, String date) {
         requireSelfOrView(userId, Module.PROGRESS);
         LocalDate d = LocalDate.parse(date);
@@ -163,16 +163,16 @@ public class CompletedActivityService {
         return out;
     }
 
-    /* ========== COMMANDS ========== */
+ 
 
     @Transactional
     public CompletedActivityDTO save(CompletedActivityDTO dto) {
-        forbidAuditorWrites(); // auditor = solo lectura
+        forbidAuditorWrites();  
 
         Long me = userId();
         Long target = (dto.getUserId() != null) ? dto.getUserId() : me;
 
-        // Dueño puede crear/editar sin MUTATE; otros → MUTATE
+         
         requireSelfOrMutate(target, Module.PROGRESS);
 
         User user = userRepo.findById(target)
@@ -203,11 +203,11 @@ public class CompletedActivityService {
         e.setUser(user);
         e.setHabit(habit);
         e.setRoutine(routine);
-        e.setDate(parseDateOrNull(dto.getDate())); // LocalDate
-        e.setCompletedAt(dto.getCompletedAt());    // "HH:mm"
+        e.setDate(parseDateOrNull(dto.getDate()));  
+        e.setCompletedAt(dto.getCompletedAt());     
         e.setNotes(dto.getNotes());
 
-        // Input sanitization check
+         
         if (InputSanitizationUtils.containsMaliciousPattern(dto.getNotes())) {
             throw new IllegalArgumentException("Malicious input detected in notes");
         }
@@ -267,7 +267,7 @@ public class CompletedActivityService {
     private float round2(float v){ return Math.round(v * 100f) / 100f; }
     private float round4(float v){ return Math.round(v * 10000f) / 10000f; }
 
-    /* ========== helpers ========== */
+ 
     private CompletedActivityDTO toDTO(Completedactivity e) {
         CompletedActivityDTO dto = new CompletedActivityDTO();
         dto.setId(e.getId());

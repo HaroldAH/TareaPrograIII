@@ -23,7 +23,7 @@ public class RoutineHabitResolver {
         this.service = service;
     }
 
-    /* ============ QUERIES (CONSULT) ============ */
+ 
 
     @QueryMapping
     public List<RoutineHabitDTO> getRoutineHabitsByRoutineId(@Argument Long routineId) {
@@ -31,7 +31,7 @@ public class RoutineHabitResolver {
         return service.getByRoutineId(routineId);
     }
 
-    /* ============ MUTATIONS (MUTATE) ============ */
+ 
 
     @MutationMapping
     public RoutineHabitDTO createRoutineHabit(@Argument RoutineHabitInput input) {
@@ -46,7 +46,7 @@ public class RoutineHabitResolver {
         return true;
     }
 
-    /* ============ Mapper ============ */
+ 
 
     private RoutineHabitDTO toDTO(RoutineHabitInput in) {
         RoutineHabitDTO dto = new RoutineHabitDTO();

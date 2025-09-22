@@ -21,29 +21,21 @@ public class StatsService {
         this.completedRepo = completedRepo;
     }
 
-    /**
-     * Lógica de seguridad:
-     * - Si userIdArg == null:
-     *     - Si el caller NO tiene VIEW(PROGRESS) → target = yo (no se permite global)
-     *     - Si SÍ tiene VIEW(PROGRESS) → target = null (global permitido)
-     * - Si userIdArg != null:
-     *     - Si userIdArg != yo → requiere VIEW(PROGRESS)
-     */
     public List<MonthlyCategoryStatDTO> monthlyCategoryStats(int year, Integer month, Long userIdArg) {
         Long me = userId();
         Long target;
 
         if (userIdArg == null) {
             if (canViewProgress()) {
-                target = null; // staff/auditor: global permitido
+                target = null;  
             } else {
-                target = me;   // no-staff: solo mis stats
+                target = me;    
             }
         } else {
             if (!userIdArg.equals(me)) {
-                requireView(Module.PROGRESS); // otros usuarios → requiere VIEW
+                requireView(Module.PROGRESS);  
             }
-            target = userIdArg; // explícitamente solicitado
+            target = userIdArg;  
         }
 
         List<Object[]> rows = (month == null)

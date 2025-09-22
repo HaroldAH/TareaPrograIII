@@ -58,7 +58,7 @@ class RoutineServiceTest {
 
         try (MockedStatic<SecurityUtils> security = mockStatic(SecurityUtils.class)) {
             security.when(SecurityUtils::userId).thenReturn(1L);
-            // OJO: usa el nombre totalmente calificado para evitar la colisión con java.lang.Module
+             
             security.when(() -> SecurityUtils.requireMutate(com.tarea.models.Module.ROUTINES))
                     .thenAnswer(inv -> null);
 
@@ -86,7 +86,7 @@ class RoutineServiceTest {
         h.setDescription("desc");
 
         var rh = new RoutineHabit();
-        // RoutineHabitId NO tiene constructor (long,long): crea y setea campos
+         
         RoutineHabitId id = new RoutineHabitId();
         id.setRoutineId(5L);
         id.setHabitId(2L);
@@ -100,7 +100,7 @@ class RoutineServiceTest {
         when(rhRepo.findByRoutine_IdOrderByOrderInRoutine(5L)).thenReturn(List.of(rh));
 
         try (MockedStatic<SecurityUtils> security = mockStatic(SecurityUtils.class)) {
-            // Igual: nombre totalmente calificado para tu enum Module
+             
             security.when(() -> SecurityUtils.requireView(com.tarea.models.Module.ROUTINES))
                     .thenAnswer(inv -> null);
 

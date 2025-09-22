@@ -39,7 +39,7 @@ class FavoriteHabitServiceTest {
     @Test
     void save_ok() {
         FavoriteHabitDTO dto = new FavoriteHabitDTO();
-        // userId null -> cae al usuario logueado
+         
         dto.setHabitId(2L);
 
         var u = new User(); u.setId(1L);

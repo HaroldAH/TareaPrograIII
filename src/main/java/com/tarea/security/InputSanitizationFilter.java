@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Component
 public class InputSanitizationFilter extends GenericFilter {
 
-    // Patrones básicos de ataque (puedes ampliar esta lista)
+     
     private static final Pattern[] MALICIOUS_PATTERNS = new Pattern[]{
         Pattern.compile("<script", Pattern.CASE_INSENSITIVE),
         Pattern.compile("drop\\s+table", Pattern.CASE_INSENSITIVE),
@@ -20,7 +20,7 @@ public class InputSanitizationFilter extends GenericFilter {
         Pattern.compile("select\\s+.*\\s+from", Pattern.CASE_INSENSITIVE)
     };
 
-    // Longitud máxima permitida para parámetros
+     
     private static final int MAX_PARAM_LENGTH = 255;
 
     @Override
@@ -29,10 +29,10 @@ public class InputSanitizationFilter extends GenericFilter {
 
         HttpServletRequest request = (HttpServletRequest) req;
 
-        // Envuelve la request para poder leer el body varias veces
+         
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
 
-        // Valida y sanitiza parámetros de URL y formulario
+         
         for (String param : wrappedRequest.getParameterMap().keySet()) {
             for (String value : wrappedRequest.getParameterValues(param)) {
                 if (value.length() > MAX_PARAM_LENGTH) {
@@ -46,15 +46,15 @@ public class InputSanitizationFilter extends GenericFilter {
             }
         }
 
-        // Opcional: valida el body (por ejemplo, JSON)
+         
         String body = new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding());
-        System.out.println("BODY: " + body); // <-- Agrega esto temporalmente
+        System.out.println("BODY: " + body);  
         if (!body.isEmpty() && containsMaliciousPattern(body)) {
             ((HttpServletResponse) res).sendError(400, "Malicious input detected in body");
             return;
         }
 
-        // Continúa la cadena de filtros
+         
         chain.doFilter(wrappedRequest, res);
     }
 

@@ -1,7 +1,6 @@
 package com.tarea.services;
 
 import com.tarea.dtos.UserDTO;
-import com.tarea.dtos.UserPermissionDTO;
 import com.tarea.models.Module;
 import com.tarea.models.ModulePermission;
 import com.tarea.models.User;
@@ -12,12 +11,8 @@ import com.tarea.security.SecurityUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
-import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -42,7 +37,7 @@ class UserServiceTest {
 
     @Test
 void createUser_bootstrap_setsAuditorAndUsersMutatePerm() {
-    // bootstrap: no hay usuarios aún
+     
     when(userRepository.count()).thenReturn(0L);
     when(passwordEncoder.encode("123")).thenReturn("enc-123");
     when(userRepository.save(any(User.class))).thenAnswer(inv -> {
@@ -53,11 +48,11 @@ void createUser_bootstrap_setsAuditorAndUsersMutatePerm() {
     when(umpRepository.findByUserIdAndModule(eq(1L), eq(Module.USERS))).thenReturn(Optional.empty());
     when(umpRepository.save(any(UserModulePermission.class))).thenAnswer(inv -> inv.getArgument(0));
 
-    // permissions = null (o List.of())
+     
     UserDTO dto = service.createUser("Admin", "ADMIN@demo.com", "123", null, null);
 
     assertEquals(1L, dto.getId());
-    assertTrue(dto.getIsAuditor()); // se activa por bootstrap
+    assertTrue(dto.getIsAuditor());  
     assertEquals("admin@demo.com", dto.getEmail());
     verify(umpRepository).save(argThat(p ->
         p.getModule() == Module.USERS && p.getPermission() == ModulePermission.MUTATE
@@ -69,7 +64,7 @@ void createUser_bootstrap_setsAuditorAndUsersMutatePerm() {
     void setCoach_XOR_withAuditor_throws() {
         var u = new User();
         u.setId(10L);
-        u.setIsAuditor(true); // ya es auditor
+        u.setIsAuditor(true);  
         when(userRepository.findById(10L)).thenReturn(Optional.of(u));
 
         try (MockedStatic<SecurityUtils> mock = mockStatic(SecurityUtils.class)) {

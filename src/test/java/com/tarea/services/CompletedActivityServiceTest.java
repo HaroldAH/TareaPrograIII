@@ -37,9 +37,9 @@ class CompletedActivityServiceTest {
     @Test
     void save_own_without_mutate_ok() {
         try (MockedStatic<SecurityUtils> sec = Mockito.mockStatic(SecurityUtils.class)) {
-            // Soy el 10
+             
             sec.when(SecurityUtils::userId).thenReturn(10L);
-            // No soy auditor y no se exige mutate para self
+             
             sec.when(() -> SecurityUtils.forbidAuditorWrites()).thenAnswer(inv -> null);
             sec.when(() -> SecurityUtils.requireSelfOrMutate(10L, Module.PROGRESS)).thenAnswer(inv -> null);
 
@@ -75,7 +75,7 @@ class CompletedActivityServiceTest {
         try (MockedStatic<SecurityUtils> sec = Mockito.mockStatic(SecurityUtils.class)) {
             sec.when(SecurityUtils::userId).thenReturn(10L);
             sec.when(() -> SecurityUtils.forbidAuditorWrites()).thenAnswer(inv -> null);
-            // target es 999 (otro user) → lanzamos AccessDenied
+             
             sec.when(() -> SecurityUtils.requireSelfOrMutate(999L, Module.PROGRESS))
                .thenThrow(new AccessDeniedException("UNAUTHORIZED"));
 
@@ -102,7 +102,7 @@ class CompletedActivityServiceTest {
     void getCompletedByUserPerDay_self_ok() {
         try (MockedStatic<SecurityUtils> sec = Mockito.mockStatic(SecurityUtils.class)) {
             sec.when(SecurityUtils::userId).thenReturn(10L);
-            // self-or-view para 10 → no lanza
+             
             sec.when(() -> SecurityUtils.requireSelfOrView(10L, Module.PROGRESS)).thenAnswer(inv -> null);
 
             Completedactivity c1 = new Completedactivity();

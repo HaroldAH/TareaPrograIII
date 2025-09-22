@@ -4,7 +4,7 @@ public class RoutineInput {
     private Long id;
     private String title;
     private Long userId;
-    private String daysOfWeek; // Ej: "MON,WED,FRI"
+    private String daysOfWeek;  
 
     public Long getId() {
         return id;

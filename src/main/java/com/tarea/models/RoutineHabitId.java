@@ -10,7 +10,7 @@ public class RoutineHabitId implements Serializable {
     private Long routineId;
     private Long habitId;
 
-    // getters y setters
+     
     public Long getRoutineId() { return routineId; }
     public void setRoutineId(Long routineId) { this.routineId = routineId; }
     public Long getHabitId() { return habitId; }

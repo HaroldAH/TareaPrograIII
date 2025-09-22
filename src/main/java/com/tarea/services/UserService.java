@@ -42,21 +42,21 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /* ========= bootstrap & CRUD básico ========= */
+ 
 
     @Transactional(readOnly = true)
     public long countUsers() {
         return userRepository.count();
     }
 
-    /** Firma LEGADA para compatibilidad con llamadas existentes. */
+ 
     @Transactional
     public UserDTO createUser(String name, String email, String rawPassword,
                               Boolean isAuditor, List<UserPermissionDTO> permissions) {
         return createUser(name, email, rawPassword, isAuditor, permissions, null, null);
     }
 
-    /** Nuevo create con soporte Coach + asignación. Aplica XOR Auditor/Coach. */
+ 
     @Transactional
     public UserDTO createUser(String name, String email, String rawPassword,
                               Boolean isAuditor, List<UserPermissionDTO> permissions,
@@ -81,12 +81,12 @@ public class UserService {
         u.setIsAuditor(auditor);
         u.setIsCoach(coach);
 
-        // Bootstrap por defecto: si no hay permisos y no es coach, deja auditor=true
+         
         if (bootstrap && (permissions == null || permissions.isEmpty()) && !Boolean.TRUE.equals(u.getIsCoach())) {
             u.setIsAuditor(true);
         }
 
-        // Asignación opcional de coach
+         
         if (assignedCoachId != null) {
             User c = userRepository.findById(assignedCoachId)
                     .orElseThrow(() -> new NoSuchElementException("Coach no existe: " + assignedCoachId));
@@ -98,7 +98,7 @@ public class UserService {
 
         u = userRepository.save(u);
 
-        // Permisos por módulo
+         
         if (permissions != null && !permissions.isEmpty()) {
             for (UserPermissionDTO p : permissions) {
                 upsertPermissionInternal(u, p.getModule(), p.getPermission());
@@ -141,7 +141,7 @@ public class UserService {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no existe: " + userId));
 
-        // XOR con Coach
+         
         if (auditor && Boolean.TRUE.equals(u.getIsCoach())) {
             throw new IllegalStateException("No puede ser Auditor y Coach a la vez.");
         }
@@ -152,7 +152,7 @@ public class UserService {
         return toDTO(u, loadPerms(userId));
     }
 
-    /** NUEVO: toggle Coach con XOR */
+ 
     @Transactional
     public UserDTO setCoach(Long userId, boolean coach) {
         requireMutate(Module.USERS);
@@ -170,7 +170,7 @@ public class UserService {
         return toDTO(u, loadPerms(userId));
     }
 
-    /** NUEVO: asignar un Coach a un usuario (1→N) */
+ 
     @Transactional
     public UserDTO setUserCoach(Long userId, Long coachId) {
         requireMutate(Module.USERS);
@@ -200,29 +200,29 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    /* ========= Paginación ========= */
+ 
 
     @Transactional(readOnly = true)
     public UserPageDTO pageUsers(Pageable pageable) {
         Page<User> p = userRepository.findAll(pageable);
 
-        // Página vacía
+         
         if (p.isEmpty()) {
             return new UserPageDTO(
                     List.of(),
                     new PageInfoDTO(
-                            0, // totalElements
-                            0, // totalPages
+                            0,  
+                            0,  
                             p.getNumber(),
                             p.getSize(),
-                            0, // numberOfElements
-                            false, // hasNext
-                            false  // hasPrevious
+                            0,  
+                            false,  
+                            false   
                     )
             );
         }
 
-        // Carga permisos en bloque
+         
         List<Long> ids = p.getContent().stream().map(User::getId).toList();
         List<UserModulePermission> perms = umpRepository.findAllByUserIdIn(ids);
 
@@ -256,7 +256,7 @@ public class UserService {
         return new UserPageDTO(content, info);
     }
 
-    /* ========= helpers ========= */
+ 
 
     @Transactional(readOnly = true)
     private List<UserPermissionDTO> loadPerms(Long userId) {
@@ -270,7 +270,7 @@ public class UserService {
                 .toList();
     }
 
-    // upsert interno (sin requireMutate) para bootstrap y usos internos seguros
+     
     @Transactional
     private void upsertPermissionInternal(User user, Module module, ModulePermission permission) {
         var existing = umpRepository.findByUserIdAndModule(user.getId(), module);
@@ -316,7 +316,7 @@ public class UserService {
         return toDTO(u, loadPerms(id));
     }
 
-    /** NUEVO: lista de usuarios asignados a un coach (no paginado) */
+ 
     @Transactional(readOnly = true)
     public List<UserDTO> getCoachees(Long coachId) {
         return userRepository.findByAssignedCoach_Id(coachId).stream()
@@ -324,7 +324,7 @@ public class UserService {
                 .toList();
     }
 
-    // Construcción del DTO con flags de Coach y asignación
+     
     private UserDTO toDTO(User user, List<UserPermissionDTO> permissions) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
@@ -333,7 +333,7 @@ public class UserService {
         dto.setAssignedCoachId(user.getAssignedCoach() != null ? user.getAssignedCoach().getId() : null);
         dto.setPermissions(permissions);
 
-        // Asegura que nunca sean null
+         
         dto.setIsAuditor(user.getIsAuditor() != null ? user.getIsAuditor() : false);
         dto.setIsCoach(user.getIsCoach() != null ? user.getIsCoach() : false);
 
@@ -355,7 +355,7 @@ public UserPageDTO pageCoachees(Long coachId, Pageable pageable) {
         );
     }
 
-    // Carga permisos en bloque
+     
     List<Long> ids = p.getContent().stream().map(User::getId).toList();
     List<UserModulePermission> perms = umpRepository.findAllByUserIdIn(ids);
 
@@ -387,10 +387,10 @@ public UserPageDTO pageCoachees(Long coachId, Pageable pageable) {
     return new UserPageDTO(content, info);
 }
 
-/** Registro público: crea usuario con permisos mínimos (solo para sí mismo) */
+ 
 @Transactional
 public UserDTO register(String name, String email, String rawPassword) {
-    // Validación manual de campos vulnerables
+     
     if (InputSanitizationUtils.containsMaliciousPattern(name)) {
         throw new IllegalArgumentException("Malicious input detected in name");
     }
@@ -428,7 +428,7 @@ public UserDTO register(String name, String email, String rawPassword) {
     return toDTO(u, loadPerms(u.getId()));
 }
 
-// Helper para crear UserPermissionDTO fácilmente
+ 
 private UserPermissionDTO createPerm(Module module, ModulePermission permission) {
     UserPermissionDTO dto = new UserPermissionDTO();
     dto.setModule(module);

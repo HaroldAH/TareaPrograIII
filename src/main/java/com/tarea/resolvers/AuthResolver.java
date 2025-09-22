@@ -26,10 +26,10 @@ public class AuthResolver {
   private final JwtService jwtService;
   private final TokenBlacklistService blacklist;
 
-  // NUEVO: servicio para registro y recuperación
+   
   private final AccountService accountService;
 
-  /* ====================== AUTH ====================== */
+ 
 
   @MutationMapping
   public String login(@Argument String email, @Argument String password) {
@@ -59,9 +59,7 @@ public class AuthResolver {
     return true;
   }
 
-  /* ============= Registro y recuperación ============= */
-
-  // Registro público de usuario
+   
   @MutationMapping
   public UserDTO register(@Argument String name,
                           @Argument String email,
@@ -69,20 +67,20 @@ public class AuthResolver {
     return accountService.registerPublic(name, email, password);
   }
 
-  // Solicitar link de "Olvidé mi contraseña"
+   
   @MutationMapping
   public Boolean requestPasswordReset(@Argument String email) {
     return accountService.requestPasswordReset(email);
   }
 
-  // Completar el reseteo con el token del correo
+   
   @MutationMapping
   public Boolean resetPassword(@Argument String token,
                                @Argument String newPassword) {
     return accountService.resetPassword(token, newPassword);
   }
 
-  // Cambiar mi contraseña (requiere estar autenticado)
+   
   @MutationMapping
   public Boolean changeMyPassword(@Argument String oldPassword,
                                   @Argument String newPassword) {

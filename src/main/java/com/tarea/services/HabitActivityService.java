@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
-// com/tarea/services/HabitActivityService.java
+ 
 
 public class HabitActivityService {
 
@@ -35,18 +35,18 @@ public class HabitActivityService {
     @Transactional
     public HabitActivityDTO save(HabitActivityDTO dto) {
         InputSanitizationUtils.validateAllStringFields(dto);
-        // Validación de seguridad en descripción
+         
         if (InputSanitizationUtils.containsMaliciousPattern(dto.getDescription())) {
             throw new IllegalArgumentException("Malicious input detected in description");
         }
 
         final Habitactivity entity;
 
-        if (dto.getId() != null) { // UPDATE
+        if (dto.getId() != null) {  
             entity = habitActivityRepository.findById(dto.getId())
                     .orElseThrow(() -> new IllegalArgumentException(
                             "HabitActivity no encontrada: " + dto.getId()));
-        } else {                    // CREATE (no seteamos id)
+        } else {                     
             entity = new Habitactivity();
         }
 
@@ -55,7 +55,7 @@ public class HabitActivityService {
         entity.setDescription(dto.getDescription());
         entity.setDuration(dto.getDuration());
         entity.setTargetTime(dto.getTargetTime() != null && !dto.getTargetTime().isBlank()
-                ? java.time.LocalTime.parse(dto.getTargetTime())  // "HH:mm"
+                ? java.time.LocalTime.parse(dto.getTargetTime())   
                 : null);
         entity.setNotes(dto.getNotes());
 
@@ -85,9 +85,9 @@ public class HabitActivityService {
                 .collect(Collectors.toList());
     }
 
-    // Eliminados según sugerencia:
-    // public List<HabitActivityDTO> getByRoutineId(Long routineId) { ... }
-    // public List<HabitActivityListDTO> getByRoutineIdList(Long routineId) { ... }
+     
+     
+     
 
     private HabitActivityDTO toDTO(Habitactivity entity) {
         HabitActivityDTO dto = new HabitActivityDTO();
@@ -98,7 +98,7 @@ public class HabitActivityService {
         dto.setDuration(entity.getDuration());
         dto.setTargetTime(entity.getTargetTime() != null ? entity.getTargetTime().toString() : null);
         dto.setNotes(entity.getNotes());
-        // dto.setRoutineId(entity.getRoutineId()); // Eliminado según sugerencia
+         
         return dto;
     }
 
@@ -107,7 +107,7 @@ public class HabitActivityService {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setCategory(entity.getCategory());
-        // dto.setRoutineId(entity.getRoutineId()); // Eliminado según sugerencia
+         
         return dto;
     }
 }

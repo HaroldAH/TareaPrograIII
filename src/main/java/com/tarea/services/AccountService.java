@@ -1,4 +1,4 @@
-// src/main/java/com/tarea/services/AccountService.java
+ 
 package com.tarea.services;
 
 import com.tarea.dtos.UserDTO;
@@ -47,7 +47,6 @@ public class AccountService {
     @Value("${app.reset.tokenMinutes:30}")
     private int tokenMinutes;
 
-    /* ================= Registro público ================= */
 
     @Transactional
     public UserDTO registerPublic(String name, String email, String rawPassword) {
@@ -61,31 +60,31 @@ public class AccountService {
         u.setEmail(normalizedEmail);
         u.setPassword(encoder.encode(rawPassword));
         u.setIsAuditor(false);
-        // si manejas coach/assignedCoach, aquí los dejas por defecto en false/null
+         
 
         u = userRepo.save(u);
 
-        // permisos básicos por defecto (CONSULT en HABITS/REMINDERS)
+         
         upsertPermission(u, Module.HABITS, ModulePermission.CONSULT);
         upsertPermission(u, Module.REMINDERS, ModulePermission.CONSULT);
 
         return toDTO(u, loadPerms(u.getId()));
     }
 
-    /* ============== Recuperación de contraseña ============== */
+ 
 
     @Transactional
     public boolean requestPasswordReset(String email) {
-        if (email == null) return true; // no filtramos
+        if (email == null) return true;  
         var opt = userRepo.findByEmail(email.trim().toLowerCase(Locale.ROOT));
-        if (opt.isEmpty()) return true; // no revelar existencia
+        if (opt.isEmpty()) return true;  
 
         User u = opt.get();
 
-        // invalidar tokens previos del usuario
+         
         prtRepo.deleteByUser_Id(u.getId());
 
-        // crear token
+         
         PasswordResetToken t = new PasswordResetToken();
         t.setUser(u);
         t.setToken(generateToken());
@@ -94,7 +93,7 @@ public class AccountService {
 
         String link = resetBaseUrl + "?token=" + t.getToken();
 
-        // En dev: imprime el link (si tienes MailService real, llama ahí)
+         
         System.out.println("[RESET LINK] " + link);
 
         return true;
@@ -115,7 +114,7 @@ public class AccountService {
         t.setUsed(true);
         prtRepo.save(t);
 
-        // limpieza: tokens vencidos
+         
         prtRepo.deleteByExpiresAtBefore(Instant.now().minus(1, ChronoUnit.DAYS));
         return true;
     }
@@ -130,11 +129,11 @@ public class AccountService {
         }
         u.setPassword(encoder.encode(newPassword));
         userRepo.save(u);
-        // opcional: prtRepo.deleteByUser_Id(u.getId());
+         
         return true;
     }
 
-    /* ================= Helpers ================= */
+ 
 
     private Optional<Long> currentUserId() {
         Authentication a = SecurityContextHolder.getContext().getAuthentication();
@@ -144,7 +143,7 @@ public class AccountService {
     }
 
     private static String generateToken() {
-        byte[] bytes = new byte[24]; // 32 chars base64url aprox
+        byte[] bytes = new byte[24];  
         new SecureRandom().nextBytes(bytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
@@ -176,7 +175,6 @@ public class AccountService {
         dto.setName(u.getName());
         dto.setEmail(u.getEmail());
         dto.setIsAuditor(Boolean.TRUE.equals(u.getIsAuditor()));
-        // si manejas isCoach/assignedCoachId en tu DTO, setéalos aquí
         dto.setPermissions(perms);
         return dto;
     }

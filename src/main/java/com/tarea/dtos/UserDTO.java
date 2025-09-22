@@ -9,10 +9,10 @@ public class UserDTO {
     private String name;
     private String email;
 
-    private Boolean isAuditor = false;    // ya lo tenías
-    private Boolean isCoach = false;      // NUEVO
+    private Boolean isAuditor = false;     
+    private Boolean isCoach = false;       
 
-    private Long assignedCoachId; // NUEVO (para la UI)
+    private Long assignedCoachId;  
 
     private List<UserPermissionDTO> permissions;
 }

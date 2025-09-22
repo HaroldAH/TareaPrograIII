@@ -44,15 +44,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     Long userId = jwtService.getUserIdFromToken(token);
 
-    // === NUEVO: authorities desde el claim ===
+     
     List<String> rawAuthorities = jwtService.getAuthoritiesFromToken(token);
     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
     if (!rawAuthorities.isEmpty()) {
       for (String a : rawAuthorities) authorities.add(new SimpleGrantedAuthority(a));
     } else {
-      // Compatibilidad con tokens antiguos basados en 'role'
-      String legacyRole = jwtService.getLegacyRoleFromToken(token); // p.ej. "USER" | "AUDITOR"
+       
+      String legacyRole = jwtService.getLegacyRoleFromToken(token);  
       if (legacyRole != null) authorities.add(new SimpleGrantedAuthority("ROLE_" + legacyRole));
     }
 

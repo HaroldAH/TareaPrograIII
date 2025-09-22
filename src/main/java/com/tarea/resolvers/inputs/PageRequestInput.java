@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public class PageRequestInput {
-    private Integer page;   // 0-based
-    private Integer size;   // tamaño de página, p.ej. 20
-    private List<String> sort; // ["name,asc","id,desc"] o ["-name","+id"]
+    private Integer page;    
+    private Integer size;    
+    private List<String> sort;  
 
     public Integer getPage() { return page == null ? 0 : page; }
     public void setPage(Integer page) { this.page = page; }

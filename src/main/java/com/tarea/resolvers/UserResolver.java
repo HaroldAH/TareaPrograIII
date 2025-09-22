@@ -31,7 +31,7 @@ public class UserResolver {
         this.userService = userService;
     }
 
-    /* ===================== QUERIES ===================== */
+ 
 
     @QueryMapping
     public List<UserDTO> getAllUsers() {
@@ -45,7 +45,7 @@ public class UserResolver {
         return userService.getById(id);
     }
 
-    /** NUEVO: lista SOLO los usuarios asignados al coach autenticado */
+ 
     @QueryMapping
     public List<UserDTO> myCoachees() {
         Long me = SecurityUtils.userId();
@@ -58,7 +58,7 @@ public class UserResolver {
         return userService.getCoachees(me);
     }
 
-    /** Ajustado: si el caller es coach y pide su propia lista, lo permitimos; si no, requiere permiso USERS */
+ 
     @QueryMapping
     public List<UserDTO> usersAssignedToCoach(@Argument Long coachId) {
         Long me = null;
@@ -75,7 +75,7 @@ public class UserResolver {
         return userService.getCoachees(coachId);
     }
 
-    /* ===================== MUTATIONS ===================== */
+ 
 
     @MutationMapping
     public UserDTO createUser(@Argument("input") UserInput input) {
@@ -86,8 +86,8 @@ public class UserResolver {
                 input.getPassword(),
                 input.getIsAuditor(),
                 perms,
-                input.getIsCoach(),         // NUEVO
-                input.getAssignedCoachId()  // NUEVO
+                input.getIsCoach(),          
+                input.getAssignedCoachId()   
         );
     }
 
@@ -131,23 +131,23 @@ public class UserResolver {
         return userService.setAuditor(userId, auditor != null && auditor);
     }
 
-    // ===== NUEVO: activar/desactivar Coach (con XOR dentro del service) =====
+     
     @MutationMapping
     public UserDTO setCoach(@Argument Long userId, @Argument Boolean coach) {
         SecurityUtils.requireMutate(Module.USERS);
         return userService.setCoach(userId, coach != null && coach);
     }
 
-    // ===== NUEVO: asignar un Coach a un usuario =====
+     
     @MutationMapping
     public UserDTO setUserCoach(@Argument Long userId, @Argument Long coachId) {
         SecurityUtils.requireMutate(Module.USERS);
         return userService.setUserCoach(userId, coachId);
     }
 
-    // ===== NUEVO: registrar un usuario (sin asignar permisos ni coach) =====
+     
 
-    /* ===================== HELPERS ===================== */
+ 
 
     private List<UserPermissionDTO> mapInputs(List<ModulePermissionInput> inputs) {
         if (inputs == null || inputs.isEmpty()) return List.of();
@@ -159,17 +159,17 @@ public class UserResolver {
         }).toList();
     }
 
-    // Soporta tanto POJO (getters) como record (accessors)
+     
     private Module getModule(ModulePermissionInput p) {
         try { return (Module) p.getClass().getMethod("getModule").invoke(p); }
-        catch (Exception ignore) { /* fall through */ }
+        catch (Exception ignore) { }
         try { return (Module) p.getClass().getMethod("module").invoke(p); }
         catch (Exception e) { throw new IllegalArgumentException("ModulePermissionInput.module no accesible"); }
     }
 
     private ModulePermission getPermission(ModulePermissionInput p) {
         try { return (ModulePermission) p.getClass().getMethod("getPermission").invoke(p); }
-        catch (Exception ignore) { /* fall through */ }
+        catch (Exception ignore) { }
         try { return (ModulePermission) p.getClass().getMethod("permission").invoke(p); }
         catch (Exception e) { throw new IllegalArgumentException("ModulePermissionInput.permission no accesible"); }
     }

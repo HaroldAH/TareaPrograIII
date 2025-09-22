@@ -11,11 +11,6 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-/** Reglas:
- * - Propio usuario: puede crear/borrar sin PROGRESS:MUTATE.
- * - Otros usuarios: requiere PROGRESS:MUTATE (valida el service).
- * - "My..." no exigen VIEW; globales sí (en el service).
- */
 @Controller
 public class CompletedActivityResolver {
 
@@ -24,8 +19,6 @@ public class CompletedActivityResolver {
     public CompletedActivityResolver(CompletedActivityService service) {
         this.service = service;
     }
-
-    /* =================== QUERIES =================== */
 
     @QueryMapping
     public List<CompletedActivityDTO> getAllCompletedActivities() {
@@ -67,8 +60,6 @@ public class CompletedActivityResolver {
         return service.getMineOnDay(date);
     }
 
-    /* =================== MUTATIONS =================== */
-
     @MutationMapping
     public CompletedActivityDTO createCompletedActivity(@Argument("input") CompletedActivityInput input) {
         return service.save(fromInput(input));
@@ -80,15 +71,14 @@ public class CompletedActivityResolver {
         return true;
     }
 
-    /* =================== Mapper =================== */
     private CompletedActivityDTO fromInput(CompletedActivityInput in) {
         CompletedActivityDTO dto = new CompletedActivityDTO();
         dto.setId(in.getId());
-        dto.setUserId(in.getUserId());        // si viene null, el service usará el del token
+        dto.setUserId(in.getUserId());         
         dto.setRoutineId(in.getRoutineId());
         dto.setHabitId(in.getHabitId());
-        dto.setDate(in.getDate());            // "YYYY-MM-DD"
-        dto.setCompletedAt(in.getCompletedAt()); // "HH:mm"
+        dto.setDate(in.getDate());             
+        dto.setCompletedAt(in.getCompletedAt());  
         dto.setNotes(in.getNotes());
         return dto;
     }

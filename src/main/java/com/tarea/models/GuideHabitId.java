@@ -21,11 +21,11 @@ public class GuideHabitId implements Serializable {
     @Column(name = "habit_id", nullable = false)
     private Long habitId;
 
-    // ✅ Constructor vacío (requerido por JPA)
+     
     public GuideHabitId() {
     }
 
-    // ✅ Constructor con parámetros (requerido por vos)
+     
     public GuideHabitId(Long guideId, Long habitId) {
         this.guideId = guideId;
         this.habitId = habitId;

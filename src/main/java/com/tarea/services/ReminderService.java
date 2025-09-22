@@ -32,28 +32,28 @@ public class ReminderService {
         this.habitActivityRepository = habitActivityRepository;
     }
 
-    /** Lista global: sólo staff con VIEW (AUDITOR, MOD:REMINDERS:R/RW) */
+ 
     public List<ReminderDTO> getAll() {
-        SecurityUtils.requireView(Module.REMINDERS); // 🔐
+        SecurityUtils.requireView(Module.REMINDERS);  
         return reminderRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    /** Ver uno por id: dueño o VIEW en REMINDERS */
+ 
     public ReminderDTO getById(Long id) {
         return reminderRepository.findById(id)
                 .map(r -> {
                     Long owner = r.getUser().getId();
-                    SecurityUtils.requireSelfOrView(owner, Module.REMINDERS); // 🔐
+                    SecurityUtils.requireSelfOrView(owner, Module.REMINDERS);  
                     return toDTO(r);
                 })
                 .orElse(null);
     }
 
-    /** Recordatorios por usuario: dueño o VIEW en REMINDERS */
+ 
     public List<ReminderDTO> getByUserId(Long userId) {
-        SecurityUtils.requireSelfOrView(userId, Module.REMINDERS); // 🔐
+        SecurityUtils.requireSelfOrView(userId, Module.REMINDERS);  
         return reminderRepository.findByUser_Id(userId).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -62,13 +62,13 @@ public class ReminderService {
     @Transactional
     public ReminderDTO save(ReminderDTO dto) {
         InputSanitizationUtils.validateAllStringFields(dto);
-        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                          
 
         Long me = SecurityUtils.userId();
         Long targetUserId = (dto.getUserId() != null) ? dto.getUserId() : me;
 
-        // Self o MUTATE para tocar a otros
-        SecurityUtils.requireSelfOrMutate(targetUserId, Module.REMINDERS); // 🔐
+         
+        SecurityUtils.requireSelfOrMutate(targetUserId, Module.REMINDERS);  
 
         if (dto.getHabitId() == null) {
             throw new IllegalArgumentException("habitId es obligatorio.");
@@ -84,7 +84,7 @@ public class ReminderService {
         if (dto.getId() != null) {
             entity = reminderRepository.findById(dto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Reminder no encontrado: " + dto.getId()));
-            // 🔐 Asegura que sólo el dueño o MUTATE puedan actualizar
+             
             SecurityUtils.requireSelfOrMutate(entity.getUser().getId(), Module.REMINDERS);
         } else {
             entity = new Reminder();
@@ -100,11 +100,11 @@ public class ReminderService {
     }
 
     public void delete(Long id) {
-        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                          
 
         Reminder r = reminderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Reminder no encontrado: " + id));
-        // 🔐 Dueño o MUTATE
+         
         SecurityUtils.requireSelfOrMutate(r.getUser().getId(), Module.REMINDERS);
         reminderRepository.delete(r);
     }

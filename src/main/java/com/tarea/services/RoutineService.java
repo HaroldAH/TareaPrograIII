@@ -33,32 +33,32 @@ public class RoutineService {
         this.routineHabitRepository = routineHabitRepository;
     }
 
-    /** Global: sólo staff con VIEW en ROUTINES */
+ 
     public List<RoutineDTO> getAll() {
-        SecurityUtils.requireView(Module.ROUTINES); // 🔐
+        SecurityUtils.requireView(Module.ROUTINES);  
         return routineRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    /** Ver una rutina: dueño o VIEW en ROUTINES */
+ 
     public RoutineDTO getById(Long id) {
         return routineRepository.findById(id)
                 .map(r -> {
                     Long owner = r.getUser() != null ? r.getUser().getId() : null;
                     if (owner != null) {
-                        SecurityUtils.requireSelfOrView(owner, Module.ROUTINES); // 🔐
+                        SecurityUtils.requireSelfOrView(owner, Module.ROUTINES);  
                     } else {
-                        SecurityUtils.requireView(Module.ROUTINES); // 🔐 sin dueño: sólo staff
+                        SecurityUtils.requireView(Module.ROUTINES);  
                     }
                     return toDTO(r);
                 })
                 .orElse(null);
     }
 
-    /** Por usuario: dueño o VIEW */
+ 
     public List<RoutineDTO> getByUserId(Long userId) {
-        SecurityUtils.requireSelfOrView(userId, Module.ROUTINES); // 🔐
+        SecurityUtils.requireSelfOrView(userId, Module.ROUTINES);  
         return routineRepository.findByUser_Id(userId).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -67,12 +67,12 @@ public class RoutineService {
     @Transactional
     public RoutineDTO save(RoutineDTO dto) {
         InputSanitizationUtils.validateAllStringFields(dto);
-        SecurityUtils.forbidAuditorWrites();                           // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                            
 
         Long me = SecurityUtils.userId();
         Long targetUserId = (dto.getUserId() != null) ? dto.getUserId() : me;
 
-        // 🔐 self o MUTATE para tocar a otros
+         
         SecurityUtils.requireSelfOrMutate(targetUserId, Module.ROUTINES);
 
         User user = userRepository.findById(targetUserId)
@@ -81,10 +81,10 @@ public class RoutineService {
         final Routine entity;
 
         if (dto.getId() != null) {
-            // UPDATE
+             
             entity = routineRepository.findById(dto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + dto.getId()));
-            // 🔐 Dueño o MUTATE
+             
             Long owner = entity.getUser() != null ? entity.getUser().getId() : null;
             if (owner != null) {
                 SecurityUtils.requireSelfOrMutate(owner, Module.ROUTINES);
@@ -92,7 +92,7 @@ public class RoutineService {
                 SecurityUtils.requireMutate(Module.ROUTINES);
             }
         } else {
-            // CREATE
+             
             entity = new Routine();
         }
 
@@ -105,13 +105,13 @@ public class RoutineService {
     }
 
     public void delete(Long id) {
-        SecurityUtils.forbidAuditorWrites();                           // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                            
 
         Routine r = routineRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + id));
         Long owner = r.getUser() != null ? r.getUser().getId() : null;
 
-        // 🔐 Dueño o MUTATE
+         
         if (owner != null) {
             SecurityUtils.requireSelfOrMutate(owner, Module.ROUTINES);
         } else {
@@ -129,16 +129,16 @@ public class RoutineService {
         return dto;
     }
 
-    /** Detalle: dueño o VIEW */
+ 
     public RoutineDetailDTO getRoutineDetail(Long routineId) {
         Routine routine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + routineId));
 
         Long owner = routine.getUser() != null ? routine.getUser().getId() : null;
         if (owner != null) {
-            SecurityUtils.requireSelfOrView(owner, Module.ROUTINES); // 🔐
+            SecurityUtils.requireSelfOrView(owner, Module.ROUTINES);  
         } else {
-            SecurityUtils.requireView(Module.ROUTINES); // 🔐
+            SecurityUtils.requireView(Module.ROUTINES);  
         }
 
         RoutineDetailDTO dto = new RoutineDetailDTO();

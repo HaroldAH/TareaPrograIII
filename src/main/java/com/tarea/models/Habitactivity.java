@@ -16,7 +16,7 @@ import lombok.Setter;
 public class Habitactivity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // <-- agrega esto
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
     @Column(name = "id")
     private Long id;
 

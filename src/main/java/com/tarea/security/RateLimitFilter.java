@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
-    // Buckets por IP para login y creación de cuentas
+     
     private final Map<String, Bucket> loginBuckets = new ConcurrentHashMap<>();
-    // Buckets por usuario para GraphQL
+     
     private final Map<String, Bucket> graphqlBuckets = new ConcurrentHashMap<>();
 
     @Override
@@ -55,7 +55,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        // Solo filtra login y graphql
+         
         return !(path.equals("/api/auth/login") || path.equals("/graphql"));
     }
 }

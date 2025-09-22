@@ -4,7 +4,7 @@ public class GuideInput {
     private Long id;
     private String title;
     private String content;
-    private String category; // Ej: "PHYSICAL", "MENTAL", "SLEEP", "DIET"
+    private String category;  
     private Long userId;
 
     public Long getId() {

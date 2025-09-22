@@ -3,7 +3,7 @@ package com.tarea.security;
 import com.tarea.models.Module;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;   // 👈
+import org.springframework.security.core.GrantedAuthority;    
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public final class SecurityUtils {
   private SecurityUtils(){}
 
-  /* ================== Permisos por módulo ================== */
+ 
 
   public static void requireView(Module m) {
     requireAny("AUDITOR", "MOD:" + m + ":R", "MOD:" + m + ":RW");
@@ -21,7 +21,7 @@ public final class SecurityUtils {
     requireAny("MOD:" + m + ":RW");
   }
 
-  /** owner o viewer (para lecturas de otros) */
+ 
   public static void requireSelfOrView(Long targetUserId, Module m) {
     Long me = userId();
     if (!me.equals(targetUserId)) {
@@ -29,7 +29,7 @@ public final class SecurityUtils {
     }
   }
 
-  /** owner o mutate (para modificaciones sobre otros) */
+ 
   public static void requireSelfOrMutate(Long targetUserId, Module m) {
     Long me = userId();
     if (!me.equals(targetUserId)) {
@@ -37,7 +37,7 @@ public final class SecurityUtils {
     }
   }
 
-  /** checks “suaves” para lógica condicional */
+ 
   public static boolean canView(Module m) {
     return hasAny("AUDITOR", "MOD:" + m + ":R", "MOD:" + m + ":RW");
   }
@@ -64,9 +64,9 @@ public final class SecurityUtils {
     return false;
   }
 
-  /* ================== Auditor: solo lectura ================== */
+ 
 
-  /** true si el usuario autenticado tiene autoridad AUDITOR */
+ 
   public static boolean isAuditor() {
     var ctx = SecurityContextHolder.getContext();
     if (ctx == null || ctx.getAuthentication() == null) {
@@ -78,14 +78,14 @@ public final class SecurityUtils {
     return false;
   }
 
-  /** Bloquea cualquier mutación si es auditor (read-only). */
+ 
   public static void forbidAuditorWrites() {
     if (isAuditor()) {
       throw new AccessDeniedException("Forbidden: auditors are read-only");
     }
   }
 
-  /* ================== Identidad del usuario ================== */
+ 
 
   public static Long userId() {
     Authentication auth = SecurityContextHolder.getContext() != null
@@ -102,19 +102,19 @@ public final class SecurityUtils {
     if (p instanceof Integer i) return i.longValue();
     if (p instanceof String s) {
       try { return Long.parseLong(s); }
-      catch (NumberFormatException e) { /* fallthrough */ }
+      catch (NumberFormatException e) {  }
     }
     if (p instanceof UserDetails ud) {
       String u = ud.getUsername();
       try { return Long.parseLong(u); }
-      catch (NumberFormatException e) { /* fallthrough */ }
+      catch (NumberFormatException e) {  }
     }
     if (p instanceof java.security.Principal pr) {
       try { return Long.parseLong(pr.getName()); }
-      catch (NumberFormatException e) { /* fallthrough */ }
+      catch (NumberFormatException e) {  }
     }
 
-    // Ajusta tu JwtAuthFilter para setear el ID numérico como principal.
+     
     throw new AccessDeniedException("Unauthorized");
   }
 }

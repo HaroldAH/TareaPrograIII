@@ -2,19 +2,19 @@ package com.tarea.dtos;
 
 public class MonthlyCategoryStatDTO {
     private int year;
-    private int month;                 // 1..12
+    private int month;                  
     private String category;
 
-    private int totalCompletions;      // cuántas actividades se completaron
-    private int uniqueDays;            // en cuántos días distintos hubo actividad
-    private double avgPerActiveDay;    // totalCompletions / uniqueDays
+    private int totalCompletions;       
+    private int uniqueDays;             
+    private double avgPerActiveDay;     
 
-    private int totalDurationMinutes;  // SUM(habitactivity.duration)
-    private double activeDayRatio;     // uniqueDays / daysInMonth (0..1)
+    private int totalDurationMinutes;   
+    private double activeDayRatio;      
 
-    // Extras (ideas semanales integradas al mensual)
-    private int weeksActive;           // semanas ISO del mes con actividad (YEARWEEK)
-    private double avgPerActiveWeek;   // totalCompletions / weeksActive
+     
+    private int weeksActive;            
+    private double avgPerActiveWeek;    
 
     public MonthlyCategoryStatDTO() {}
 

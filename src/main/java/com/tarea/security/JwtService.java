@@ -19,7 +19,7 @@ public class JwtService {
     return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
   }
 
-  /* ====== NUEVO: generar token con claims extra (authorities[]) ====== */
+ 
   public String generateToken(Map<String,Object> extraClaims, String subject) {
     return Jwts.builder()
         .setClaims(extraClaims == null ? new HashMap<>() : new HashMap<>(extraClaims))
@@ -30,14 +30,14 @@ public class JwtService {
         .compact();
   }
 
-  /* Overload de conveniencia: userId + authorities[] */
+ 
   public String generateToken(Long userId, List<String> authorities) {
     Map<String,Object> claims = new HashMap<>();
     claims.put("authorities", authorities == null ? List.of() : authorities);
     return generateToken(claims, String.valueOf(userId));
   }
 
-  /* ====== Legacy (si aún generas con 'role') ====== */
+ 
   @Deprecated
   public String generateToken(Long userId, String role) {
     Map<String,Object> claims = new HashMap<>();
@@ -62,7 +62,7 @@ public class JwtService {
     return Long.parseLong(extractAllClaims(token).getSubject());
   }
 
-  /* Helpers opcionales */
+ 
   public List<String> getAuthoritiesFromToken(String token) {
     Object raw = extractAllClaims(token).get("authorities");
     if (raw instanceof List<?> list) {

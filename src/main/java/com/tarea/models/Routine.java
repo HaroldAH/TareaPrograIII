@@ -11,18 +11,18 @@ import lombok.Setter;
 public class Routine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // <-- IMPORTANTE
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
     @Column(name = "id")
     private Long id;
 
     @Column(name = "title", length = 100, nullable = false)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false) // si quieres forzar que siempre tenga usuario
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)  
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Tu columna en BD se llama daysOfWeek (camelCase), por eso mapeamos explícito
+     
     @Column(name = "daysOfWeek", length = 20)
     private String daysOfWeek;
 }

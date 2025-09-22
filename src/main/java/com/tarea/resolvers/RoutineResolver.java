@@ -22,59 +22,59 @@ public class RoutineResolver {
         this.routineService = routineService;
     }
 
-    /* ============ QUERIES ============ */
+ 
 
-    /** Global: sólo staff con VIEW */
+ 
     @QueryMapping
     public List<RoutineDTO> getAllRoutines() {
         SecurityUtils.requireView(Module.ROUTINES);
         return routineService.getAll();
     }
 
-    /** Ver una: deja que el service haga owner-or-view */
+ 
     @QueryMapping
     public RoutineDTO getRoutineById(@Argument Long id) {
         return routineService.getById(id);
     }
 
-    /** Por usuario: deja que el service haga owner-or-view */
+ 
     @QueryMapping
     public List<RoutineDTO> getRoutinesByUser(@Argument Long userId) {
         return routineService.getByUserId(userId);
     }
 
-    /** Mis rutinas: autoservicio (sin requireView) */
+ 
     @QueryMapping
     public List<RoutineDTO> getMyRoutines() {
         Long me = SecurityUtils.userId();
         return routineService.getByUserId(me);
     }
 
-    /** Detalle: deja que el service haga owner-or-view */
+ 
     @QueryMapping
     public RoutineDetailDTO getRoutineDetail(@Argument Long id) {
         return routineService.getRoutineDetail(id);
     }
 
-    /* ============ MUTATIONS ============ */
+ 
 
-    /** Crear/editar: autoservicio; el service valida self-or-mutate */
+ 
     @MutationMapping
     public RoutineDTO createRoutine(@Argument("input") RoutineInput input) {
         if (input.getUserId() == null) {
-            input.setUserId(SecurityUtils.userId()); // dueño = token si no viene
+            input.setUserId(SecurityUtils.userId());  
         }
         return routineService.save(toDTO(input));
     }
 
-    /** Borrar: deja que el service haga self-or-mutate */
+ 
     @MutationMapping
     public Boolean deleteRoutine(@Argument Long id) {
         routineService.delete(id);
         return true;
     }
 
-    /* ============ Mapper ============ */
+ 
 
     private RoutineDTO toDTO(RoutineInput input) {
         RoutineDTO dto = new RoutineDTO();

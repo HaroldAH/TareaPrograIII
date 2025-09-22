@@ -32,19 +32,19 @@ public class FavoriteHabitService {
         this.habitActivityRepository = habitActivityRepository;
     }
 
-    /** Lista global: sólo staff con VIEW en HABITS (o módulo propio si lo tienes) */
+ 
     public List<FavoriteHabitDTO> getAll() {
-        SecurityUtils.requireView(Module.HABITS); // 🔐
+        SecurityUtils.requireView(Module.HABITS);  
         return favoriteHabitRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    /** Ver uno: dueño o VIEW */
+ 
     public FavoriteHabitDTO getById(Long id) {
         return favoriteHabitRepository.findById(id)
                 .map(fh -> {
-                    SecurityUtils.requireSelfOrView(fh.getUser().getId(), Module.HABITS); // 🔐
+                    SecurityUtils.requireSelfOrView(fh.getUser().getId(), Module.HABITS);  
                     return toDTO(fh);
                 })
                 .orElse(null);
@@ -52,12 +52,12 @@ public class FavoriteHabitService {
 
     @Transactional
     public FavoriteHabitDTO save(FavoriteHabitDTO dto) {
-        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                          
 
         Long me = SecurityUtils.userId();
         Long target = (dto.getUserId() != null) ? dto.getUserId() : me;
 
-        // 🔐 Self o MUTATE en HABITS para tocar a otros
+         
         SecurityUtils.requireSelfOrMutate(target, Module.HABITS);
 
         User user = userRepository.findById(target)
@@ -69,7 +69,7 @@ public class FavoriteHabitService {
         if (dto.getId() != null) {
             entity = favoriteHabitRepository.findById(dto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("FavoriteHabit no encontrada: " + dto.getId()));
-            SecurityUtils.requireSelfOrMutate(entity.getUser().getId(), Module.HABITS); // 🔐
+            SecurityUtils.requireSelfOrMutate(entity.getUser().getId(), Module.HABITS);  
         } else {
             entity = new FavoriteHabit();
         }
@@ -82,11 +82,11 @@ public class FavoriteHabitService {
 
     @Transactional
     public void delete(Long id) {
-        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                          
 
         FavoriteHabit fh = favoriteHabitRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("FavoriteHabit no encontrada: " + id));
-        // 🔐 Dueño o MUTATE
+         
         SecurityUtils.requireSelfOrMutate(fh.getUser().getId(), Module.HABITS);
         favoriteHabitRepository.delete(fh);
     }
@@ -99,9 +99,9 @@ public class FavoriteHabitService {
         return dto;
     }
 
-    /** Mis favoritos (lista/card): dueño o VIEW para ver otros */
+ 
     public List<HabitActivityListDTO> getFavoriteHabitsListByUser(Long userId) {
-        SecurityUtils.requireSelfOrView(userId, Module.HABITS); // 🔐
+        SecurityUtils.requireSelfOrView(userId, Module.HABITS);  
         return favoriteHabitRepository.findByUser_Id(userId).stream()
             .map(fav -> {
                 Habitactivity habit = fav.getHabit();
@@ -113,9 +113,9 @@ public class FavoriteHabitService {
             }).collect(Collectors.toList());
     }
 
-    /** Mis favoritos por categoría: dueño o VIEW para ver otros */
+ 
     public List<HabitActivityListDTO> getFavoriteHabitsByCategory(Long userId, String category) {
-        SecurityUtils.requireSelfOrView(userId, Module.HABITS); // 🔐
+        SecurityUtils.requireSelfOrView(userId, Module.HABITS);  
         return favoriteHabitRepository.findByUser_IdAndHabit_Category(userId, category).stream()
             .map(fav -> {
                 Habitactivity habit = fav.getHabit();
@@ -127,9 +127,9 @@ public class FavoriteHabitService {
             }).collect(Collectors.toList());
     }
 
-    /** Detalle por nombre: dueño o VIEW para ver otros */
+ 
     public HabitActivityDTO getFavoriteHabitDetailByName(Long userId, String name) {
-        SecurityUtils.requireSelfOrView(userId, Module.HABITS); // 🔐
+        SecurityUtils.requireSelfOrView(userId, Module.HABITS);  
         FavoriteHabit fav = favoriteHabitRepository.findByUser_IdAndHabit_Name(userId, name);
         if (fav == null) return null;
         Habitactivity habit = fav.getHabit();

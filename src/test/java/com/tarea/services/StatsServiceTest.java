@@ -29,7 +29,7 @@ class StatsServiceTest {
     @Test
     void nonStaff_nullUserId_uses_me() {
         try (MockedStatic<SecurityUtils> sec = Mockito.mockStatic(SecurityUtils.class)) {
-            // soy 10, y NO tengo VIEW(PROGRESS) → global NO permitido → target = me
+             
             sec.when(SecurityUtils::userId).thenReturn(10L);
             sec.when(() -> SecurityUtils.requireView(Module.PROGRESS))
                .thenThrow(new AccessDeniedException("NO_VIEW"));
@@ -43,15 +43,15 @@ class StatsServiceTest {
             assertThat(out).hasSize(1);
             MonthlyCategoryStatDTO d = out.get(0);
             assertThat(d.getTotalCompletions()).isEqualTo(6);
-            assertThat(d.getAvgPerActiveDay()).isEqualTo(2.0f);  // 6/3
-            assertThat(d.getAvgPerActiveWeek()).isEqualTo(3.0f); // 6/2
+            assertThat(d.getAvgPerActiveDay()).isEqualTo(2.0f);   
+            assertThat(d.getAvgPerActiveWeek()).isEqualTo(3.0f);  
         }
     }
 
     @Test
     void staff_nullUserId_global_ok() {
         try (MockedStatic<SecurityUtils> sec = Mockito.mockStatic(SecurityUtils.class)) {
-            // soy 1, y SÍ tengo VIEW → global permitido → target = null
+             
             sec.when(SecurityUtils::userId).thenReturn(1L);
             sec.when(() -> SecurityUtils.requireView(Module.PROGRESS)).thenAnswer(inv -> null);
 
@@ -72,7 +72,7 @@ class StatsServiceTest {
     void otherUser_requires_view_denied() {
         try (MockedStatic<SecurityUtils> sec = Mockito.mockStatic(SecurityUtils.class)) {
             sec.when(SecurityUtils::userId).thenReturn(10L);
-            // Pido stats de otro user → debe requerir VIEW → denegado
+             
             sec.when(() -> SecurityUtils.requireView(Module.PROGRESS))
                .thenThrow(new AccessDeniedException("NO_VIEW"));
 

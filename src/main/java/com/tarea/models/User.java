@@ -25,16 +25,16 @@ public class User {
     @Column(name = "is_auditor", nullable = false)
     private Boolean isAuditor = false;
 
-    // NUEVO
+     
     @Column(name = "is_coach", nullable = false)
     private Boolean isCoach = false;
 
-    // NUEVO: cada usuario puede tener un coach asignado (1→N)
+     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_coach_id")
     private User assignedCoach;
 
-    // (opcional) si quieres navegar desde el coach hacia “sus usuarios”, agrega:
-    // @OneToMany(mappedBy = "assignedCoach")
-    // private Set<User> coachees = new HashSet<>();
+     
+     
+     
 }

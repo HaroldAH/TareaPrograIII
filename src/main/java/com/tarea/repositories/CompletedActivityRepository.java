@@ -9,14 +9,14 @@ import org.springframework.data.repository.query.Param;
 
 public interface CompletedActivityRepository extends JpaRepository<Completedactivity, Long> {
 
-    // Búsquedas básicas
+     
     List<Completedactivity> findByUser_Id(Long userId);
     List<Completedactivity> findByUser_IdAndDateBetween(Long userId, LocalDate start, LocalDate end);
     List<Completedactivity> findByUser_IdAndDateGreaterThanEqual(Long userId, LocalDate start);
     List<Completedactivity> findByUser_IdAndDateLessThanEqual(Long userId, LocalDate end);
 
-    // ---------- Agregaciones mensuales ----------
-    // Año completo (por categoría)
+     
+     
     @Query(value = """
         SELECT
            YEAR(ca.date)                        AS y,
@@ -35,7 +35,7 @@ public interface CompletedActivityRepository extends JpaRepository<Completedacti
     """, nativeQuery = true)
     List<Object[]> monthlyCategoryStatsYear(@Param("year") int year, @Param("userId") Long userId);
 
-    // Un mes específico (por categoría)
+     
     @Query(value = """
         SELECT
            YEAR(ca.date)                        AS y,

@@ -18,11 +18,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * Resolver de SOLO lectura para paginación y conteos.
- * - No modifica Services existentes.
- * - Mapea entidades -> DTO aquí mismo, como en usersPage.
- */
 @Controller
 public class PagesResolver {
 
@@ -53,7 +48,7 @@ public class PagesResolver {
         this.guideHabitRepo = guideHabitRepo;
     }
 
-    /* ============ Helpers locales (sin utils externos) ============ */
+ 
 
     private Pageable toPageable(PageRequestInput in) {
         return (in == null) ? PageRequest.of(0, 20) : in.toPageable();
@@ -71,7 +66,7 @@ public class PagesResolver {
         );
     }
 
-    /* ================== CompletedActivity ================== */
+ 
 
     @QueryMapping
     public CompletedActivityPageDTO completedActivitiesPage(@Argument("page") PageRequestInput req) {
@@ -93,7 +88,7 @@ public class PagesResolver {
         return dto;
     }
 
-    /* ================== HabitActivity ================== */
+ 
 
     @QueryMapping
     public HabitActivityPageDTO habitActivitiesPage(@Argument("page") PageRequestInput req) {
@@ -115,7 +110,7 @@ public class PagesResolver {
         return dto;
     }
 
-    /* ================== Guides ================== */
+ 
 
     @QueryMapping
     public GuidePageDTO guidesPage(@Argument("page") PageRequestInput req) {
@@ -135,7 +130,7 @@ public class PagesResolver {
         return dto;
     }
 
-    /* ================== Routines ================== */
+ 
 
     @QueryMapping
     public RoutinePageDTO routinesPage(@Argument("page") PageRequestInput req) {
@@ -155,7 +150,7 @@ public class PagesResolver {
         return dto;
     }
 
-    /* ================== Reminders ================== */
+ 
 
     @QueryMapping
     public ReminderPageDTO remindersPage(@Argument("page") PageRequestInput req) {
@@ -176,7 +171,7 @@ public class PagesResolver {
         return dto;
     }
 
-    /* ================== Favorite Habits ================== */
+ 
 
     @QueryMapping
     public FavoriteHabitPageDTO favoriteHabitsPage(@Argument("page") PageRequestInput req) {
@@ -195,7 +190,7 @@ public class PagesResolver {
         return dto;
     }
 
-    /* ================== Routine-Habit (N:M) ================== */
+ 
 
     @QueryMapping
     public RoutineHabitPageDTO routineHabitsPage(@Argument("page") PageRequestInput req) {
@@ -216,7 +211,7 @@ public class PagesResolver {
         return dto;
     }
 
-    /* ================== Guide-Habit (N:M) ================== */
+ 
 
     @QueryMapping
     public GuideHabitPageDTO guideHabitsPage(@Argument("page") PageRequestInput req) {

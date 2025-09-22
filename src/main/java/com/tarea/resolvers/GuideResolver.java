@@ -25,7 +25,7 @@ public class GuideResolver {
         this.guideService = guideService;
     }
 
-    /* ================= QUERIES (CONSULT) ================= */
+ 
 
     @QueryMapping
     public List<GuideDTO> getAllGuides() {
@@ -63,12 +63,12 @@ public class GuideResolver {
         return guideService.getGuideDetail(id);
     }
 
-    /* ================= MUTATIONS (MUTATE) ================= */
+ 
 
     @MutationMapping
     public GuideDTO createGuide(@Argument GuideInput input, Authentication auth) {
         requireMutate(Module.GUIDES);
-        // Conveniencia: si no viene userId, usar el del token si está disponible
+         
         if (input.getUserId() == null && auth != null) {
             try { input.setUserId(Long.valueOf(auth.getName())); } catch (NumberFormatException ignored) {}
         }
@@ -82,7 +82,7 @@ public class GuideResolver {
         return true;
     }
 
-    /* ================= Mapper ================= */
+ 
     private GuideDTO toDTO(GuideInput input) {
         GuideDTO dto = new GuideDTO();
         dto.setId(input.getId());

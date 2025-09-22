@@ -1,4 +1,4 @@
-// src/main/java/com/tarea/repositories/PasswordResetTokenRepository.java
+ 
 package com.tarea.repositories;
 
 import com.tarea.models.PasswordResetToken;

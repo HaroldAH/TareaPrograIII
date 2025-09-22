@@ -36,14 +36,14 @@ class ReminderServiceTest {
     @Test
     void save_throwsIfHabitIdNull() {
         ReminderDTO dto = new ReminderDTO();
-        // userId null -> se usa SecurityUtils.userId()
+         
 
         try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
             mocked.when(SecurityUtils::forbidAuditorWrites).thenAnswer(inv -> null);
             mocked.when(SecurityUtils::userId).thenReturn(1L);
             mocked.when(() -> SecurityUtils.requireSelfOrMutate(1L, Module.REMINDERS)).thenAnswer(inv -> null);
 
-            assertThrows(IllegalArgumentException.class, () -> service.save(dto)); // "habitId es obligatorio."
+            assertThrows(IllegalArgumentException.class, () -> service.save(dto));  
         }
     }
 
@@ -67,7 +67,7 @@ class ReminderServiceTest {
 
         try (MockedStatic<SecurityUtils> mocked = mockStatic(SecurityUtils.class)) {
             mocked.when(SecurityUtils::forbidAuditorWrites).thenAnswer(inv -> null);
-            // aunque venga userId en el DTO, no estorba mockear userId():
+             
             mocked.when(SecurityUtils::userId).thenReturn(1L);
             mocked.when(() -> SecurityUtils.requireSelfOrMutate(1L, Module.REMINDERS)).thenAnswer(inv -> null);
 

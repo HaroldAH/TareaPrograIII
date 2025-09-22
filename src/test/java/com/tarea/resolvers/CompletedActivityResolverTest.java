@@ -60,13 +60,13 @@ class CompletedActivityResolverTest {
 
     @Test
     void myQueries_ok() {
-        // getMyCompletedActivities
+         
         when(service.getMine("2025-09-01", "2025-09-30")).thenReturn(List.of(dto1));
         var m1 = resolver.getMyCompletedActivities("2025-09-01", "2025-09-30");
         assertThat(m1).hasSize(1);
         verify(service).getMine("2025-09-01", "2025-09-30");
 
-        // getMyCompletedActivitiesPerDay
+         
         CompletedDayDTO dPerDay = new CompletedDayDTO();
         dPerDay.setDate("2025-09-10");
         dPerDay.setActivities(List.of(dto1));
@@ -77,7 +77,7 @@ class CompletedActivityResolverTest {
         assertThat(m2.get(0).getDate()).isEqualTo("2025-09-10");
         verify(service).getMinePerDay("2025-09-01", "2025-09-30");
 
-        // getMyCompletedActivitiesPerWeek
+         
         CompletedWeekDTO w = new CompletedWeekDTO();
         w.setWeekLabel("2025-W38");
         w.setTotalCompleted(5);
@@ -88,7 +88,7 @@ class CompletedActivityResolverTest {
         assertThat(m3.get(0).getWeekLabel()).isEqualTo("2025-W38");
         verify(service).getMinePerWeek("2025-09-01", "2025-09-30");
 
-        // getMyCompletedActivitiesOnDay
+         
         CompletedDayDTO dOnDay = new CompletedDayDTO();
         dOnDay.setDate("2025-09-22");
         dOnDay.setActivities(List.of(dto1));

@@ -40,7 +40,6 @@ class RoutineHabitServiceTest {
         habitRepo = mock(HabitActivityRepository.class);
         service = new RoutineHabitService(rhRepo, routineRepo, habitRepo);
 
-        // 🔐 Stub de todos los checks para que no lancen AccessDenied:
         security = mockStatic(SecurityUtils.class);
         security.when(SecurityUtils::isAuditor).thenReturn(false);
         security.when(() -> SecurityUtils.forbidAuditorWrites()).thenAnswer(inv -> null);

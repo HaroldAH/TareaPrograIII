@@ -27,60 +27,47 @@ public class FavoriteHabitResolver {
         this.userRepository = userRepository;
     }
 
-    /* =================== QUERIES =================== */
-
-    /** Lista global: sólo staff con VIEW (esto sí queda igual) */
     @QueryMapping
     public List<FavoriteHabitDTO> getAllFavoriteHabits() {
         SecurityUtils.requireView(Module.HABITS);
         return service.getAll();
     }
 
-    /** Ver uno por id: deja que el service haga owner-or-view */
     @QueryMapping
     public FavoriteHabitDTO getFavoriteHabitById(@Argument Long id) {
         return service.getById(id);
     }
 
-    /** Mis favoritos (autoservicio: sin exigir VIEW) */
     @QueryMapping
     public List<HabitActivityListDTO> getFavoriteHabitsListByUser() {
         Long me = SecurityUtils.userId();
         return service.getFavoriteHabitsListByUser(me);
     }
 
-    /** Mis favoritos por categoría (autoservicio) */
     @QueryMapping
     public List<HabitActivityListDTO> getFavoriteHabitsByCategory(@Argument String category) {
         Long me = SecurityUtils.userId();
         return service.getFavoriteHabitsByCategory(me, category);
     }
 
-    /** Detalle por nombre (autoservicio) */
     @QueryMapping
     public HabitActivityDTO getFavoriteHabitDetailByName(@Argument String name) {
         Long me = SecurityUtils.userId();
         return service.getFavoriteHabitDetailByName(me, name);
     }
 
-    /* =================== MUTATIONS =================== */
-
-    /** Crear favorito propio (sin exigir :RW; el service valida self-or-mutate para terceros) */
     @MutationMapping
     public FavoriteHabitDTO createFavoriteHabit(@Argument FavoriteHabitInput input) {
         FavoriteHabitDTO dto = toDTO(input);
-        dto.setUserId(SecurityUtils.userId()); // fuerza dueño = token
+        dto.setUserId(SecurityUtils.userId());  
         return service.save(dto);
     }
 
-    /** Borrar (el service valida que seas dueño o que tengas :RW) */
     @MutationMapping
     public Boolean deleteFavoriteHabit(@Argument Long id) {
         service.delete(id);
         return true;
     }
-
-    /* =================== Helpers =================== */
 
     private FavoriteHabitDTO toDTO(FavoriteHabitInput in) {
         FavoriteHabitDTO dto = new FavoriteHabitDTO();

@@ -1,4 +1,4 @@
-// src/main/java/com/tarea/models/PasswordResetToken.java
+ 
 package com.tarea.models;
 
 import jakarta.persistence.*;
@@ -27,7 +27,7 @@ public class PasswordResetToken {
     @Column(name="created_at", nullable=false, updatable=false)
     private Instant createdAt = Instant.now();
 
-    // getters/setters
+     
     public Long getId() { return id; }
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }

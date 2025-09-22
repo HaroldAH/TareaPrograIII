@@ -2,14 +2,14 @@ package com.tarea.services;
 
 import com.tarea.dtos.RoutineHabitDTO;
 import com.tarea.models.Habitactivity;
-import com.tarea.models.Module;                 // 👈
-import com.tarea.models.Routine;              // 👈
+import com.tarea.models.Module;                  
+import com.tarea.models.Routine;               
 import com.tarea.models.RoutineHabit;
 import com.tarea.models.RoutineHabitId;
 import com.tarea.repositories.HabitActivityRepository;
 import com.tarea.repositories.RoutineHabitRepository;
 import com.tarea.repositories.RoutineRepository;
-import com.tarea.security.SecurityUtils;      // 👈
+import com.tarea.security.SecurityUtils;       
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,27 +32,27 @@ public class RoutineHabitService {
         this.habitActivityRepository = habitActivityRepository;
     }
 
-    /** Consulta: dueño de la rutina o VIEW en ROUTINES */
+ 
     public List<RoutineHabitDTO> getByRoutineId(Long routineId) {
         Routine r = routineRepository.findById(routineId)
                 .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + routineId));
         Long owner = r.getUser().getId();
-        SecurityUtils.requireSelfOrView(owner, Module.ROUTINES);   // 🔐
+        SecurityUtils.requireSelfOrView(owner, Module.ROUTINES);    
 
         return routineHabitRepository.findByRoutine_Id(routineId).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    /** Crear/actualizar: dueño de la rutina o MUTATE en ROUTINES */
+ 
     @Transactional
     public RoutineHabitDTO save(RoutineHabitDTO dto) {
-        SecurityUtils.forbidAuditorWrites();                       // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                        
 
         Routine routine = routineRepository.findById(dto.getRoutineId())
                 .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + dto.getRoutineId()));
         Long owner = routine.getUser().getId();
-        SecurityUtils.requireSelfOrMutate(owner, Module.ROUTINES); // 🔐
+        SecurityUtils.requireSelfOrMutate(owner, Module.ROUTINES);  
 
         Habitactivity habit = habitActivityRepository.findById(dto.getHabitId())
                 .orElseThrow(() -> new IllegalArgumentException("Hábito no encontrado: " + dto.getHabitId()));
@@ -73,9 +73,9 @@ public class RoutineHabitService {
         return toDTO(saved);
     }
 
-    /** Eliminar: dueño de la rutina o MUTATE en ROUTINES */
+ 
     public void delete(Long routineId, Long habitId) {
-        SecurityUtils.forbidAuditorWrites();                       // ⛔ auditor solo lectura
+        SecurityUtils.forbidAuditorWrites();                        
 
         RoutineHabitId id = new RoutineHabitId();
         id.setRoutineId(routineId);
@@ -84,7 +84,7 @@ public class RoutineHabitService {
         RoutineHabit rh = routineHabitRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vínculo rutina-hábito no encontrado"));
         Long owner = rh.getRoutine().getUser().getId();
-        SecurityUtils.requireSelfOrMutate(owner, Module.ROUTINES); // 🔐
+        SecurityUtils.requireSelfOrMutate(owner, Module.ROUTINES);  
 
         routineHabitRepository.deleteById(id);
     }

@@ -12,12 +12,12 @@ import java.util.Optional;
 @Repository
 public interface UserModulePermissionRepository extends JpaRepository<UserModulePermission, Long> {
 
-    // property traversal: user.id
+     
     Optional<UserModulePermission> findByUserIdAndModule(Long userId, Module module);
 
     List<UserModulePermission> findAllByUserId(Long userId);
 
-    // ⬅️ tu servicio lo usa en getAll()
+     
     List<UserModulePermission> findAllByUserIdIn(List<Long> userIds);
 
     @Modifying

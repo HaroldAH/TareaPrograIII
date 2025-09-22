@@ -23,7 +23,7 @@ public class GuideHabitResolver {
         this.guideHabitService = guideHabitService;
     }
 
-    /* =============== QUERIES (CONSULT) =============== */
+ 
 
     @QueryMapping
     public List<GuideHabitDTO> getAllGuideHabits() {
@@ -37,7 +37,7 @@ public class GuideHabitResolver {
         return guideHabitService.getById(guideId, habitId);
     }
 
-    /* =============== MUTATIONS (MUTATE) =============== */
+ 
 
     @MutationMapping
     public GuideHabitDTO createGuideHabit(@Argument GuideHabitInput input) {
@@ -52,7 +52,7 @@ public class GuideHabitResolver {
         return true;
     }
 
-    /* =============== Mapper =============== */
+ 
     private GuideHabitDTO toDTO(GuideHabitInput input) {
         GuideHabitDTO dto = new GuideHabitDTO();
         dto.setGuideId(input.getGuideId());

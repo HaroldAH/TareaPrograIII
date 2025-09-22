@@ -1,4 +1,4 @@
-// com/tarea/models/Completedactivity.java
+ 
 package com.tarea.models;
 
 import jakarta.persistence.*;
@@ -12,11 +12,11 @@ import java.time.LocalDate;
 public class Completedactivity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ← importante para evitar INTERNAL_ERROR por id manual
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)  // ← dueño obligatorio
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)   
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -28,10 +28,10 @@ public class Completedactivity {
     @JoinColumn(name = "habit_id")
     private Habitactivity habit;
 
-    @Column(name = "date") // DATE en BD
+    @Column(name = "date")  
     private LocalDate date;
 
-    @Column(name = "completedAt", length = 10) // "HH:mm"
+    @Column(name = "completedAt", length = 10)  
     private String completedAt;
 
     @Column(name = "notes", length = 255)

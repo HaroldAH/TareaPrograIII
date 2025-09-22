@@ -3,10 +3,10 @@ package com.tarea.resolvers.inputs;
 public class HabitActivityInput {
     private Long id;
     private String name;
-    private String category;     // Ej: PHYSICAL, MENTAL, SLEEP, DIET
+    private String category;      
     private String description;
-    private Integer duration;    // En minutos
-    private String targetTime;   // Ej: "07:30", formato HH:mm
+    private Integer duration;     
+    private String targetTime;    
     private String notes;
 
     public Long getId() {

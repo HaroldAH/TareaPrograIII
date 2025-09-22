@@ -31,7 +31,7 @@ class HabitActivityResolverTest extends BaseResolverTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         resolver = new HabitActivityResolver(service);
-        // Configurar contexto de seguridad simulado con permiso RW para HABITS
+         
         Authentication auth = mock(Authentication.class);
     when(auth.getAuthorities()).thenReturn((java.util.Collection) java.util.List.of(new SimpleGrantedAuthority("MOD:HABITS:RW")));
         SecurityContext context = mock(SecurityContext.class);

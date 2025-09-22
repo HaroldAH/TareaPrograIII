@@ -5,7 +5,7 @@ import java.util.List;
 
 @Data
 public class CompletedWeekDTO {
-    private String weekLabel; // Ej: "2025-W38"
+    private String weekLabel;  
     private List<CompletedRoutineInWeekDTO> routines;
     private int totalCompleted;
 }

@@ -39,7 +39,6 @@ public class CountResolver {
     this.guideHabitRepo = guideHabitRepo;
   }
 
-  /* counts.graphqls */
   @QueryMapping
   public int countHabitActivities() {
     SecurityUtils.requireView(Module.HABITS);
@@ -58,7 +57,6 @@ public class CountResolver {
     return (int) completedRepo.count();
   }
 
-  /* pagination.graphqls */
   @QueryMapping
   public int countUsers() {
     SecurityUtils.requireView(Module.USERS);
