@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.tarea.resolvers.AuthResolverTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.134 s -- in com.tarea.resolvers.AuthResolverTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.741 s -- in com.tarea.resolvers.AuthResolverTest

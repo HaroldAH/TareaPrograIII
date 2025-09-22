@@ -24,6 +24,7 @@ com\tarea\resolvers\GuideResolver.class
 com\tarea\services\CompletedActivityService.class
 com\tarea\dtos\PageInfoDTO.class
 com\tarea\security\TokenBlacklistService.class
+com\tarea\services\CompletedActivityService$1WKey.class
 com\tarea\resolvers\ReminderResolver.class
 com\tarea\dtos\CompletedDayDTO.class
 com\tarea\resolvers\HabitActivityResolver.class

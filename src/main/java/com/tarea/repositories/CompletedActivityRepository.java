@@ -1,20 +1,22 @@
 package com.tarea.repositories;
 
 import com.tarea.models.Completedactivity;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
-import java.util.List;
-
 public interface CompletedActivityRepository extends JpaRepository<Completedactivity, Long> {
 
+    // Búsquedas básicas
     List<Completedactivity> findByUser_Id(Long userId);
     List<Completedactivity> findByUser_IdAndDateBetween(Long userId, LocalDate start, LocalDate end);
+    List<Completedactivity> findByUser_IdAndDateGreaterThanEqual(Long userId, LocalDate start);
+    List<Completedactivity> findByUser_IdAndDateLessThanEqual(Long userId, LocalDate end);
 
-    // --- Agregaciones mensuales por categoría (AÑO COMPLETO) ---
-    // Devuelve: [year, month, category, total_completions, unique_days, total_duration, weeks_active]
+    // ---------- Agregaciones mensuales ----------
+    // Año completo (por categoría)
     @Query(value = """
         SELECT
            YEAR(ca.date)                        AS y,
@@ -33,6 +35,7 @@ public interface CompletedActivityRepository extends JpaRepository<Completedacti
     """, nativeQuery = true)
     List<Object[]> monthlyCategoryStatsYear(@Param("year") int year, @Param("userId") Long userId);
 
+    // Un mes específico (por categoría)
     @Query(value = """
         SELECT
            YEAR(ca.date)                        AS y,

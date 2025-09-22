@@ -1,29 +1,28 @@
-// com/tarea/services/CompletedActivityService.java
 package com.tarea.services;
 
 import com.tarea.dtos.CompletedActivityDTO;
 import com.tarea.dtos.CompletedDayDTO;
-import com.tarea.dtos.CompletedRoutineInWeekDTO;
 import com.tarea.dtos.CompletedWeekDTO;
+import com.tarea.dtos.MonthlyCategoryStatDTO;
 import com.tarea.models.Completedactivity;
 import com.tarea.models.Habitactivity;
+import com.tarea.models.Module;
 import com.tarea.models.Routine;
 import com.tarea.models.User;
 import com.tarea.repositories.CompletedActivityRepository;
 import com.tarea.repositories.HabitActivityRepository;
 import com.tarea.repositories.RoutineRepository;
 import com.tarea.repositories.UserRepository;
+import com.tarea.security.SecurityUtils;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.temporal.WeekFields;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.temporal.WeekFields;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-
+import static com.tarea.security.SecurityUtils.*;
 
 @Service
 public class CompletedActivityService {
@@ -43,67 +42,233 @@ public class CompletedActivityService {
         this.habitRepo = habitRepo;
     }
 
+    /* ========== QUERIES ========== */
+
+    // Global: requiere VIEW(PROGRESS)
     public List<CompletedActivityDTO> getAll() {
+        requireView(Module.PROGRESS);
         return repo.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    // Ver uno: dueño o VIEW
     public CompletedActivityDTO getById(Long id) {
-        return repo.findById(id).map(this::toDTO).orElse(null);
+        Completedactivity e = repo.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("CompletedActivity no encontrada: " + id));
+        requireSelfOrView(e.getUser().getId(), Module.PROGRESS);
+        return toDTO(e);
     }
 
-    public List<CompletedActivityDTO> getByUser(Long userId, String start, String end) {
+    // Por usuario: dueño o VIEW
+    public List<CompletedActivityDTO> getByUser(Long userId, String startDate, String endDate) {
+        requireSelfOrView(userId, Module.PROGRESS);
+        LocalDate start = parseDateOrNull(startDate);
+        LocalDate end   = parseDateOrNull(endDate);
+
+        List<Completedactivity> list;
         if (start != null && end != null) {
-            LocalDate s = LocalDate.parse(start);
-            LocalDate e = LocalDate.parse(end);
-            return repo.findByUser_IdAndDateBetween(userId, s, e).stream().map(this::toDTO).collect(Collectors.toList());
+            list = repo.findByUser_IdAndDateBetween(userId, start, end);
+        } else if (start != null) {
+            list = repo.findByUser_IdAndDateGreaterThanEqual(userId, start);
+        } else if (end != null) {
+            list = repo.findByUser_IdAndDateLessThanEqual(userId, end);
+        } else {
+            list = repo.findByUser_Id(userId);
         }
-        return repo.findByUser_Id(userId).stream().map(this::toDTO).collect(Collectors.toList());
+        return list.stream().map(this::toDTO).collect(Collectors.toList());
     }
+
+    // “Mis …” (sin VIEW)
+    public List<CompletedActivityDTO> getMine(String startDate, String endDate) {
+        return getByUser(SecurityUtils.userId(), startDate, endDate);
+    }
+    public List<CompletedDayDTO> getMinePerDay(String startDate, String endDate) {
+        return getCompletedByUserPerDay(SecurityUtils.userId(), startDate, endDate);
+    }
+    public List<CompletedWeekDTO> getMinePerWeek(String startDate, String endDate) {
+        return getCompletedByUserPerWeek(SecurityUtils.userId(), startDate, endDate);
+    }
+    public CompletedDayDTO getMineOnDay(String date) {
+        return getCompletedByUserOnDay(SecurityUtils.userId(), date);
+    }
+
+    // Agrupación por día: dueño o VIEW
+    public List<CompletedDayDTO> getCompletedByUserPerDay(Long userId, String startDate, String endDate) {
+        requireSelfOrView(userId, Module.PROGRESS);
+        LocalDate start = parseDateOrNull(startDate);
+        LocalDate end   = parseDateOrNull(endDate);
+
+        List<Completedactivity> data =
+            repo.findByUser_IdAndDateBetween(userId,
+                start != null ? start : LocalDate.MIN,
+                end   != null ? end   : LocalDate.MAX);
+
+        Map<LocalDate, List<Completedactivity>> grouped = data.stream()
+            .collect(Collectors.groupingBy(Completedactivity::getDate, LinkedHashMap::new, Collectors.toList()));
+
+        List<CompletedDayDTO> out = new ArrayList<>();
+        grouped.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey())
+            .forEach(e -> {
+                CompletedDayDTO d = new CompletedDayDTO();
+                d.setDate(e.getKey().toString());
+                d.setActivities(e.getValue().stream().map(this::toDTO).collect(Collectors.toList()));
+                d.setTotalCompleted(e.getValue().size());
+                out.add(d);
+            });
+        return out;
+    }
+
+    // Agrupación por semana (ISO): dueño o VIEW
+    public List<CompletedWeekDTO> getCompletedByUserPerWeek(Long userId, String startDate, String endDate) {
+        requireSelfOrView(userId, Module.PROGRESS);
+        LocalDate start = parseDateOrNull(startDate);
+        LocalDate end   = parseDateOrNull(endDate);
+
+        List<Completedactivity> data =
+            repo.findByUser_IdAndDateBetween(userId,
+                start != null ? start : LocalDate.MIN,
+                end   != null ? end   : LocalDate.MAX);
+
+        WeekFields wf = WeekFields.of(Locale.getDefault());
+        record WKey(int year, int week) {}
+
+        return data.stream()
+            .collect(Collectors.groupingBy(a -> new WKey(
+                a.getDate().get(wf.weekBasedYear()),
+                a.getDate().get(wf.weekOfWeekBasedYear())
+            )))
+            .entrySet().stream()
+            .sorted(Comparator.comparing((Map.Entry<WKey, List<Completedactivity>> e) -> e.getKey().year)
+                .thenComparing(e -> e.getKey().week))
+            .map(e -> {
+                var dto = new CompletedWeekDTO();
+                dto.setWeekLabel(e.getKey().year() + "-W" + e.getKey().week());
+                dto.setTotalCompleted(e.getValue().size());
+                dto.setRoutines(List.of());
+                return dto;
+            })
+            .collect(Collectors.toList());
+    }
+
+    // Un día: dueño o VIEW
+    public CompletedDayDTO getCompletedByUserOnDay(Long userId, String date) {
+        requireSelfOrView(userId, Module.PROGRESS);
+        LocalDate d = LocalDate.parse(date);
+        List<Completedactivity> list = repo.findByUser_IdAndDateBetween(userId, d, d);
+        var out = new CompletedDayDTO();
+        out.setDate(date);
+        out.setActivities(list.stream().map(this::toDTO).collect(Collectors.toList()));
+        out.setTotalCompleted(list.size());
+        return out;
+    }
+
+    /* ========== COMMANDS ========== */
 
     @Transactional
     public CompletedActivityDTO save(CompletedActivityDTO dto) {
-        if (dto.getUserId() == null) throw new IllegalArgumentException("userId es obligatorio.");
-        if (dto.getHabitId() == null && dto.getRoutineId() == null) {
-            throw new IllegalArgumentException("Debe indicar habitId o routineId.");
-        }
+        forbidAuditorWrites(); // auditor = solo lectura
 
-        User user = userRepo.findById(dto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + dto.getUserId()));
+        Long me = userId();
+        Long target = (dto.getUserId() != null) ? dto.getUserId() : me;
 
-        Routine routine = null;
-        if (dto.getRoutineId() != null) {
-            routine = routineRepo.findById(dto.getRoutineId())
-                    .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + dto.getRoutineId()));
-        }
+        // Dueño puede crear/editar sin MUTATE; otros → MUTATE
+        requireSelfOrMutate(target, Module.PROGRESS);
+
+        User user = userRepo.findById(target)
+            .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + target));
 
         Habitactivity habit = null;
         if (dto.getHabitId() != null) {
             habit = habitRepo.findById(dto.getHabitId())
-                    .orElseThrow(() -> new IllegalArgumentException("Hábito no encontrado: " + dto.getHabitId()));
+                .orElseThrow(() -> new IllegalArgumentException("Hábito no encontrado: " + dto.getHabitId()));
         }
 
-        final Completedactivity entity;
+        Routine routine = null;
+        if (dto.getRoutineId() != null) {
+            routine = routineRepo.findById(dto.getRoutineId())
+                .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + dto.getRoutineId()));
+        }
+
+        Completedactivity e;
         if (dto.getId() != null) {
-            entity = repo.findById(dto.getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Registro no encontrado: " + dto.getId()));
+            e = repo.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("CompletedActivity no encontrada: " + dto.getId()));
+            requireSelfOrMutate(e.getUser().getId(), Module.PROGRESS);
         } else {
-            entity = new Completedactivity();
+            e = new Completedactivity();
+            e.setUser(user);
         }
 
-        entity.setUser(user);
-        entity.setRoutine(routine);
-        entity.setHabit(habit);
-        entity.setDate(dto.getDate() != null ? LocalDate.parse(dto.getDate()) : null);
-        entity.setCompletedAt(dto.getCompletedAt());
-        entity.setNotes(dto.getNotes());
+        e.setUser(user);
+        e.setHabit(habit);
+        e.setRoutine(routine);
+        e.setDate(parseDateOrNull(dto.getDate())); // LocalDate
+        e.setCompletedAt(dto.getCompletedAt());    // "HH:mm"
+        e.setNotes(dto.getNotes());
 
-        return toDTO(repo.save(entity));
+        return toDTO(repo.save(e));
     }
 
+    @Transactional
     public void delete(Long id) {
-        repo.deleteById(id);
+        forbidAuditorWrites();
+        Completedactivity e = repo.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("CompletedActivity no encontrada: " + id));
+        requireSelfOrMutate(e.getUser().getId(), Module.PROGRESS);
+        repo.delete(e);
     }
 
+    /* ========== STATS ========== */
+
+    /**
+     * Si month == null -> todo el año.
+     * Si userId == null -> usa el del token (no permitimos global sin staff).
+     * Si userId != me -> requiere VIEW(PROGRESS).
+     */
+    public List<MonthlyCategoryStatDTO> monthlyCategoryStats(int year, Integer month, Long userIdArg) {
+        Long me = userId();
+        Long target = (userIdArg == null) ? me : userIdArg;
+        if (!me.equals(target)) requireView(Module.PROGRESS);
+
+        List<Object[]> rows = (month == null)
+            ? repo.monthlyCategoryStatsYear(year, target)
+            : repo.monthlyCategoryStatsMonth(year, month, target);
+
+        return rows.stream().map(r -> mapMonthlyRow(r, month)).collect(Collectors.toList());
+    }
+
+    private MonthlyCategoryStatDTO mapMonthlyRow(Object[] r, Integer forcedMonth) {
+        int y = ((Number) r[0]).intValue();
+        int m = (forcedMonth != null) ? forcedMonth : ((Number) r[1]).intValue();
+        String category = (String) r[2];
+        int total = ((Number) r[3]).intValue();
+        int uniqueDays = ((Number) r[4]).intValue();
+        int totalDuration = ((Number) r[5]).intValue();
+        int weeksActive = ((Number) r[6]).intValue();
+
+        int daysInMonth = YearMonth.of(y, m).lengthOfMonth();
+        float avgPerActiveDay = uniqueDays == 0 ? 0f : ((float) total) / uniqueDays;
+        float activeDayRatio  = daysInMonth == 0 ? 0f : ((float) uniqueDays) / daysInMonth;
+        float avgPerActiveWeek = weeksActive == 0 ? 0f : ((float) total) / weeksActive;
+
+        MonthlyCategoryStatDTO dto = new MonthlyCategoryStatDTO();
+        dto.setYear(y);
+        dto.setMonth(m);
+        dto.setCategory(category);
+        dto.setTotalCompletions(total);
+        dto.setUniqueDays(uniqueDays);
+        dto.setAvgPerActiveDay(round2(avgPerActiveDay));
+        dto.setTotalDurationMinutes(totalDuration);
+        dto.setActiveDayRatio(round4(activeDayRatio));
+        dto.setWeeksActive(weeksActive);
+        dto.setAvgPerActiveWeek(round2(avgPerActiveWeek));
+        return dto;
+    }
+
+    private float round2(float v){ return Math.round(v * 100f) / 100f; }
+    private float round4(float v){ return Math.round(v * 10000f) / 10000f; }
+
+    /* ========== helpers ========== */
     private CompletedActivityDTO toDTO(Completedactivity e) {
         CompletedActivityDTO dto = new CompletedActivityDTO();
         dto.setId(e.getId());
@@ -116,63 +281,7 @@ public class CompletedActivityService {
         return dto;
     }
 
-    public List<CompletedDayDTO> getCompletedByUserPerDay(Long userId, String start, String end) {
-        List<CompletedActivityDTO> all = getByUser(userId, start, end);
-        Map<String, List<CompletedActivityDTO>> grouped = all.stream()
-                .collect(Collectors.groupingBy(CompletedActivityDTO::getDate));
-        return grouped.entrySet().stream()
-                .map(e -> {
-                    CompletedDayDTO dto = new CompletedDayDTO();
-                    dto.setDate(e.getKey());
-                    dto.setActivities(e.getValue());
-                    dto.setTotalCompleted(e.getValue().size());
-                    return dto;
-                })
-                .sorted((a, b) -> b.getDate().compareTo(a.getDate())) // más reciente primero
-                .collect(Collectors.toList());
-    }
-
-    public List<CompletedWeekDTO> getCompletedByUserPerWeek(Long userId, String start, String end) {
-        List<CompletedActivityDTO> all = getByUser(userId, start, end);
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-        Map<String, List<CompletedActivityDTO>> byWeek = all.stream()
-                .collect(Collectors.groupingBy(dto -> {
-                    LocalDate d = LocalDate.parse(dto.getDate());
-                    int week = d.get(weekFields.weekOfWeekBasedYear());
-                    int year = d.getYear();
-                    return String.format("%d-W%02d", year, week);
-                }));
-
-        return byWeek.entrySet().stream()
-                .map(e -> {
-                    // Agrupa por rutina
-                    Map<Long, List<CompletedActivityDTO>> byRoutine = e.getValue().stream()
-                            .filter(dto -> dto.getRoutineId() != null)
-                            .collect(Collectors.groupingBy(CompletedActivityDTO::getRoutineId));
-                    List<CompletedRoutineInWeekDTO> routines = byRoutine.entrySet().stream()
-                            .map(r -> {
-                                CompletedRoutineInWeekDTO cr = new CompletedRoutineInWeekDTO();
-                                cr.setRoutineId(r.getKey());
-                                cr.setRoutineTitle(""); // Puedes setear el título si lo necesitas (requiere repo)
-                                cr.setCompletedHabits(r.getValue());
-                                return cr;
-                            }).collect(Collectors.toList());
-                    CompletedWeekDTO dto = new CompletedWeekDTO();
-                    dto.setWeekLabel(e.getKey());
-                    dto.setRoutines(routines);
-                    dto.setTotalCompleted(e.getValue().size());
-                    return dto;
-                })
-                .sorted((a, b) -> b.getWeekLabel().compareTo(a.getWeekLabel()))
-                .collect(Collectors.toList());
-    }
-
-    public CompletedDayDTO getCompletedByUserOnDay(Long userId, String date) {
-        List<CompletedActivityDTO> all = getByUser(userId, date, date);
-        CompletedDayDTO dto = new CompletedDayDTO();
-        dto.setDate(date);
-        dto.setActivities(all);
-        dto.setTotalCompleted(all.size());
-        return dto;
+    private LocalDate parseDateOrNull(String s) {
+        return (s == null || s.isBlank()) ? null : LocalDate.parse(s);
     }
 }
