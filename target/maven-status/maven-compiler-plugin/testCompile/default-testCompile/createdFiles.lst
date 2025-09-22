@@ -1,1 +1,11 @@
+com\tarea\services\FavoriteHabitServiceTest.class
+com\tarea\services\HabitActivityServiceTest.class
+com\tarea\services\CompletedActivityServiceTest.class
+com\tarea\services\RoutineServiceTest.class
+com\tarea\services\RoutineHabitServiceTest.class
+com\tarea\services\GuideServiceTest.class
+com\tarea\services\StatsServiceTest.class
 com\tarea\rutinas\saludables\RutinasSaludablesApplicationTests.class
+com\tarea\services\ReminderServiceTest.class
+com\tarea\services\GuideHabitServiceTest.class
+com\tarea\services\UserServiceTest.class

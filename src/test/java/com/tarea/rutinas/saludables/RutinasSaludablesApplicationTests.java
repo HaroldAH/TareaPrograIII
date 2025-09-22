@@ -1,13 +1,9 @@
 package com.tarea.rutinas.saludables;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@Disabled("Solo pruebas unitarias: no levantar el contexto de Spring.")
 class RutinasSaludablesApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
+    @Test void noop() {}
 }

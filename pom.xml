@@ -50,22 +50,21 @@
         <!-- JWT (jjwt) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-          <artifactId>jjwt-api</artifactId>
-           <version>0.11.5</version>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
         </dependency>
         <dependency>
-          <groupId>io.jsonwebtoken</groupId>
-          <artifactId>jjwt-impl</artifactId>
-           <version>0.11.5</version>
-          <scope>runtime</scope>
-      </dependency>
-        <dependency>
-          <groupId>io.jsonwebtoken</groupId>
-          <artifactId>jjwt-jackson</artifactId>
-         <version>0.11.5</version>
-          <scope>runtime</scope>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
         </dependency>
-
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- MariaDB Driver -->
         <dependency>
@@ -107,6 +106,18 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Mockito: habilita mocking de métodos estáticos (SecurityUtils) -->
+        <!-- tests -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>
