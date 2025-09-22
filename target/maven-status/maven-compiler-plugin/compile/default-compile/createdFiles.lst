@@ -89,6 +89,7 @@ com\tarea\dtos\GuideHabitPageDTO.class
 com\tarea\models\Reminder.class
 com\tarea\repositories\FavoriteHabitRepository.class
 com\tarea\services\HabitActivityService.class
+com\tarea\security\RateLimitFilter.class
 com\tarea\services\StatsService.class
 com\tarea\services\ReminderService.class
 com\tarea\resolvers\CompletedActivityResolver.class
