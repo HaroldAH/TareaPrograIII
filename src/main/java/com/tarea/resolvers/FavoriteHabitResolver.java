@@ -4,26 +4,22 @@ import com.tarea.dtos.FavoriteHabitDTO;
 import com.tarea.dtos.HabitActivityDTO;
 import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.models.Module;
-import com.tarea.models.User;
 import com.tarea.repositories.UserRepository;
 import com.tarea.resolvers.inputs.FavoriteHabitInput;
+import com.tarea.security.SecurityUtils;
 import com.tarea.services.FavoriteHabitService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-
-import static com.tarea.security.SecurityUtils.requireMutate;
-import static com.tarea.security.SecurityUtils.requireView;
 
 @Controller
 public class FavoriteHabitResolver {
 
     private final FavoriteHabitService service;
+    @SuppressWarnings("unused")
     private final UserRepository userRepository;
 
     public FavoriteHabitResolver(FavoriteHabitService service, UserRepository userRepository) {
@@ -31,77 +27,60 @@ public class FavoriteHabitResolver {
         this.userRepository = userRepository;
     }
 
-    /* =================== QUERIES (CONSULT) =================== */
+    /* =================== QUERIES =================== */
 
+    /** Lista global: sólo staff con VIEW (esto sí queda igual) */
     @QueryMapping
     public List<FavoriteHabitDTO> getAllFavoriteHabits() {
-        requireView(Module.HABITS);
+        SecurityUtils.requireView(Module.HABITS);
         return service.getAll();
     }
 
+    /** Ver uno por id: deja que el service haga owner-or-view */
     @QueryMapping
     public FavoriteHabitDTO getFavoriteHabitById(@Argument Long id) {
-        requireView(Module.HABITS);
         return service.getById(id);
     }
 
+    /** Mis favoritos (autoservicio: sin exigir VIEW) */
     @QueryMapping
     public List<HabitActivityListDTO> getFavoriteHabitsListByUser() {
-        requireView(Module.HABITS);
-        Long userId = getAuthenticatedUserId();
-        return service.getFavoriteHabitsListByUser(userId);
+        Long me = SecurityUtils.userId();
+        return service.getFavoriteHabitsListByUser(me);
     }
 
+    /** Mis favoritos por categoría (autoservicio) */
     @QueryMapping
     public List<HabitActivityListDTO> getFavoriteHabitsByCategory(@Argument String category) {
-        requireView(Module.HABITS);
-        Long userId = getAuthenticatedUserId();
-        return service.getFavoriteHabitsByCategory(userId, category);
+        Long me = SecurityUtils.userId();
+        return service.getFavoriteHabitsByCategory(me, category);
     }
 
+    /** Detalle por nombre (autoservicio) */
     @QueryMapping
     public HabitActivityDTO getFavoriteHabitDetailByName(@Argument String name) {
-        requireView(Module.HABITS);
-        Long userId = getAuthenticatedUserId();
-        return service.getFavoriteHabitDetailByName(userId, name);
+        Long me = SecurityUtils.userId();
+        return service.getFavoriteHabitDetailByName(me, name);
     }
 
-    /* =================== MUTATIONS (MUTATE) =================== */
+    /* =================== MUTATIONS =================== */
 
+    /** Crear favorito propio (sin exigir :RW; el service valida self-or-mutate para terceros) */
     @MutationMapping
     public FavoriteHabitDTO createFavoriteHabit(@Argument FavoriteHabitInput input) {
-        requireMutate(Module.HABITS);
-        Long userId = getAuthenticatedUserId();
-
         FavoriteHabitDTO dto = toDTO(input);
-        dto.setUserId(userId); // fuerza el dueño al del token
+        dto.setUserId(SecurityUtils.userId()); // fuerza dueño = token
         return service.save(dto);
     }
 
+    /** Borrar (el service valida que seas dueño o que tengas :RW) */
     @MutationMapping
     public Boolean deleteFavoriteHabit(@Argument Long id) {
-        requireMutate(Module.HABITS);
         service.delete(id);
         return true;
     }
 
     /* =================== Helpers =================== */
-
-    private Long getAuthenticatedUserId() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) throw new RuntimeException("No autenticado");
-        Object principal = auth.getPrincipal();
-        if (principal instanceof Long l) return l;
-        if (principal instanceof User u) return u.getId();
-        // fallback: algunos setups ponen el subject como String
-        try { return Long.valueOf(auth.getName()); }
-        catch (NumberFormatException e) {
-            String email = auth.getName();
-            return userRepository.findByEmail(email)
-                    .map(User::getId)
-                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        }
-    }
 
     private FavoriteHabitDTO toDTO(FavoriteHabitInput in) {
         FavoriteHabitDTO dto = new FavoriteHabitDTO();

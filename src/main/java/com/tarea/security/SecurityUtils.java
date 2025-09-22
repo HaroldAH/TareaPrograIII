@@ -20,28 +20,52 @@ public final class SecurityUtils {
     requireAny("MOD:" + m + ":RW");
   }
 
+  /** Nuevo: owner o viewer (para lecturas de otros) */
+  public static void requireSelfOrView(Long targetUserId, Module m) {
+    Long me = userId();
+    if (!me.equals(targetUserId)) {
+      requireView(m);
+    }
+  }
+
+  /** Nuevo: owner o mutate (para modificaciones sobre otros) */
+  public static void requireSelfOrMutate(Long targetUserId, Module m) {
+    Long me = userId();
+    if (!me.equals(targetUserId)) {
+      requireMutate(m);
+    }
+  }
+
+  /** Nuevo: check “suave” para lógica condicional */
+  public static boolean canView(Module m) {
+    return hasAny("AUDITOR", "MOD:" + m + ":R", "MOD:" + m + ":RW");
+  }
+
+  /** Nuevo: check “suave” para lógica condicional */
+  public static boolean canMutate(Module m) {
+    return hasAny("MOD:" + m + ":RW");
+  }
+
   private static void requireAny(String... needed) {
+    if (!hasAny(needed)) {
+      throw new AccessDeniedException("Forbidden");
+    }
+  }
+
+  private static boolean hasAny(String... needed) {
     var ctx = SecurityContextHolder.getContext();
     if (ctx == null || ctx.getAuthentication() == null) {
       throw new AccessDeniedException("Unauthorized");
     }
     var auths = ctx.getAuthentication().getAuthorities();
     for (String n : needed) {
-      if (auths.contains(new SimpleGrantedAuthority(n))) return;
+      if (auths.contains(new SimpleGrantedAuthority(n))) return true;
     }
-    throw new AccessDeniedException("Forbidden");
+    return false;
   }
 
   /* ================== Identidad del usuario ================== */
 
-  /**
-   * Devuelve el ID del usuario autenticado tomando el principal del contexto.
-   * Soporta principal como Long, Integer o String (numérico), y también
-   * UserDetails/Principal cuyo "username/name" sea numérico.
-   *
-   * Lanza AccessDeniedException("Unauthorized") si no hay sesión o si no
-   * puede obtener un ID numérico.
-   */
   public static Long userId() {
     Authentication auth = SecurityContextHolder.getContext() != null
         ? SecurityContextHolder.getContext().getAuthentication()
@@ -69,8 +93,7 @@ public final class SecurityUtils {
       catch (NumberFormatException e) { /* fallthrough */ }
     }
 
-    // Si llegamos aquí, tu JwtAuthFilter no está poniendo el userId como principal.
-    // Ajusta el filtro para setear el ID (String/Long) en el Authentication#setPrincipal.
+    // Ajusta tu JwtAuthFilter para setear el ID numérico como principal.
     throw new AccessDeniedException("Unauthorized");
   }
 }

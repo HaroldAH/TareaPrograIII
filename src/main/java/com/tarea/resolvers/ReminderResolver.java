@@ -1,21 +1,18 @@
 package com.tarea.resolvers;
 
+import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.dtos.ReminderDTO;
 import com.tarea.dtos.ReminderListDTO;
-import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.models.Module;
 import com.tarea.resolvers.inputs.ReminderInput;
+import com.tarea.security.SecurityUtils;
 import com.tarea.services.ReminderService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-
-import static com.tarea.security.SecurityUtils.requireMutate;
-import static com.tarea.security.SecurityUtils.requireView;
 
 @Controller
 public class ReminderResolver {
@@ -26,37 +23,38 @@ public class ReminderResolver {
         this.reminderService = reminderService;
     }
 
-    /* ================= QUERIES (CONSULT) ================= */
+    /* ================= QUERIES ================= */
 
+    /** Global: sólo staff con VIEW */
     @QueryMapping
     public List<ReminderDTO> getAllReminders() {
-        requireView(Module.REMINDERS);
+        SecurityUtils.requireView(Module.REMINDERS);
         return reminderService.getAll();
     }
 
+    /** Ver uno: deja que el service haga owner-or-view */
     @QueryMapping
     public ReminderDTO getReminderById(@Argument Long id) {
-        requireView(Module.REMINDERS);
         return reminderService.getById(id);
     }
 
+    /** Por usuario: deja que el service haga owner-or-view */
     @QueryMapping
     public List<ReminderDTO> getRemindersByUser(@Argument Long userId) {
-        requireView(Module.REMINDERS);
         return reminderService.getByUserId(userId);
     }
 
+    /** Mis recordatorios: autoservicio */
     @QueryMapping
-    public List<ReminderDTO> getMyReminders(Authentication auth) {
-        requireView(Module.REMINDERS);
-        Long me = Long.valueOf(auth.getName());
+    public List<ReminderDTO> getMyReminders() {
+        Long me = SecurityUtils.userId();
         return reminderService.getByUserId(me);
     }
 
+    /** Mi lista para UI (card) */
     @QueryMapping
-    public List<ReminderListDTO> getMyReminderList(Authentication auth) {
-        requireView(Module.REMINDERS);
-        Long me = Long.valueOf(auth.getName());
+    public List<ReminderListDTO> getMyReminderList() {
+        Long me = SecurityUtils.userId();
         return reminderService.getByUserId(me).stream().map(reminder -> {
             ReminderListDTO dto = new ReminderListDTO();
             dto.setId(reminder.getId());
@@ -75,41 +73,49 @@ public class ReminderResolver {
         }).toList();
     }
 
-    /* ================= MUTATIONS (MUTATE) ================= */
+    /* ================= MUTATIONS ================= */
 
+    /**
+     * Crear/editar:
+     * - Si input.userId == null ⇒ se asume dueño = token (autoservicio)
+     * - Si viene userId ⇒ el service hará requireSelfOrMutate (terceros ⇒ requiere :RW)
+     */
     @MutationMapping
-    public ReminderDTO createReminder(@Argument("input") ReminderInput input, Authentication auth) {
-        requireMutate(Module.REMINDERS);
-        Long me = Long.valueOf(auth.getName());
+    public ReminderDTO createReminder(@Argument("input") ReminderInput input) {
         ReminderDTO dto = toDTO(input);
-        dto.setUserId(me); // fuerza el dueño al del token
+        if (dto.getUserId() == null) {
+            dto.setUserId(SecurityUtils.userId());
+        }
         return reminderService.save(dto);
     }
 
+    /** Azúcar explícito para “lo mío” */
+    @MutationMapping
+    public ReminderDTO createMyReminder(@Argument("input") ReminderInput input) {
+        ReminderDTO dto = toDTO(input);
+        dto.setUserId(SecurityUtils.userId()); // fuerza dueño = token
+        return reminderService.save(dto);
+    }
+
+    /** Borrar: deja que el service haga self-or-mutate */
     @MutationMapping
     public Boolean deleteReminder(@Argument Long id) {
-        requireMutate(Module.REMINDERS);
         reminderService.delete(id);
         return true;
     }
 
-    @MutationMapping
-    public ReminderDTO createMyReminder(@Argument("input") ReminderInput input, Authentication auth) {
-        requireMutate(Module.REMINDERS);
-        Long me = Long.valueOf(auth.getName());
-        ReminderDTO dto = toDTO(input);
-        dto.setUserId(me);
-        return reminderService.save(dto);
-    }
-
     /* ================= Mapper ================= */
 
-    private ReminderDTO toDTO(ReminderInput input) {
-        ReminderDTO dto = new ReminderDTO();
-        dto.setId(input.getId());
-        dto.setHabitId(input.getHabitId());
-        dto.setTime(input.getTime());
-        dto.setFrequency(input.getFrequency());
-        return dto;
-    }
+   // en ReminderResolver
+private ReminderDTO toDTO(ReminderInput input) {
+    ReminderDTO dto = new ReminderDTO();
+    dto.setId(input.getId());
+    dto.setUserId(input.getUserId());   // 👈 ahora sí propagamos el userId enviado
+    dto.setHabitId(input.getHabitId());
+    dto.setTime(input.getTime());
+    dto.setFrequency(input.getFrequency());
+    return dto;
+}
+
+
 }
