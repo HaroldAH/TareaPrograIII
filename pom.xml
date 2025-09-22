@@ -116,8 +116,6 @@
             <scope>test</scope>
         </dependency>
 
-
-
     </dependencies>
 
     <build>
@@ -147,6 +145,25 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- NUEVO: Surefire para ejecutar también tests en resolvers -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.3</version>
+                <configuration>
+                    <includes>
+                        <!-- patrones genéricos -->
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
+                        <!-- aseguramos carpetas clave -->
+                        <include>**/services/**/*Test.java</include>
+                        <include>**/resolvers/**/*Test.java</include>
+                    </includes>
+                    <!-- opcional: silencia el warning de Mockito en JDK recientes -->
+                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
                 </configuration>
             </plugin>
         </plugins>

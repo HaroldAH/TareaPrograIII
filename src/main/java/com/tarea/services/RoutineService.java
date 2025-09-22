@@ -65,6 +65,8 @@ public class RoutineService {
 
     @Transactional
     public RoutineDTO save(RoutineDTO dto) {
+        SecurityUtils.forbidAuditorWrites();                           // ⛔ auditor solo lectura
+
         Long me = SecurityUtils.userId();
         Long targetUserId = (dto.getUserId() != null) ? dto.getUserId() : me;
 
@@ -101,6 +103,8 @@ public class RoutineService {
     }
 
     public void delete(Long id) {
+        SecurityUtils.forbidAuditorWrites();                           // ⛔ auditor solo lectura
+
         Routine r = routineRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Rutina no encontrada: " + id));
         Long owner = r.getUser() != null ? r.getUser().getId() : null;

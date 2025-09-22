@@ -3,7 +3,7 @@ package com.tarea;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = "com.tarea") // Esto asegura que se escanee todo
+@SpringBootApplication
 public class RutinasSaludablesApplication {
 
     public static void main(String[] args) {

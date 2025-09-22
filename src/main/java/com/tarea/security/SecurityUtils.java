@@ -3,6 +3,7 @@ package com.tarea.security;
 import com.tarea.models.Module;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;   // 👈
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public final class SecurityUtils {
     requireAny("MOD:" + m + ":RW");
   }
 
-  /** Nuevo: owner o viewer (para lecturas de otros) */
+  /** owner o viewer (para lecturas de otros) */
   public static void requireSelfOrView(Long targetUserId, Module m) {
     Long me = userId();
     if (!me.equals(targetUserId)) {
@@ -28,7 +29,7 @@ public final class SecurityUtils {
     }
   }
 
-  /** Nuevo: owner o mutate (para modificaciones sobre otros) */
+  /** owner o mutate (para modificaciones sobre otros) */
   public static void requireSelfOrMutate(Long targetUserId, Module m) {
     Long me = userId();
     if (!me.equals(targetUserId)) {
@@ -36,12 +37,11 @@ public final class SecurityUtils {
     }
   }
 
-  /** Nuevo: check “suave” para lógica condicional */
+  /** checks “suaves” para lógica condicional */
   public static boolean canView(Module m) {
     return hasAny("AUDITOR", "MOD:" + m + ":R", "MOD:" + m + ":RW");
   }
 
-  /** Nuevo: check “suave” para lógica condicional */
   public static boolean canMutate(Module m) {
     return hasAny("MOD:" + m + ":RW");
   }
@@ -62,6 +62,27 @@ public final class SecurityUtils {
       if (auths.contains(new SimpleGrantedAuthority(n))) return true;
     }
     return false;
+  }
+
+  /* ================== Auditor: solo lectura ================== */
+
+  /** true si el usuario autenticado tiene autoridad AUDITOR */
+  public static boolean isAuditor() {
+    var ctx = SecurityContextHolder.getContext();
+    if (ctx == null || ctx.getAuthentication() == null) {
+      throw new AccessDeniedException("Unauthorized");
+    }
+    for (GrantedAuthority a : ctx.getAuthentication().getAuthorities()) {
+      if ("AUDITOR".equals(a.getAuthority())) return true;
+    }
+    return false;
+  }
+
+  /** Bloquea cualquier mutación si es auditor (read-only). */
+  public static void forbidAuditorWrites() {
+    if (isAuditor()) {
+      throw new AccessDeniedException("Forbidden: auditors are read-only");
+    }
   }
 
   /* ================== Identidad del usuario ================== */

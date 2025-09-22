@@ -52,6 +52,8 @@ public class FavoriteHabitService {
 
     @Transactional
     public FavoriteHabitDTO save(FavoriteHabitDTO dto) {
+        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+
         Long me = SecurityUtils.userId();
         Long target = (dto.getUserId() != null) ? dto.getUserId() : me;
 
@@ -78,7 +80,10 @@ public class FavoriteHabitService {
         return toDTO(saved);
     }
 
+    @Transactional
     public void delete(Long id) {
+        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+
         FavoriteHabit fh = favoriteHabitRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("FavoriteHabit no encontrada: " + id));
         // 🔐 Dueño o MUTATE

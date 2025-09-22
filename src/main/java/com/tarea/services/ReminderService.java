@@ -60,9 +60,8 @@ public class ReminderService {
 
     @Transactional
     public ReminderDTO save(ReminderDTO dto) {
-        // 🛡️ Resolver debe setear userId SIEMPRE:
-        // - createMyReminder: dto.userId = SecurityUtils.userId()
-        // - createReminder(userId? ...): si null → normalizar a currentUser
+        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+
         Long me = SecurityUtils.userId();
         Long targetUserId = (dto.getUserId() != null) ? dto.getUserId() : me;
 
@@ -99,6 +98,8 @@ public class ReminderService {
     }
 
     public void delete(Long id) {
+        SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
+
         Reminder r = reminderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Reminder no encontrado: " + id));
         // 🔐 Dueño o MUTATE

@@ -1,9 +1,16 @@
 package com.tarea.rutinas.saludables;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled("Solo pruebas unitarias: no levantar el contexto de Spring.")
+/**
+ * Smoke test sin levantar Spring ni la BD.
+ * Solo verifica que JUnit corre en el proyecto.
+ */
 class RutinasSaludablesApplicationTests {
-    @Test void noop() {}
+
+    @Test
+    void sanity() {
+        assertTrue(true);
+    }
 }
