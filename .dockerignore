@@ -1,0 +1,12 @@
+# Evita copiar archivos innecesarios al contexto de build de Docker
+.git
+.gitignore
+.env
+target/
+*.md
+*.log
+.idea/
+.vscode/
+Dockerfile
+docker-compose.yml
+scripts/

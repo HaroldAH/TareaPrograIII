@@ -1,16 +1,79 @@
 version: '3.8'
 
 services:
-  mariadb:
-    image: mariadb:latest
-    container_name: healthyhabits-db
+  db:
+    image: mariadb:11.1
+    container_name: healthyhabits_db
     restart: unless-stopped
-    ports:
-      - "3306:3306"
-    env_file:
-      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
     volumes:
       - mariadb_data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - healthyroutines_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAVA_VERSION: ${JAVA_VERSION:-21}
+    container_name: healthyhabits_api
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      SPRING_JPA_DATABASE_PLATFORM: ${SPRING_JPA_DATABASE_PLATFORM}
+      
+      SERVER_PORT: ${SERVER_PORT}
+      
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      
+      SPRING_GRAPHQL_GRAPHIQL_ENABLED: ${SPRING_GRAPHQL_GRAPHIQL_ENABLED}
+      SPRING_GRAPHQL_GRAPHIQL_PATH: ${SPRING_GRAPHQL_GRAPHIQL_PATH}
+      
+      LOGGING_LEVEL_ROOT: ${LOGGING_LEVEL_ROOT}
+      LOGGING_LEVEL_COM_HEALTHYROUTINES: ${LOGGING_LEVEL_COM_HEALTHYROUTINES}
+      
+      SPRING_PROFILES_ACTIVE: ${ENVIRONMENT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - healthyroutines_network
+    volumes:
+      - app_logs:/app/logs  
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${SERVER_PORT}/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 volumes:
   mariadb_data:
+    driver: local
+  app_logs:
+    driver: local
+
+networks:
+  healthyroutines_network:
+    driver: bridge
