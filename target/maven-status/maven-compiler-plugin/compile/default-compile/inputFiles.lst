@@ -84,6 +84,8 @@ C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\StatsResolver.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\resolvers\UserResolver.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\RutinasSaludablesApplication.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\security\InputSanitizationFilter.java
+C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\security\InputSanitizationUtils.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\security\JwtAuthFilter.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\security\JwtService.java
 C:\Users\yaria\OneDrive\Documents\GitHub\TareaPrograIII\src\main\java\com\tarea\security\RateLimitFilter.java

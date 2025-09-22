@@ -9,6 +9,9 @@ import com.tarea.models.User;
 import com.tarea.repositories.GuideHabitRepository;
 import com.tarea.repositories.GuideRepository;
 import com.tarea.repositories.UserRepository;
+import com.tarea.security.InputSanitizationUtils;
+
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,7 +62,9 @@ public class GuideService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public GuideDTO save(GuideDTO dto) {
+        InputSanitizationUtils.validateAllStringFields(dto);
         if (dto.getUserId() == null) {
             throw new IllegalArgumentException("userId es obligatorio.");
         }

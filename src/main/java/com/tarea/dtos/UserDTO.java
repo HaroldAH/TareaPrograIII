@@ -9,8 +9,8 @@ public class UserDTO {
     private String name;
     private String email;
 
-    private Boolean isAuditor;    // ya lo tenías
-    private Boolean isCoach;      // NUEVO
+    private Boolean isAuditor = false;    // ya lo tenías
+    private Boolean isCoach = false;      // NUEVO
 
     private Long assignedCoachId; // NUEVO (para la UI)
 

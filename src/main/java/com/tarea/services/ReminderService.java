@@ -8,6 +8,7 @@ import com.tarea.models.User;
 import com.tarea.repositories.HabitActivityRepository;
 import com.tarea.repositories.ReminderRepository;
 import com.tarea.repositories.UserRepository;
+import com.tarea.security.InputSanitizationUtils;
 import com.tarea.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +61,7 @@ public class ReminderService {
 
     @Transactional
     public ReminderDTO save(ReminderDTO dto) {
+        InputSanitizationUtils.validateAllStringFields(dto);
         SecurityUtils.forbidAuditorWrites();                         // ⛔ auditor solo lectura
 
         Long me = SecurityUtils.userId();

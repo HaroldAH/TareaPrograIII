@@ -145,6 +145,8 @@ public class UserResolver {
         return userService.setUserCoach(userId, coachId);
     }
 
+    // ===== NUEVO: registrar un usuario (sin asignar permisos ni coach) =====
+
     /* ===================== HELPERS ===================== */
 
     private List<UserPermissionDTO> mapInputs(List<ModulePermissionInput> inputs) {

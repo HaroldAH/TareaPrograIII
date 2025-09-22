@@ -14,6 +14,7 @@ import com.tarea.repositories.HabitActivityRepository;
 import com.tarea.repositories.RoutineRepository;
 import com.tarea.repositories.UserRepository;
 import com.tarea.security.SecurityUtils;
+import com.tarea.security.InputSanitizationUtils;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.WeekFields;
@@ -206,6 +207,11 @@ public class CompletedActivityService {
         e.setCompletedAt(dto.getCompletedAt());    // "HH:mm"
         e.setNotes(dto.getNotes());
 
+        // Input sanitization check
+        if (InputSanitizationUtils.containsMaliciousPattern(dto.getNotes())) {
+            throw new IllegalArgumentException("Malicious input detected in notes");
+        }
+
         return toDTO(repo.save(e));
     }
 
@@ -218,13 +224,6 @@ public class CompletedActivityService {
         repo.delete(e);
     }
 
-    /* ========== STATS ========== */
-
-    /**
-     * Si month == null -> todo el año.
-     * Si userId == null -> usa el del token (no permitimos global sin staff).
-     * Si userId != me -> requiere VIEW(PROGRESS).
-     */
     public List<MonthlyCategoryStatDTO> monthlyCategoryStats(int year, Integer month, Long userIdArg) {
         Long me = userId();
         Long target = (userIdArg == null) ? me : userIdArg;

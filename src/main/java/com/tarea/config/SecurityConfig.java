@@ -2,6 +2,7 @@ package com.tarea.config;
 
 import com.tarea.security.JwtAuthFilter;
 import com.tarea.security.RateLimitFilter;
+import com.tarea.security.InputSanitizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -46,7 +47,8 @@ public PasswordEncoder passwordEncoder() {
                 .anyRequest().authenticated()
             )
             .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new InputSanitizationFilter(), JwtAuthFilter.class);
 
         return http.build();
     }

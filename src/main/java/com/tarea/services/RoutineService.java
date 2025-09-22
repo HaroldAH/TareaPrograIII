@@ -10,6 +10,7 @@ import com.tarea.models.User;
 import com.tarea.repositories.RoutineHabitRepository;
 import com.tarea.repositories.RoutineRepository;
 import com.tarea.repositories.UserRepository;
+import com.tarea.security.InputSanitizationUtils;
 import com.tarea.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +66,7 @@ public class RoutineService {
 
     @Transactional
     public RoutineDTO save(RoutineDTO dto) {
+        InputSanitizationUtils.validateAllStringFields(dto);
         SecurityUtils.forbidAuditorWrites();                           // ⛔ auditor solo lectura
 
         Long me = SecurityUtils.userId();

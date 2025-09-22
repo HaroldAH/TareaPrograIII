@@ -4,6 +4,7 @@ import com.tarea.dtos.HabitActivityDTO;
 import com.tarea.dtos.HabitActivityListDTO;
 import com.tarea.models.Habitactivity;
 import com.tarea.repositories.HabitActivityRepository;
+import com.tarea.security.InputSanitizationUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -33,6 +34,12 @@ public class HabitActivityService {
 
     @Transactional
     public HabitActivityDTO save(HabitActivityDTO dto) {
+        InputSanitizationUtils.validateAllStringFields(dto);
+        // Validación de seguridad en descripción
+        if (InputSanitizationUtils.containsMaliciousPattern(dto.getDescription())) {
+            throw new IllegalArgumentException("Malicious input detected in description");
+        }
+
         final Habitactivity entity;
 
         if (dto.getId() != null) { // UPDATE
@@ -51,7 +58,6 @@ public class HabitActivityService {
                 ? java.time.LocalTime.parse(dto.getTargetTime())  // "HH:mm"
                 : null);
         entity.setNotes(dto.getNotes());
-        // entity.setRoutineId(dto.getRoutineId()); // Eliminado según sugerencia
 
         Habitactivity saved = habitActivityRepository.save(entity);
         return toDTO(saved);

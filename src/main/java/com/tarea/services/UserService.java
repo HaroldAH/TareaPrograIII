@@ -10,6 +10,8 @@ import com.tarea.models.User;
 import com.tarea.models.UserModulePermission;
 import com.tarea.repositories.UserModulePermissionRepository;
 import com.tarea.repositories.UserRepository;
+import com.tarea.security.InputSanitizationUtils;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -323,15 +325,18 @@ public class UserService {
     }
 
     // Construcción del DTO con flags de Coach y asignación
-    private UserDTO toDTO(User u, List<UserPermissionDTO> perms) {
+    private UserDTO toDTO(User user, List<UserPermissionDTO> permissions) {
         UserDTO dto = new UserDTO();
-        dto.setId(u.getId());
-        dto.setName(u.getName());
-        dto.setEmail(u.getEmail());
-        dto.setIsAuditor(Boolean.TRUE.equals(u.getIsAuditor()));
-        dto.setIsCoach(Boolean.TRUE.equals(u.getIsCoach()));
-        dto.setAssignedCoachId(u.getAssignedCoach() != null ? u.getAssignedCoach().getId() : null);
-        dto.setPermissions(perms);
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setAssignedCoachId(user.getAssignedCoach() != null ? user.getAssignedCoach().getId() : null);
+        dto.setPermissions(permissions);
+
+        // Asegura que nunca sean null
+        dto.setIsAuditor(user.getIsAuditor() != null ? user.getIsAuditor() : false);
+        dto.setIsCoach(user.getIsCoach() != null ? user.getIsCoach() : false);
+
         return dto;
     }
 
@@ -380,5 +385,54 @@ public UserPageDTO pageCoachees(Long coachId, Pageable pageable) {
     );
 
     return new UserPageDTO(content, info);
+}
+
+/** Registro público: crea usuario con permisos mínimos (solo para sí mismo) */
+@Transactional
+public UserDTO register(String name, String email, String rawPassword) {
+    // Validación manual de campos vulnerables
+    if (InputSanitizationUtils.containsMaliciousPattern(name)) {
+        throw new IllegalArgumentException("Malicious input detected in name");
+    }
+    if (InputSanitizationUtils.containsMaliciousPattern(email)) {
+        throw new IllegalArgumentException("Malicious input detected in email");
+    }
+    if (InputSanitizationUtils.containsMaliciousPattern(rawPassword)) {
+        throw new IllegalArgumentException("Malicious input detected in password");
+    }
+
+    String normalizedEmail = (email == null) ? null : email.trim().toLowerCase(Locale.ROOT);
+
+    User u = new User();
+    u.setName(name);
+    u.setEmail(normalizedEmail);
+    u.setPassword(rawPassword != null ? passwordEncoder.encode(rawPassword) : null);
+    u.setIsAuditor(false);
+    u.setIsCoach(false);
+
+    u = userRepository.save(u);
+
+    List<UserPermissionDTO> basicPermissions = List.of(
+        createPerm(Module.HABITS, ModulePermission.CONSULT),
+        createPerm(Module.HABITS, ModulePermission.MUTATE),
+        createPerm(Module.ROUTINES, ModulePermission.CONSULT),
+        createPerm(Module.ROUTINES, ModulePermission.MUTATE),
+        createPerm(Module.REMINDERS, ModulePermission.CONSULT),
+        createPerm(Module.REMINDERS, ModulePermission.MUTATE)
+    );
+
+    for (UserPermissionDTO perm : basicPermissions) {
+        upsertPermissionInternal(u, perm.getModule(), perm.getPermission());
+    }
+
+    return toDTO(u, loadPerms(u.getId()));
+}
+
+// Helper para crear UserPermissionDTO fácilmente
+private UserPermissionDTO createPerm(Module module, ModulePermission permission) {
+    UserPermissionDTO dto = new UserPermissionDTO();
+    dto.setModule(module);
+    dto.setPermission(permission);
+    return dto;
 }
 }
